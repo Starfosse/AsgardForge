@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Axe, Shield, Hammer, Flame, ShoppingCart } from "lucide-react";
+import { Axe, Flame, Hammer, Shield, ShoppingCart } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 const Menu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -7,7 +7,6 @@ const Menu = () => {
   const [isCartPreviewVisible, setIsCartPreviewVisible] = useState(false);
   const cartPreviewTimerRef = useRef(null);
 
-  // Placeholder cart items (in a real app, this would come from state management)
   const cartItems = [
     {
       name: "Hache de Guerre d'Odin",

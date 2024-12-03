@@ -1,5 +1,4 @@
-import React from "react";
-import { Axe, Shield, Flame, Compass, Hammer } from "lucide-react";
+import { Flame, Hammer, Shield } from "lucide-react";
 
 const Home = () => {
   const featuredProducts = [

@@ -1,6 +1,5 @@
-import React, { useState } from "react";
-import { ShoppingCart, Star, Shield, Axe } from "lucide-react";
-import ProductsPage from "./Products";
+import { Axe, Shield, ShoppingCart, Star } from "lucide-react";
+import { useState } from "react";
 
 const Product = () => {
   const [quantity, setQuantity] = useState(1);

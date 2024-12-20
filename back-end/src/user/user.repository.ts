@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Connection } from 'mysql2/promise';
-import { User } from './entities/user.entity';
 import { DATABASE_CONNECTION } from 'src/database/database.module';
+import { User } from './user.service';
 
 @Injectable()
 export class UserRepository {
@@ -17,6 +17,7 @@ export class UserRepository {
     );
     const user = rows[0];
     if (!user) return null;
+
     return {
       id: user.id,
       google_id: user.google_id,
@@ -28,13 +29,7 @@ export class UserRepository {
     };
   }
 
-  async create(userData: {
-    google_id: string;
-    first_name: string;
-    last_name: string;
-    email: string;
-    access_token?: string;
-  }): Promise<User> {
+  async create(userData: Omit<User, 'id' | 'created_at'>): Promise<User> {
     const [result]: any = await this.connection.query(
       'INSERT INTO users (google_id, email, first_name, last_name, created_at) VALUES (?, ?, ?, ?, ?)',
       [

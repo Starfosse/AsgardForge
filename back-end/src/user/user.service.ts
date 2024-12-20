@@ -12,22 +12,17 @@ export interface User {
 }
 
 @Injectable()
+@Injectable()
 export class UserService {
   constructor(private userRepository: UserRepository) {}
 
-  async findOrCreateUser(userDetails: {
-    google_id: string;
-    first_name: string;
-    last_name: string;
-    email: string;
-    access_token?: string;
-  }) {
+  async findOrCreateUser(
+    userDetails: Omit<User, 'id' | 'created_at'>,
+  ): Promise<User> {
     let user = await this.userRepository.findByGoogleId(userDetails.google_id);
-
     if (!user) {
       user = await this.userRepository.create(userDetails);
     }
-
     return user;
   }
 }

@@ -29,8 +29,6 @@ export const DATABASE_CONFIG = Symbol('DATABASE_CONFIG');
             : 3306,
         };
 
-        console.log('Database Configuration:', config);
-
         return config;
       },
       inject: [ConfigService],

@@ -56,4 +56,20 @@ export class UserRepository {
       created_at: new Date(rows[0].created_at),
     };
   }
+
+  async findById(id: number): Promise<User | null> {
+    try {
+      const [rows]: any = await this.connection.execute(
+        'SELECT * FROM users WHERE id = ?',
+        [id],
+      );
+      const user = rows[0];
+      if (!user) return null;
+
+      return user;
+    } catch (error) {
+      console.error('Error finding user by id:', error);
+      throw new Error('Could not find user by id');
+    }
+  }
 }

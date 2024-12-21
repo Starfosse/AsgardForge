@@ -15,12 +15,14 @@ import { AuthService } from './auth.service';
 import { User, UserService } from 'src/user/user.service';
 import { Request, Response } from 'express';
 import { CurrentUser } from 'src/user/decorators/current-user.decorator';
+import { AuthRepository } from './auth.repository';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
     private userService: UserService,
+    private authRepository: AuthRepository,
   ) {}
 
   @Get('google')
@@ -72,7 +74,7 @@ export class AuthController {
     @CurrentUser() user: User,
     @Res({ passthrough: true }) res: Response,
   ) {
-    await this.authService.revokeRefreshToken(user.id);
+    await this.authRepository.revokeRefreshToken(user.id);
 
     res.clearCookie('refresh_token', {
       httpOnly: true,

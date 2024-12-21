@@ -1,18 +1,21 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { User, UserService } from 'src/user/user.service';
-import * as jwt from 'jsonwebtoken';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
-import { DATABASE_CONNECTION } from 'src/database/database.module';
+import * as jwt from 'jsonwebtoken';
 import { Connection } from 'mysql2/promise';
+import { DATABASE_CONNECTION } from 'src/database/database.module';
+import { User } from 'src/user/user.service';
+import { AuthRepository } from './auth.repository';
+import { UserRepository } from 'src/user/user.repository';
 
 @Injectable()
 export class AuthService {
   constructor(
     private configService: ConfigService,
-    private userService: UserService,
     @Inject(DATABASE_CONNECTION)
     private connection: Connection,
+    private authRepository: AuthRepository,
+    private userRepository: UserRepository,
   ) {}
 
   async generateTokens(user: User) {
@@ -41,9 +44,9 @@ export class AuthService {
 
       const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
 
-      await this.connection.execute(
-        'UPDATE users SET refresh_token = ?, updated_at = NOW() WHERE id = ?',
-        [hashedRefreshToken, user.id],
+      await this.authRepository.generateRefreshTokens(
+        hashedRefreshToken,
+        user.id,
       );
 
       return {
@@ -58,29 +61,12 @@ export class AuthService {
 
   async validateRefreshToken(token: string, userId: number): Promise<boolean> {
     try {
-      const [rows]: any = await this.connection.execute(
-        'SELECT refresh_token FROM users WHERE id = ?',
-        [userId],
-      );
-
-      if (!rows || !rows[0] || !rows[0].refresh_token) return false;
-
-      return await bcrypt.compare(token, rows[0].refresh_token);
+      const userRefreshToken =
+        await this.authRepository.findRefreshToken(userId);
+      return await bcrypt.compare(token, userRefreshToken);
     } catch (error) {
       console.error('Error validating refresh token:', error);
-      return false;
-    }
-  }
-
-  async revokeRefreshToken(userId: number): Promise<void> {
-    try {
-      await this.connection.execute(
-        'UPDATE users SET refresh_token = NULL, updated_at = NOW() WHERE id = ?',
-        [userId],
-      );
-    } catch (error) {
-      console.error('Error revoking refresh token:', error);
-      throw new Error('Could not revoke refresh token');
+      throw new Error('Failed to validate refresh token');
     }
   }
 
@@ -108,20 +94,16 @@ export class AuthService {
         [payload.sub],
       );
 
-      const user = rows[0];
-      if (!user) {
-        throw new Error('User not found');
-      }
-
+      const user = await this.userRepository.findById(payload.sub);
       return await this.generateTokens(user);
     } catch (error) {
-      if (
-        error.name === 'JsonWebTokenError' ||
-        error.name === 'TokenExpiredError'
-      ) {
-        throw new Error('Invalid or expired refresh token');
+      if (error.name === 'JsonWebTokenError') {
+        throw new Error('Invalid refresh token format');
       }
-      throw error;
+      if (error.name === 'TokenExpiredError') {
+        throw new Error('Refresh token has expired');
+      }
+      throw new Error('Failed to refresh tokens');
     }
   }
 }

@@ -1,12 +1,14 @@
 import { Axe, Flame, Hammer, Shield, ShoppingCart } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
+import { Link } from "react-router-dom";
 
 const Menu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeCategory, setActiveCategory] = useState(null);
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [isCartPreviewVisible, setIsCartPreviewVisible] = useState(false);
-  const cartPreviewTimerRef = useRef(null);
-
+  const cartPreviewTimerRef = useRef<number | null>(null);
+  const { isAuthenticated, user, login, logout } = useAuth();
   const cartItems = [
     {
       name: "Hache de Guerre d'Odin",
@@ -52,30 +54,23 @@ const Menu = () => {
   };
 
   const handleCartMouseEnter = () => {
-    // Clear any existing timer
     if (cartPreviewTimerRef.current) {
       clearTimeout(cartPreviewTimerRef.current);
     }
-
-    // Set a new timer to show preview
     cartPreviewTimerRef.current = setTimeout(() => {
       setIsCartPreviewVisible(true);
-    }, 200); // Short delay to improve user experience
+    }, 200);
   };
 
   const handleCartMouseLeave = () => {
-    // Clear the timer if user moves away quickly
     if (cartPreviewTimerRef.current) {
       clearTimeout(cartPreviewTimerRef.current);
     }
-
-    // Hide preview after a short delay
     cartPreviewTimerRef.current = setTimeout(() => {
       setIsCartPreviewVisible(false);
-    }, 300); // Slightly longer delay to allow mouse movement
+    }, 300);
   };
 
-  // Clean up timer on component unmount
   useEffect(() => {
     return () => {
       if (cartPreviewTimerRef.current) {
@@ -86,14 +81,14 @@ const Menu = () => {
 
   return (
     <nav className="bg-stone-900 text-amber-300 shadow-lg border-b-4 border-amber-700">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center">
+          <Link to="/" className="flex items-center">
             <span className="text-2xl font-runic tracking-wider">
               AsgardForge
             </span>
-          </div>
+          </Link>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex space-x-4 items-center">
@@ -131,8 +126,8 @@ const Menu = () => {
               onMouseEnter={handleCartMouseEnter}
               onMouseLeave={handleCartMouseLeave}
             >
-              <a
-                href="/panier"
+              <Link
+                to="/panier"
                 className="flex items-center space-x-2 hover:text-amber-500 transition duration-300"
               >
                 <ShoppingCart className="w-6 h-6" />
@@ -140,14 +135,10 @@ const Menu = () => {
                 <span className="bg-amber-700 text-white text-xs rounded-full px-2 py-1">
                   {cartItems.reduce((total, item) => total + item.quantity, 0)}
                 </span>
-              </a>
+              </Link>
 
               {isCartPreviewVisible && (
-                <div
-                  className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-stone-200 p-4 z-50"
-                  onMouseEnter={handleCartMouseEnter}
-                  onMouseLeave={handleCartMouseLeave}
-                >
+                <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl border border-stone-200 p-4 z-50">
                   <h3 className="text-lg font-semibold mb-4 text-stone-800">
                     Aperçu du Panier
                   </h3>
@@ -177,17 +168,31 @@ const Menu = () => {
                       {calculateTotal()} €
                     </span>
                   </div>
-                  <a
-                    href="/panier"
+                  <Link
+                    to="/cart"
                     className="mt-4 w-full block text-center bg-stone-800 text-white py-2 rounded hover:bg-stone-700"
                   >
                     Voir le Panier
-                  </a>
+                  </Link>
                 </div>
               )}
             </div>
           </div>
-
+          {isAuthenticated ? (
+            <div className="hidden md:flex md:flex-row items-center space-y-4">
+              <div>Bonjour {user.firstname}</div>
+              <button className="hover:text-amber-500" onClick={logout}>
+                Se déconnecter
+              </button>
+            </div>
+          ) : (
+            <button
+              className="hidden md:flex hover:text-amber-500"
+              onClick={login}
+            >
+              Se connecter
+            </button>
+          )}
           {/* Mobile Menu Toggle */}
           <div className="md:hidden">
             <button
@@ -199,10 +204,38 @@ const Menu = () => {
           </div>
         </div>
       </div>
-
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden bg-stone-900">
+          {isAuthenticated ? (
+            <div className="border-t border-stone-700 p-4 hover:bg-stone-800 w-full flex items-center justify-between space-x-4">
+              <div>Bonjour {user.firstname}</div>
+              <button className="hover:text-amber-500" onClick={logout}>
+                Se déconnecter
+              </button>
+            </div>
+          ) : (
+            <button
+              className="border-t border-stone-700 p-4 hover:bg-stone-800 w-full flex items-center "
+              onClick={login}
+            >
+              Se connecter
+            </button>
+          )}
+          {cartItems.length > 0 && (
+            <Link
+              to="/cart"
+              className="border-t border-stone-700 p-4 hover:bg-stone-800 w-full flex items-center justify-between space-x-4"
+            >
+              <div className="flex items-center space-x-2">
+                <ShoppingCart className="w-6 h-6" />
+                <span>Panier</span>
+              </div>
+              <span className="bg-amber-700 text-white text-xs rounded-full px-2 py-1">
+                {cartItems.reduce((total, item) => total + item.quantity, 0)}
+              </span>
+            </Link>
+          )}
           {categories.map((category) => (
             <div key={category.name} className="border-t border-stone-700">
               <button

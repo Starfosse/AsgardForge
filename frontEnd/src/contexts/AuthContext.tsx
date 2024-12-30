@@ -34,7 +34,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       const token = localStorage.getItem("access_token");
       if (token) {
-        const response = await fetch("/api/user/me", {
+        const response = await fetch("/user/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -58,12 +58,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const login = () => {
-    window.location.href = "/api/auth/login";
+    window.location.href = "/auth/login";
   };
 
   const logout = async () => {
     try {
-      await fetch("/api/auth/logout", {
+      await fetch("/auth/logout", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,

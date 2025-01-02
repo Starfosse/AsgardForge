@@ -10,6 +10,7 @@ import Collections from "./pages/Collection";
 import Home from "./pages/Home";
 import Product from "./pages/Product";
 import Layout from "./layouts/Layout";
+import { GoogleCallBack } from "./components/GoogleCallBack";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
             </Layout>
           }
         />
+        <Route path="/login/success" element={<GoogleCallBack />} />
         <Route
           path="/collections"
           element={

@@ -47,7 +47,8 @@ export class AuthController {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       path: '/api/auth/refresh',
     });
-    return { access_token };
+    const frontendURL = 'http://localhost:5173';
+    res.redirect(`${frontendURL}/login/success?token=${access_token}`);
   }
 
   @Post('refresh')

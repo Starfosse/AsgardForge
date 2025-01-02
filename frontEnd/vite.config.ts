@@ -5,13 +5,22 @@ import react from "@vitejs/plugin-react-swc";
 export default defineConfig({
   plugins: [react()],
   server: {
-    // à retirer avant le push
     watch: {
-      usePolling: true, // Utiliser le polling pour vérifier les changements de fichiers
-      interval: 1000, // Intervalle de polling en millisecondes
+      usePolling: true,
+      interval: 1000,
     },
     hmr: {
-      overlay: true, // Afficher une superposition sur les erreurs de HMR
+      overlay: true,
+    },
+    proxy: {
+      "/auth": {
+        target: "http://localhost:3000",
+        changeOrigin: true,
+      },
+      "/user": {
+        target: "http://localhost:3000",
+        changeOrigin: true,
+      },
     },
   },
 });

@@ -6,10 +6,18 @@ import {
   useState,
 } from "react";
 
+interface User {
+  id: number;
+  googleId: string;
+  lastName: string;
+  firstName: string;
+  email: string;
+}
+
 type AuthContextType = {
   isAuthenticated: boolean;
   isLoading: boolean;
-  user: any | null;
+  user: User | null;
   login: () => void;
   logout: () => void;
   checkAuthStatus: () => void;
@@ -39,16 +47,22 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             Authorization: `Bearer ${token}`,
           },
         });
-
         if (!response.ok) {
           throw new Error("Token invalid");
         }
-
-        const userData = await response.json();
-        setUser(userData);
+        const rawUserData = await response.json();
+        const transformedUser: User = {
+          id: rawUserData.id,
+          googleId: rawUserData.google_id,
+          lastName: rawUserData.last_name,
+          firstName: rawUserData.first_name,
+          email: rawUserData.email,
+        };
+        setUser(transformedUser);
         setIsAuthenticated(true);
       }
     } catch (error) {
+      console.error(error);
       localStorage.removeItem("access_token");
       setUser(null);
       setIsAuthenticated(false);

@@ -12,7 +12,7 @@ export class UserController {
   @UseGuards(AuthGuard('jwt'))
   async getMe(@CurrentUser() user: User) {
     const userInfo = await this.userRepository.findById(user.id);
-    return userInfo;
+    return { ...userInfo };
   }
   // @Post()
   // create(@Body() createUserDto: CreateUserDto) {

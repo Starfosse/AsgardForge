@@ -127,7 +127,7 @@ const Menu = () => {
               onMouseLeave={handleCartMouseLeave}
             >
               <Link
-                to="/panier"
+                to="/cart"
                 className="flex items-center space-x-2 hover:text-amber-500 transition duration-300"
               >
                 <ShoppingCart className="w-6 h-6" />
@@ -179,8 +179,8 @@ const Menu = () => {
             </div>
           </div>
           {isAuthenticated ? (
-            <div className="hidden md:flex md:flex-row items-center space-y-4">
-              <div>Bonjour {user.firstname}</div>
+            <div className="hidden md:flex md:flex-col items-center ">
+              <div className="text-sm">Bonjour {user?.firstName}</div>
               <button className="hover:text-amber-500" onClick={logout}>
                 Se déconnecter
               </button>
@@ -209,7 +209,7 @@ const Menu = () => {
         <div className="md:hidden bg-stone-900">
           {isAuthenticated ? (
             <div className="border-t border-stone-700 p-4 hover:bg-stone-800 w-full flex items-center justify-between space-x-4">
-              <div>Bonjour {user.firstname}</div>
+              <div>Bonjour {user?.firstName}</div>
               <button className="hover:text-amber-500" onClick={logout}>
                 Se déconnecter
               </button>

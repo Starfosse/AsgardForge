@@ -31,7 +31,6 @@ export class AuthController {
 
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
-  @UseInterceptors(ClassSerializerInterceptor)
   async googleLoginCallback(
     @Req() req,
     @Res({ passthrough: true }) res: Response,

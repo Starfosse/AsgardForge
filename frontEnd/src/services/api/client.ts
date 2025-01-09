@@ -1,5 +1,11 @@
 import { isPublicRoute } from "./publicRoutes";
 
+interface ApiResponse<T> {
+  data: T | null;
+  status: number;
+  message: string;
+}
+
 export const apiClient = {
   fetch: async <T>(url: string, options: RequestInit = {}): Promise<T> => {
     const headers = new Headers({
@@ -15,6 +21,7 @@ export const apiClient = {
         throw new Error("No access token available");
       }
     }
+
     try {
       const response = await fetch(url, {
         ...options,
@@ -22,43 +29,62 @@ export const apiClient = {
       });
 
       if (response.status === 401) {
-        const refreshResponse = await fetch("/api/auth/refresh", {
-          method: "POST",
-          credentials: "include",
-        });
+        try {
+          const refreshResponse = await fetch("/api/auth/refresh", {
+            method: "POST",
+            credentials: "include",
+          });
 
-        if (!refreshResponse.ok) {
+          if (!refreshResponse.ok) {
+            localStorage.removeItem("access_token");
+            window.location.href = "/login";
+            throw new Error("Session expired");
+          }
+
+          const refreshData: ApiResponse<{ access_token: string }> =
+            await refreshResponse.json();
+
+          if (refreshData.data?.access_token) {
+            localStorage.setItem("access_token", refreshData.data.access_token);
+
+            // Nouvelle requête avec le token rafraîchi
+            const newResponse = await fetch(url, {
+              ...options,
+              headers: new Headers({
+                ...headers,
+                Authorization: `Bearer ${refreshData.data.access_token}`,
+              }),
+            });
+
+            if (!newResponse.ok) {
+              const errorData: ApiResponse<any> = await newResponse.json();
+              throw new Error(errorData.message || "API Error");
+            }
+
+            const newData: ApiResponse<T> = await newResponse.json();
+            return newData.data as T;
+          } else {
+            throw new Error("Invalid refresh token response");
+          }
+        } catch (refreshError) {
           localStorage.removeItem("access_token");
           window.location.href = "/login";
-          throw new Error("Session expired");
+          throw refreshError;
         }
-
-        const { access_token } = await refreshResponse.json();
-        localStorage.setItem("access_token", access_token);
-
-        const newResponse = await fetch(url, {
-          ...options,
-          headers: new Headers({
-            ...headers,
-            Authorization: `Bearer ${access_token}`,
-          }),
-        });
-        if (!newResponse.ok) {
-          const errorData = await newResponse.json().catch(() => ({}));
-          throw new Error(errorData.message || "API Error");
-        }
-        return newResponse.json();
       }
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
+        const errorData: ApiResponse<any> = await response.json();
         throw new Error(errorData.message || "API Error");
       }
 
-      return response.json();
+      const responseData: ApiResponse<T> = await response.json();
+      return responseData.data as T;
     } catch (error) {
-      console.error(error);
-      throw new Error("No access token available");
+      console.error("API request failed:", error);
+      throw error instanceof Error
+        ? error
+        : new Error("Unknown error occurred");
     }
   },
 };

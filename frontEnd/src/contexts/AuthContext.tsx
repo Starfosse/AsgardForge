@@ -45,13 +45,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       if (token) {
         const response = await authService.getUserProfile();
         console.log("response", response);
-        if (response.data) {
+        if (response) {
           const transformedUser: User = {
-            id: response.data.id,
-            googleId: response.data.google_id,
-            lastName: response.data.last_name,
-            firstName: response.data.first_name,
-            email: response.data.email,
+            id: response.id,
+            googleId: response.google_id,
+            lastName: response.last_name,
+            firstName: response.first_name,
+            email: response.email,
           };
           setUser(transformedUser);
         }

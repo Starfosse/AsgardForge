@@ -31,11 +31,7 @@ export class AuthController {
 
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
-  @UseInterceptors(ClassSerializerInterceptor)
-  async googleLoginCallback(
-    @Req() req,
-    @Res({ passthrough: true }) res: Response,
-  ) {
+  async googleLoginCallback(@Req() req, @Res() res: Response) {
     if (!req.user) throw new UnauthorizedException('Authentication failed');
     const savedUser = await this.userService.findOrCreateUser(req.user);
     const { access_token, refresh_token } =
@@ -48,13 +44,13 @@ export class AuthController {
       path: '/api/auth/refresh',
     });
     const frontendURL = 'http://localhost:5173';
-    res.redirect(`${frontendURL}/login/success?token=${access_token}`);
+    return res.redirect(`${frontendURL}/login/success?token=${access_token}`);
   }
 
   @Post('refresh')
   async refresh(
     @Req() req: Request,
-    @Res({ passthrough: true }) res: Response,
+    @Res() res: Response, // Retirez { passthrough: true }
   ) {
     const refresh_token = req.cookies['refresh_token'];
     const tokens = await this.authService.refreshTokens(refresh_token);
@@ -67,13 +63,14 @@ export class AuthController {
       path: '/api/auth/refresh',
     });
 
-    return { access_token: tokens.access_token };
+    return res.json({ access_token: tokens.access_token });
   }
 
   @Post('logout')
+  @UseGuards(AuthGuard('jwt'))
   async logout(
     @CurrentUser() user: User,
-    @Res({ passthrough: true }) res: Response,
+    @Res() res: Response, // Retirez { passthrough: true }
   ) {
     await this.authRepository.revokeRefreshToken(user.id);
 
@@ -84,6 +81,6 @@ export class AuthController {
       path: '/api/auth/refresh',
     });
 
-    return { message: 'Logged out successfully' };
+    return res.json({ message: 'Logged out successfully' });
   }
 }

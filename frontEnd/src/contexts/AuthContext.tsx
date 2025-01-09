@@ -5,6 +5,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import { authService } from "../services/api";
 
 interface User {
   id: number;
@@ -42,23 +43,18 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       const token = localStorage.getItem("access_token");
       if (token) {
-        const response = await fetch("/user/me", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        if (!response.ok) {
-          throw new Error("Token invalid");
+        const response = await authService.getUserProfile();
+        console.log("response", response);
+        if (response) {
+          const transformedUser: User = {
+            id: response.id,
+            googleId: response.google_id,
+            lastName: response.last_name,
+            firstName: response.first_name,
+            email: response.email,
+          };
+          setUser(transformedUser);
         }
-        const rawUserData = await response.json();
-        const transformedUser: User = {
-          id: rawUserData.id,
-          googleId: rawUserData.google_id,
-          lastName: rawUserData.last_name,
-          firstName: rawUserData.first_name,
-          email: rawUserData.email,
-        };
-        setUser(transformedUser);
         setIsAuthenticated(true);
       }
     } catch (error) {
@@ -77,12 +73,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const logout = async () => {
     try {
-      await fetch("/auth/logout", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      });
+      await authService.logout();
     } catch (error) {
       console.error(error);
     } finally {

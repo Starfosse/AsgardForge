@@ -1,6 +1,4 @@
 import {
-  Body,
-  ClassSerializerInterceptor,
   Controller,
   Get,
   Post,
@@ -8,14 +6,13 @@ import {
   Res,
   UnauthorizedException,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { AuthService } from './auth.service';
-import { User, UserService } from 'src/user/user.service';
 import { Request, Response } from 'express';
 import { CurrentUser } from 'src/user/decorators/current-user.decorator';
+import { User, UserService } from 'src/user/user.service';
 import { AuthRepository } from './auth.repository';
+import { AuthService } from './auth.service';
 
 @Controller('auth')
 export class AuthController {
@@ -48,10 +45,7 @@ export class AuthController {
   }
 
   @Post('refresh')
-  async refresh(
-    @Req() req: Request,
-    @Res() res: Response, // Retirez { passthrough: true }
-  ) {
+  async refresh(@Req() req: Request, @Res() res: Response) {
     const refresh_token = req.cookies['refresh_token'];
     const tokens = await this.authService.refreshTokens(refresh_token);
 
@@ -68,10 +62,7 @@ export class AuthController {
 
   @Post('logout')
   @UseGuards(AuthGuard('jwt'))
-  async logout(
-    @CurrentUser() user: User,
-    @Res() res: Response, // Retirez { passthrough: true }
-  ) {
+  async logout(@CurrentUser() user: User, @Res() res: Response) {
     await this.authRepository.revokeRefreshToken(user.id);
 
     res.clearCookie('refresh_token', {

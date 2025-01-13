@@ -1,16 +1,13 @@
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Navigate,
-} from "react-router-dom";
-import Menu from "./components/Menu";
-import Cart from "./pages/Cart";
-import Collections from "./pages/Collection";
-import Home from "./pages/Home";
-import Product from "./pages/Product";
-import Layout from "./layouts/Layout";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { GoogleCallBack } from "./components/GoogleCallBack";
+import LayoutAdmin from "./layouts/LayoutAdmin";
+import LayoutClient from "./layouts/LayoutClient";
+import Dashboard from "./pages/admin/Dashboard";
+import DashBoardProduct from "./pages/admin/Product";
+import Cart from "./pages/client/Cart";
+import Collections from "./pages/client/Collection";
+import Home from "./pages/client/Home";
+import Product from "./pages/client/Product";
 
 function App() {
   return (
@@ -28,34 +25,50 @@ function App() {
         <Route
           path="/"
           element={
-            <Layout>
+            <LayoutClient>
               <Home />
-            </Layout>
+            </LayoutClient>
           }
         />
         <Route path="/login/success" element={<GoogleCallBack />} />
         <Route
           path="/collections"
           element={
-            <Layout>
+            <LayoutClient>
               <Collections />
-            </Layout>
+            </LayoutClient>
           }
         />
         <Route
           path="/collections/:id"
           element={
-            <Layout>
+            <LayoutClient>
               <Product />
-            </Layout>
+            </LayoutClient>
           }
         />
         <Route
           path="/cart"
           element={
-            <Layout>
+            <LayoutClient>
               <Cart />
-            </Layout>
+            </LayoutClient>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <LayoutAdmin>
+              <Dashboard />
+            </LayoutAdmin>
+          }
+        />
+        <Route
+          path="/dashboard/products"
+          element={
+            <LayoutAdmin>
+              <DashBoardProduct />
+            </LayoutAdmin>
           }
         />
       </Routes>

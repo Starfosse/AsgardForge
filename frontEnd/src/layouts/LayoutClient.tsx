@@ -1,6 +1,6 @@
 import Menu from "../components/Menu";
 
-function Layout({ children }: { children: React.ReactNode }) {
+function LayoutClient({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-col min-h-screen ">
       <Menu />
@@ -9,4 +9,4 @@ function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-export default Layout;
+export default LayoutClient;

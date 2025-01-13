@@ -4,6 +4,7 @@ import PriceSection from "./PriceSection";
 import StockSection from "./StockSection";
 import DetailsSection from "./DetailsSection";
 import ImageSection from "./ImageSection";
+import { productsService } from "@/services/api";
 
 export interface ProductForm {
   name: string;
@@ -98,7 +99,6 @@ export default function ProductForm() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsUploading(true);
-    console.log(formData);
     try {
       setStatus((prev) => ({ ...prev, error: false, message: "" }));
       const formDataToSend = new FormData();
@@ -114,7 +114,7 @@ export default function ProductForm() {
         }
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await productsService.addProduct(formDataToSend);
 
       setStatus({
         submitted: true,

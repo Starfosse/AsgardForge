@@ -14,15 +14,43 @@ CREATE TABLE users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE `products` (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name VARCHAR(100) NOT NULL,
+CREATE TABLE categories (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL UNIQUE,
     description TEXT,
-    price DECIMAL(10,2) NOT NULL,
-    promotion INTEGER DEFAULT 0,
-    main_image_url VARCHAR(255),
-    image_gallery JSON,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE products (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    price DECIMAL(10, 2) NOT NULL,
+    promotion_price DECIMAL(10, 2),
+    stock INT NOT NULL DEFAULT 0,
+    category_id BIGINT NOT NULL,
+    alert_stock INT NOT NULL DEFAULT 0,
+    details TEXT,
+    specifications TEXT,
+    dimensions VARCHAR(255),
+    weight DECIMAL(10, 2),
+    material VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    stock_quantity INTEGER DEFAULT 0,
+    FOREIGN KEY (category_id) REFERENCES categories(id)
 );
+
+CREATE TABLE product_images (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    product_id BIGINT NOT NULL,
+    image_path VARCHAR(255) NOT NULL,
+    image_order INT NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+);
+
+CREATE INDEX idx_product_category ON products(category_id);
+CREATE INDEX idx_product_stock ON products(stock);
+CREATE INDEX idx_product_name ON products(name);
+CREATE INDEX idx_category_name ON categories(name);

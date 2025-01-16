@@ -52,7 +52,7 @@ export class ProductsController {
     const imageUploaded = await this.cloudinaryService.uploadImages(imageUrls);
     const product = {
       ...productData,
-      images: imageUploaded,
+      images: imageUploaded.map((image) => image.url),
     };
 
     return this.productsService.create(product);

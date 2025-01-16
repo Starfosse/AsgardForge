@@ -98,7 +98,7 @@ export class ProductsRepository {
     }
   }
 
-  async createProductImage(productId: number, imageUrl: UploadApiResponse) {
+  async createProductImage(productId: number, imageUrl: string) {
     try {
       const [result] = await this.connection.query(
         'SELECT COALESCE(MAX(image_order), -1) as maxOrder FROM product_images WHERE product_id = ?',

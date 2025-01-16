@@ -5,7 +5,7 @@ import { ProductsRepository } from './products.repository';
 import { UploadApiResponse } from 'cloudinary';
 
 export interface productData {
-  images: UploadApiResponse[];
+  images: string[];
   price: number;
   promotionPrice: number;
   stock: number;

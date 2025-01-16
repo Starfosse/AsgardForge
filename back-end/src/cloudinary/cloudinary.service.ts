@@ -23,4 +23,16 @@ export class CloudinaryService {
       throw error;
     }
   }
+
+  async uploadImages(imagePaths: string[]) {
+    try {
+      const results = await Promise.all(
+        imagePaths.map((imagePath) => this.uploadImage(imagePath)),
+      );
+      return results;
+    } catch (error) {
+      console.error("Erreur lors de l'upload sur Cloudinary:", error);
+      throw error;
+    }
+  }
 }

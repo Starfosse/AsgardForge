@@ -40,8 +40,6 @@ export class ProductsController {
     @Body() createProductDto: CreateProductDto,
     @UploadedFiles() images: Array<Express.Multer.File>,
   ) {
-    console.log(createProductDto);
-    console.log(images);
     const productData = {
       ...createProductDto,
       price: parseFloat(createProductDto.price.toString()),
@@ -51,33 +49,32 @@ export class ProductsController {
       weight: parseFloat(createProductDto.weight.toString()),
     };
     const imageUrls = images ? images.map((image) => image.path) : [];
-    const res = await this.cloudinaryService.uploadImage(imageUrls[0]);
-    console.log(res.url);
+    const imageUploaded = await this.cloudinaryService.uploadImages(imageUrls);
     const product = {
       ...productData,
-      images: imageUrls,
+      images: imageUploaded,
     };
 
-    return this.productsService.create(createProductDto);
+    return this.productsService.create(product);
   }
 
-  @Get()
-  findAll() {
-    return this.productsService.findAll();
-  }
+  // @Get()
+  // findAll() {
+  //   return this.productsService.findAll();
+  // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.productsService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.productsService.findOne(+id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-    return this.productsService.update(+id, updateProductDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
+  //   return this.productsService.update(+id, updateProductDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.productsService.remove(+id);
-  }
+  // @Delete(':id')
+  // remove(@Param('id') id: string) {
+  //   return this.productsService.remove(+id);
+  // }
 }

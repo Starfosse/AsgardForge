@@ -1,14 +1,63 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseInterceptors,
+  UploadedFiles,
+} from '@nestjs/common';
+import { diskStorage } from 'multer';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {}
+  constructor(
+    private readonly productsService: ProductsService,
+    private readonly cloudinaryService: CloudinaryService,
+  ) {}
 
   @Post()
-  create(@Body() createProductDto: CreateProductDto) {
+  @UseInterceptors(
+    FilesInterceptor('images', 10, {
+      storage: diskStorage({
+        destination: './uploads/products',
+        filename: (req, file, cb) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          cb(null, `${uniqueSuffix}-${file.originalname}`);
+        },
+      }),
+    }),
+  )
+  async create(
+    @Body() createProductDto: CreateProductDto,
+    @UploadedFiles() images: Array<Express.Multer.File>,
+  ) {
+    console.log(createProductDto);
+    console.log(images);
+    const productData = {
+      ...createProductDto,
+      price: parseFloat(createProductDto.price.toString()),
+      promotionPrice: parseFloat(createProductDto.promotionPrice.toString()),
+      stock: parseInt(createProductDto.stock.toString()),
+      alertStock: parseInt(createProductDto.alertStock.toString()),
+      weight: parseFloat(createProductDto.weight.toString()),
+    };
+    const imageUrls = images ? images.map((image) => image.path) : [];
+    const res = await this.cloudinaryService.uploadImage(imageUrls[0]);
+    console.log(res.url);
+    const product = {
+      ...productData,
+      images: imageUrls,
+    };
+
     return this.productsService.create(createProductDto);
   }
 

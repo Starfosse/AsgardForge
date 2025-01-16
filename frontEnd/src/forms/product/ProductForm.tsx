@@ -113,7 +113,7 @@ export default function ProductForm() {
           formDataToSend.append(key, value);
         }
       }
-
+      console.log(formDataToSend);
       await productsService.addProduct(formDataToSend);
 
       setStatus({

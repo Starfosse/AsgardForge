@@ -66,37 +66,6 @@ export class ProductsRepository {
     }
   }
 
-  // async updateProduct(productUpdate: productData) {
-  //   try {
-  //     const [rows] = await this.connection.query(
-  //       'SELECT * FROM products WHERE name = ?',
-  //       [productUpdate.name],
-  //     );
-
-  //     await this.connection.query(
-  //       'UPDATE products SET name = ?, description = ?, price = ?, promotion_price = ?, stock = ?, category_id = ?, alert_stock = ?, details = ?, specifications = ?, dimensions = ?, weight = ?, material = ? WHERE id = ?',
-  //       [
-  //         productUpdate.name,
-  //         productUpdate.description,
-  //         productUpdate.price,
-  //         productUpdate.promotionPrice,
-  //         productUpdate.stock,
-  //         rows[0].id,
-  //         productUpdate.alertStock,
-  //         productUpdate.details,
-  //         productUpdate.specifications,
-  //         productUpdate.dimensions,
-  //         productUpdate.weight,
-  //         productUpdate.material,
-  //         id,
-  //       ],
-  //     );
-  //   } catch (error) {
-  //     console.error(error);
-  //     throw new Error('Could not update product');
-  //   }
-  // }
-
   async deleteProduct(name: string) {
     try {
       await this.connection.query('DELETE FROM products WHERE name = ?', [

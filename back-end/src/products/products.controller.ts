@@ -15,12 +15,14 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { ProductsRepository } from './products.repository';
 
 @Controller('products')
 export class ProductsController {
   constructor(
     private readonly productsService: ProductsService,
     private readonly cloudinaryService: CloudinaryService,
+    private readonly productsRepository: ProductsRepository,
   ) {}
 
   @Post()
@@ -40,41 +42,51 @@ export class ProductsController {
     @Body() createProductDto: CreateProductDto,
     @UploadedFiles() images: Array<Express.Multer.File>,
   ) {
-    const productData = {
-      ...createProductDto,
-      price: parseFloat(createProductDto.price.toString()),
-      promotionPrice: parseFloat(createProductDto.promotionPrice.toString()),
-      stock: parseInt(createProductDto.stock.toString()),
-      alertStock: parseInt(createProductDto.alertStock.toString()),
-      weight: parseFloat(createProductDto.weight.toString()),
-    };
-    const imageUrls = images ? images.map((image) => image.path) : [];
-    const imageUploaded = await this.cloudinaryService.uploadImages(imageUrls);
-    const product = {
-      ...productData,
-      images: imageUploaded.map((image) => image.url),
-    };
-
-    return this.productsService.create(product);
+    try {
+      const productData = {
+        ...createProductDto,
+        price: parseFloat(createProductDto.price.toString()),
+        promotionPrice: parseFloat(createProductDto.promotionPrice.toString()),
+        stock: parseInt(createProductDto.stock.toString()),
+        alertStock: parseInt(createProductDto.alertStock.toString()),
+        weight: parseFloat(createProductDto.weight.toString()),
+      };
+      const imageUrls = images ? images.map((image) => image.path) : [];
+      const imageUploaded =
+        await this.cloudinaryService.uploadImages(imageUrls);
+      const product = {
+        ...productData,
+        images: imageUploaded.map((image) => image.url),
+      };
+      return this.productsService.create(product);
+    } catch (error) {
+      console.error(error);
+      throw new Error('Could not create product');
+    }
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.productsService.findAll();
-  // }
+  @Get()
+  async findAll() {
+    try {
+      return this.productsRepository.findAll();
+    } catch (error) {
+      console.error(error);
+      throw new Error('Could not find products');
+    }
+  }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.productsService.findOne(+id);
-  // }
+  @Get(':name')
+  async findOne(@Param('name') name: string) {
+    try {
+      return this.productsRepository.findProductByName(name);
+    } catch (error) {
+      console.error(error);
+      throw new Error('Could not find product');
+    }
+  }
 
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
-  //   return this.productsService.update(+id, updateProductDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.productsService.remove(+id);
-  // }
+  @Delete(':name')
+  async remove(@Param('name') name: string) {
+    return this.productsRepository.deleteProduct(name);
+  }
 }

@@ -36,7 +36,7 @@ export class ProductsRepository {
         ],
       );
 
-      return result[0].insertId;
+      return result.insertId;
     } catch (error) {
       console.error(error);
       throw new Error('Could not create product');
@@ -56,36 +56,46 @@ export class ProductsRepository {
     }
   }
 
-  async updateProduct(id: number, productUpdate: productData) {
+  async findAll() {
     try {
-      const [rows] = await this.connection.query(
-        'SELECT * FROM products WHERE name = ?',
-        [productUpdate.name],
-      );
-
-      await this.connection.query(
-        'UPDATE products SET name = ?, description = ?, price = ?, promotion_price = ?, stock = ?, category_id = ?, alert_stock = ?, details = ?, specifications = ?, dimensions = ?, weight = ?, material = ? WHERE id = ?',
-        [
-          productUpdate.name,
-          productUpdate.description,
-          productUpdate.price,
-          productUpdate.promotionPrice,
-          productUpdate.stock,
-          rows[0].id,
-          productUpdate.alertStock,
-          productUpdate.details,
-          productUpdate.specifications,
-          productUpdate.dimensions,
-          productUpdate.weight,
-          productUpdate.material,
-          id,
-        ],
-      );
+      const [rows] = await this.connection.query('SELECT * FROM products');
+      return rows;
     } catch (error) {
       console.error(error);
-      throw new Error('Could not update product');
+      throw new Error('Could not find products');
     }
   }
+
+  // async updateProduct(productUpdate: productData) {
+  //   try {
+  //     const [rows] = await this.connection.query(
+  //       'SELECT * FROM products WHERE name = ?',
+  //       [productUpdate.name],
+  //     );
+
+  //     await this.connection.query(
+  //       'UPDATE products SET name = ?, description = ?, price = ?, promotion_price = ?, stock = ?, category_id = ?, alert_stock = ?, details = ?, specifications = ?, dimensions = ?, weight = ?, material = ? WHERE id = ?',
+  //       [
+  //         productUpdate.name,
+  //         productUpdate.description,
+  //         productUpdate.price,
+  //         productUpdate.promotionPrice,
+  //         productUpdate.stock,
+  //         rows[0].id,
+  //         productUpdate.alertStock,
+  //         productUpdate.details,
+  //         productUpdate.specifications,
+  //         productUpdate.dimensions,
+  //         productUpdate.weight,
+  //         productUpdate.material,
+  //         id,
+  //       ],
+  //     );
+  //   } catch (error) {
+  //     console.error(error);
+  //     throw new Error('Could not update product');
+  //   }
+  // }
 
   async deleteProduct(name: string) {
     try {
@@ -131,28 +141,16 @@ export class ProductsRepository {
     }
   }
 
-  async createCategory(category: string, description: string) {
+  async findProductsByCategory(category: string) {
     try {
-      await this.connection.query(
-        'INSERT INTO categories (namen, description) VALUES (?, ?)',
-        [category, description],
-      );
-    } catch (error) {
-      console.error(error);
-      throw new Error('Could not create category');
-    }
-  }
-
-  async findCategory(category) {
-    try {
-      const [rows]: any = await this.connection.query(
-        'SELECT * FROM categories WHERE name = ?',
+      const [rows] = await this.connection.query(
+        'SELECT * FROM products WHERE category_id = (SELECT id FROM categories WHERE name = ?)',
         [category],
       );
-      return rows[0];
+      return rows;
     } catch (error) {
       console.error(error);
-      throw new Error('Could not find category');
+      throw new Error('Could not find products');
     }
   }
 }

@@ -1,21 +1,19 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
-  UseInterceptors,
+  Get,
+  Param,
+  Post,
   UploadedFiles,
+  UseInterceptors,
 } from '@nestjs/common';
-import { diskStorage } from 'multer';
-import { ProductsService } from './products.service';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { CreateProductDto } from './dto/create-product.dto';
 import { ProductsRepository } from './products.repository';
+import { ProductsService } from './products.service';
 
 @Controller('products')
 export class ProductsController {

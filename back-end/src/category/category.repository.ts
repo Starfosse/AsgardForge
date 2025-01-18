@@ -11,7 +11,7 @@ export class CategoryRepository {
   async create(category: string, description: string) {
     try {
       const [rows] = await this.connection.query(
-        'INSERT INTO categories (namen, description) VALUES (?, ?)',
+        'INSERT INTO categories (name, description) VALUES (?, ?)',
         [category, description],
       );
       return rows;

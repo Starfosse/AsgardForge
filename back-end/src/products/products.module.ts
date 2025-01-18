@@ -8,5 +8,6 @@ import { ProductsRepository } from './products.repository';
   imports: [CloudinaryModule],
   controllers: [ProductsController],
   providers: [ProductsService, ProductsRepository],
+  exports: [ProductsRepository],
 })
 export class ProductsModule {}

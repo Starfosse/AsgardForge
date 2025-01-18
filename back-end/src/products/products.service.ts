@@ -49,14 +49,14 @@ export class ProductsService {
     }
   }
 
-  update(id: number, productUpdate: productData) {
-    try {
-      return this.productsRepository.updateProduct(id, productUpdate);
-    } catch (error) {
-      console.error(error);
-      throw new Error('Could not update product');
-    }
-  }
+  // update(id: number, productUpdate: productData) {
+  //   try {
+  //     return this.productsRepository.updateProduct(id, productUpdate);
+  //   } catch (error) {
+  //     console.error(error);
+  //     throw new Error('Could not update product');
+  //   }
+  // }
 
   remove(name: string) {
     try {

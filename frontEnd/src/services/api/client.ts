@@ -87,4 +87,36 @@ export const apiClient = {
         : new Error("Unknown error occurred");
     }
   },
+  upload: async <T>(url: string, formData: FormData): Promise<T> => {
+    const headers = new Headers();
+    if (!isPublicRoute(url)) {
+      const token = localStorage.getItem("access_token");
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      } else {
+        throw new Error("No access token available");
+      }
+    }
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        body: formData,
+        headers,
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "API Error");
+      }
+
+      const responseData = await response.json();
+      return responseData.data;
+    } catch (error) {
+      console.error("API request failed:", error);
+      throw error instanceof Error
+        ? error
+        : new Error("Unknown error occurred");
+    }
+  },
 };

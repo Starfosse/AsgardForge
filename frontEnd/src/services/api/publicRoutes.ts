@@ -2,6 +2,7 @@ const publicRoutes = [
   "/auth/google",
   "/auth/google/callback",
   "/auth/refresh",
+  "/products",
 ] as const;
 
 type PublicRoute = (typeof publicRoutes)[number];

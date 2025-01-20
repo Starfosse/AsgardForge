@@ -33,12 +33,13 @@ export class CategoryController {
 
   @Get()
   async findAll() {
-    return this.categoryRepository.findAll();
+    console.log('findAll');
+    return await this.categoryRepository.findAll();
   }
 
   @Get(':name')
   async findOne(@Param('name') name: string) {
-    return this.categoryRepository.findCategory(name);
+    return await this.categoryRepository.findCategory(name);
   }
 
   @Get(':name/products')

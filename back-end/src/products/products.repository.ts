@@ -2,7 +2,6 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Connection } from 'mysql2/promise';
 import { DATABASE_CONNECTION } from 'src/database/database.module';
 import { productData } from './products.service';
-import { UploadApiResponse } from 'cloudinary';
 
 @Injectable()
 export class ProductsRepository {
@@ -17,7 +16,7 @@ export class ProductsRepository {
         'SELECT * FROM categories WHERE name = ?',
         [product.category],
       );
-
+      console.log(rows);
       const [result]: any = await this.connection.query(
         'INSERT INTO products (name, description, price, promotion_price, stock, category_id, alert_stock, details, specifications, dimensions, weight, material) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         [
@@ -43,11 +42,11 @@ export class ProductsRepository {
     }
   }
 
-  async findProductByName(name: string) {
+  async findProduct(id: number) {
     try {
       const [rows] = await this.connection.query(
-        'SELECT * FROM products WHERE name = ?',
-        [name],
+        'SELECT * FROM products WHERE id = ?',
+        [id],
       );
       return rows[0];
     } catch (error) {
@@ -66,11 +65,9 @@ export class ProductsRepository {
     }
   }
 
-  async deleteProduct(name: string) {
+  async deleteProduct(id: number) {
     try {
-      await this.connection.query('DELETE FROM products WHERE name = ?', [
-        name,
-      ]);
+      await this.connection.query('DELETE FROM products WHERE id = ?', [id]);
     } catch (error) {
       console.error(error);
       throw new Error('Could not delete product');

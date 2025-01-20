@@ -1,4 +1,6 @@
+import { Category, productsService } from "@/services/api";
 import Product from "@/services/api/products/types";
+import { useEffect, useState } from "react";
 
 interface InformationsSectionProps {
   handleChange: (
@@ -8,13 +10,30 @@ interface InformationsSectionProps {
   ) => void;
   formData: Product;
   isUploading: boolean;
+  product?: Product;
 }
 
 export default function InformationsSection({
   handleChange,
   formData,
   isUploading,
+  product,
 }: InformationsSectionProps) {
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    test();
+  }, []);
+
+  const test = async () => {
+    try {
+      const response = await productsService.getCategories();
+      console.log("response === ", response);
+      setCategories(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div>
       <div className="mb-4 flex flex-col">

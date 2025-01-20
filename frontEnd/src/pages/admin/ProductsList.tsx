@@ -1,9 +1,11 @@
 import { productsService } from "@/services/api";
 import Product from "@/services/api/products/types";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function ProductsList() {
   const [products, setProducts] = useState<Product[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     productsService.getProducts().then((response) => {
@@ -11,6 +13,19 @@ export default function ProductsList() {
     });
   }, []);
 
+  const handleDelete = async (id: number) => {
+    productsService.deleteProduct(id).then(() => {
+      setProducts((prev) => prev.filter((product) => product.id !== id));
+    });
+  };
+
+  const handleEdit = (id: number) => {
+    navigate(`/dashboard/products/${id}`);
+  };
+
+  const handleCreate = () => {
+    navigate("/dashboard/products/new");
+  };
   return (
     <div className="p-4">
       <h1 className="text-2xl font-bold text-gray-400 mb-6">
@@ -33,6 +48,7 @@ export default function ProductsList() {
                 "Dimensions",
                 "Poids",
                 "Matériaux",
+                "Actions",
               ].map((header) => (
                 <th
                   key={header}
@@ -100,11 +116,26 @@ export default function ProductsList() {
                 <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-400">
                   {product.material}
                 </td>
+                <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">
+                  <button
+                    className="text-red-500 hover:text-red-700 flex"
+                    onClick={() => handleDelete(product.id ? product.id : 0)}
+                  >
+                    Supprimer
+                  </button>
+                  <button
+                    className="text-blue-500 hover:text-blue-700"
+                    onClick={() => handleEdit(product.id ? product.id : 0)}
+                  >
+                    Modifier
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+      <button onClick={() => handleCreate()}>créér un produit</button>
     </div>
   );
 }

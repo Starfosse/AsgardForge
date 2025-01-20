@@ -1,11 +1,12 @@
-import { ProductForm } from "./ProductForm";
+import Product from "@/services/api/products/types";
 
 interface DetailsSectionProps {
   handleChange: (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => void;
-  formData: ProductForm;
+  formData: Product;
   isUploading: boolean;
+  product?: Product;
 }
 
 export default function DetailsSection({

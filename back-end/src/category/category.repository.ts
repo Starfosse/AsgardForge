@@ -38,6 +38,7 @@ export class CategoryRepository {
       const [rows]: any = await this.connection.query(
         'SELECT * from categories',
       );
+      console.log(rows);
       return rows;
     } catch (error) {
       console.error(error);

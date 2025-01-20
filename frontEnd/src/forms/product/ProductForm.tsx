@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InformationsSection from "./InformationsSection";
 import PriceSection from "./PriceSection";
 import StockSection from "./StockSection";
@@ -6,6 +6,7 @@ import DetailsSection from "./DetailsSection";
 import ImageSection from "./ImageSection";
 import { productsService } from "@/services/api";
 import Product from "@/services/api/products/types";
+import { useParams } from "react-router-dom";
 
 interface Status {
   submitted: boolean;
@@ -13,7 +14,12 @@ interface Status {
   message: string;
 }
 
-export default function ProductForm() {
+interface ProductFormProps {
+  product?: Product;
+}
+
+export default function ProductForm({ product }: ProductFormProps) {
+  const { id } = useParams<{ id: string }>();
   const [formData, setFormData] = useState<Product>({
     name: "",
     description: "",
@@ -29,6 +35,13 @@ export default function ProductForm() {
     weight: 0,
     material: "",
   });
+  useEffect(() => {
+    if (id) {
+      productsService.getProduct(parseInt(id)).then((product) => {
+        setFormData(product);
+      });
+    }
+  }, [id]);
   const [status, setStatus] = useState<Status>({
     submitted: false,
     error: false,
@@ -81,7 +94,7 @@ export default function ProductForm() {
       images: prev.images.filter((_, i) => i !== index),
     }));
   };
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsUploading(true);
     try {
@@ -98,8 +111,9 @@ export default function ProductForm() {
           formDataToSend.append(key, value);
         }
       }
-      console.log(formDataToSend);
-      await productsService.addProduct(formDataToSend);
+      id
+        ? productsService.editProduct(parseInt(id), formDataToSend)
+        : productsService.addProduct(formDataToSend);
 
       setStatus({
         submitted: true,
@@ -124,27 +138,32 @@ export default function ProductForm() {
           handleChange={handleChange}
           formData={formData}
           isUploading={isUploading}
+          product={product}
         />
         <PriceSection
           handleChange={handleChange}
           formData={formData}
           isUploading={isUploading}
+          product={product}
         />
         <StockSection
           handleChange={handleChange}
           formData={formData}
           isUploading={isUploading}
+          product={product}
         />
         <DetailsSection
           handleChange={handleChange}
           formData={formData}
           isUploading={isUploading}
+          product={product}
         />
         <ImageSection
           handleImageChange={handleImageChange}
           isUploading={isUploading}
           previews={previews}
           removeImage={removeImage}
+          product={product}
         />
         {status.error && (
           <div className="p-4 bg-red-50 border-l-4 border-red-500 text-red-700">

@@ -44,21 +44,15 @@ export class ProductsController {
     try {
       const productData = {
         ...createProductDto,
-        // price: createProductDto.price
-        //   ? parseFloat(createProductDto.price.toString())
-        //   : 0,
-        // promotionPrice: createProductDto.promotionPrice
-        //   ? parseFloat(createProductDto.promotionPrice.toString())
-        //   : 0,
-        // stock: createProductDto.stock
-        //   ? parseInt(createProductDto.stock.toString())
-        //   : 0,
-        // alertStock: createProductDto.alertStock
-        //   ? parseInt(createProductDto.alertStock.toString())
-        //   : 0,
-        // weight: createProductDto.weight
-        //   ? parseFloat(createProductDto.weight.toString())
-        //   : 0,
+        price: createProductDto.price ? createProductDto.price : 0,
+        promotionPrice: createProductDto.promotionPrice
+          ? createProductDto.promotionPrice
+          : 0,
+        stock: createProductDto.stock ? createProductDto.stock : 0,
+        alertStock: createProductDto.alertStock
+          ? createProductDto.alertStock
+          : 0,
+        weight: createProductDto.weight ? createProductDto.weight : 0,
       };
       const imageUrls = images ? images.map((image) => image.path) : [];
       const imageUploaded =
@@ -134,23 +128,18 @@ export class ProductsController {
     @UploadedFiles() images: Array<Express.Multer.File>,
   ) {
     try {
+      console.log(id);
       const productData = {
         ...updateProductDto,
-        // price: updateProductDto.price
-        //   ? parseFloat(updateProductDto.price.toString())
-        //   : 0,
-        // promotionPrice: updateProductDto.promotionPrice
-        //   ? parseFloat(updateProductDto.promotionPrice.toString())
-        //   : 0,
-        // stock: updateProductDto.stock
-        //   ? parseInt(updateProductDto.stock.toString())
-        //   : 0,
-        // alertStock: updateProductDto.alertStock
-        //   ? parseInt(updateProductDto.alertStock.toString())
-        //   : 0,
-        // weight: updateProductDto.weight
-        //   ? parseFloat(updateProductDto.weight.toString())
-        //   : 0,
+        price: updateProductDto.price ? updateProductDto.price : 0,
+        promotionPrice: updateProductDto.promotionPrice
+          ? updateProductDto.promotionPrice
+          : 0,
+        stock: updateProductDto.stock ? updateProductDto.stock : 0,
+        alertStock: updateProductDto.alertStock
+          ? updateProductDto.alertStock
+          : 0,
+        weight: updateProductDto.weight ? updateProductDto.weight : 0,
       };
       const imageUrls = images ? images.map((image) => image.path) : [];
       const imageUploaded =

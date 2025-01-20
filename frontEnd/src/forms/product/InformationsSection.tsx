@@ -10,26 +10,27 @@ interface InformationsSectionProps {
   ) => void;
   formData: Product;
   isUploading: boolean;
-  product?: Product;
+  setFormData: React.Dispatch<React.SetStateAction<Product>>;
 }
 
 export default function InformationsSection({
   handleChange,
   formData,
   isUploading,
-  product,
+  setFormData,
 }: InformationsSectionProps) {
   const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
-    test();
+    handleGetCategories();
   }, []);
 
-  const test = async () => {
+  const handleGetCategories = async () => {
     try {
       const response = await productsService.getCategories();
-      console.log("response === ", response);
       setCategories(response);
+      setFormData((prev) => ({ ...prev, category: response[0].name }));
+      console.log(formData);
     } catch (error) {
       console.error(error);
     }
@@ -78,10 +79,17 @@ export default function InformationsSection({
           onChange={handleChange}
           disabled={isUploading}
         >
-          <option value="Armes">Armes</option>
+          {/* <option value="Armes" >
+            Armes
+          </option>
           <option value="Armures">Armures</option>
           <option value="Outils">Outils</option>
-          <option value="Rituels">Rituels</option>
+          <option value="Rituels">Rituels</option> */}
+          {categories.map((category) => (
+            <option key={category.id} value={category.name}>
+              {category.name}
+            </option>
+          ))}
         </select>
       </div>
     </div>

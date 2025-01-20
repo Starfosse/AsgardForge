@@ -111,6 +111,7 @@ export default function ProductForm({ product }: ProductFormProps) {
           formDataToSend.append(key, value);
         }
       }
+      console.log("formDataToSend === ", formDataToSend);
       id
         ? productsService.editProduct(parseInt(id), formDataToSend)
         : productsService.addProduct(formDataToSend);
@@ -138,7 +139,7 @@ export default function ProductForm({ product }: ProductFormProps) {
           handleChange={handleChange}
           formData={formData}
           isUploading={isUploading}
-          product={product}
+          setFormData={setFormData}
         />
         <PriceSection
           handleChange={handleChange}

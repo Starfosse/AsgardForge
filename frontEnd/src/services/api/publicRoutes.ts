@@ -3,6 +3,7 @@ const publicRoutes = [
   "/auth/google/callback",
   "/auth/refresh",
   "/products",
+  "/products/:id",
   "/category",
 ] as const;
 

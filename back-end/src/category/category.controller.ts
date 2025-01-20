@@ -33,7 +33,6 @@ export class CategoryController {
 
   @Get()
   async findAll() {
-    console.log('findAll');
     return await this.categoryRepository.findAll();
   }
 

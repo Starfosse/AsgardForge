@@ -132,7 +132,7 @@ export default function ProductForm() {
     }
   };
   return (
-    <div className="p-8">
+    <>
       <h1 className="text-xl text-gray-400 mb-6">Ajouter un produit</h1>
       <form onSubmit={handleSubmit}>
         <InformationsSection
@@ -181,6 +181,6 @@ export default function ProductForm() {
           {isUploading ? "Création en cours..." : "Créer le produit"}
         </button>
       </form>
-    </div>
+    </>
   );
 }

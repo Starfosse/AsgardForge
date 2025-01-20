@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   UploadedFiles,
   UseInterceptors,
@@ -43,11 +44,21 @@ export class ProductsController {
     try {
       const productData = {
         ...createProductDto,
-        price: parseFloat(createProductDto.price.toString()),
-        promotionPrice: parseFloat(createProductDto.promotionPrice.toString()),
-        stock: parseInt(createProductDto.stock.toString()),
-        alertStock: parseInt(createProductDto.alertStock.toString()),
-        weight: parseFloat(createProductDto.weight.toString()),
+        price: createProductDto.price
+          ? parseFloat(createProductDto.price.toString())
+          : 0,
+        promotionPrice: createProductDto.promotionPrice
+          ? parseFloat(createProductDto.promotionPrice.toString())
+          : 0,
+        stock: createProductDto.stock
+          ? parseInt(createProductDto.stock.toString())
+          : 0,
+        alertStock: createProductDto.alertStock
+          ? parseInt(createProductDto.alertStock.toString())
+          : 0,
+        weight: createProductDto.weight
+          ? parseFloat(createProductDto.weight.toString())
+          : 0,
       };
       const imageUrls = images ? images.map((image) => image.path) : [];
       const imageUploaded =
@@ -66,7 +77,17 @@ export class ProductsController {
   @Get()
   async findAll() {
     try {
-      return this.productsRepository.findAll();
+      const products = await this.productsRepository.findAll();
+      let productsWithImages = [];
+      for (const product of products as any) {
+        const productImages =
+          await this.productsRepository.findAllImagesFromProduct(product.id);
+        productsWithImages.push({
+          ...product,
+          images: productImages,
+        });
+      }
+      return productsWithImages;
     } catch (error) {
       console.error(error);
       throw new Error('Could not find products');
@@ -76,7 +97,13 @@ export class ProductsController {
   @Get(':name')
   async findOne(@Param('name') name: string) {
     try {
-      return this.productsRepository.findProductByName(name);
+      const product = await this.productsRepository.findProductByName(name);
+      const productImages =
+        await this.productsRepository.findAllImagesFromProduct(product.id);
+      return {
+        ...product,
+        images: productImages,
+      };
     } catch (error) {
       console.error(error);
       throw new Error('Could not find product');
@@ -86,5 +113,56 @@ export class ProductsController {
   @Delete(':name')
   async remove(@Param('name') name: string) {
     return this.productsRepository.deleteProduct(name);
+  }
+
+  @Patch(':id')
+  @UseInterceptors(
+    FilesInterceptor('images', 10, {
+      storage: diskStorage({
+        destination: './uploads/products',
+        filename: (req, file, cb) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          cb(null, `${uniqueSuffix}-${file.originalname}`);
+        },
+      }),
+    }),
+  )
+  async update(
+    @Param('id') id: string,
+    @Body() updateProductDto: CreateProductDto,
+    @UploadedFiles() images: Array<Express.Multer.File>,
+  ) {
+    try {
+      const productData = {
+        ...updateProductDto,
+        price: updateProductDto.price
+          ? parseFloat(updateProductDto.price.toString())
+          : 0,
+        promotionPrice: updateProductDto.promotionPrice
+          ? parseFloat(updateProductDto.promotionPrice.toString())
+          : 0,
+        stock: updateProductDto.stock
+          ? parseInt(updateProductDto.stock.toString())
+          : 0,
+        alertStock: updateProductDto.alertStock
+          ? parseInt(updateProductDto.alertStock.toString())
+          : 0,
+        weight: updateProductDto.weight
+          ? parseFloat(updateProductDto.weight.toString())
+          : 0,
+      };
+      const imageUrls = images ? images.map((image) => image.path) : [];
+      const imageUploaded =
+        await this.cloudinaryService.uploadImages(imageUrls);
+      const product = {
+        ...productData,
+        images: imageUploaded.map((image) => image.url),
+      };
+      return await this.productsService.updateProduct(product, parseInt(id));
+    } catch (error) {
+      console.error(error);
+      throw new Error('Could not update product');
+    }
   }
 }

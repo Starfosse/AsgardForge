@@ -33,7 +33,7 @@ export class ProductsService {
           imageUrl,
         );
       }
-      return { message: 'Product created successfully' };
+      return productCreatedId;
     } catch (error) {
       console.error(error);
       throw new Error('Could not create product');
@@ -49,14 +49,19 @@ export class ProductsService {
     }
   }
 
-  // update(id: number, productUpdate: productData) {
-  //   try {
-  //     return this.productsRepository.updateProduct(id, productUpdate);
-  //   } catch (error) {
-  //     console.error(error);
-  //     throw new Error('Could not update product');
-  //   }
-  // }
+  async updateProduct(productUpdated: productData, id: number) {
+    try {
+      await this.productsRepository.updateProduct(productUpdated, id);
+      await this.productsRepository.deleteAllImagesFromProduct(id);
+      for (const image of productUpdated.images) {
+        await this.productsRepository.createProductImage(id, image);
+      }
+      return productUpdated;
+    } catch (error) {
+      console.error(error);
+      throw new Error('Could not update product');
+    }
+  }
 
   remove(name: string) {
     try {

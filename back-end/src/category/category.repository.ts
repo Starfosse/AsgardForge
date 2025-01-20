@@ -10,11 +10,11 @@ export class CategoryRepository {
   ) {}
   async create(category: string, description: string) {
     try {
-      const [rows] = await this.connection.query(
+      const [result]: any = await this.connection.query(
         'INSERT INTO categories (name, description) VALUES (?, ?)',
         [category, description],
       );
-      return rows;
+      return result.insertId;
     } catch (error) {
       console.error(error);
       throw new Error('Could not create category');
@@ -35,7 +35,9 @@ export class CategoryRepository {
 
   async findAll() {
     try {
-      const [rows]: any = this.connection.query('SELECT * from categories');
+      const [rows]: any = await this.connection.query(
+        'SELECT * from categories',
+      );
       return rows;
     } catch (error) {
       console.error(error);
@@ -43,16 +45,29 @@ export class CategoryRepository {
     }
   }
 
-  async findCategoryByName(name: string) {
+  async update(category: string, newCategory: string, description: string) {
     try {
-      const [rows]: any = await this.connection.query(
-        'SELECT * FROM categories WHERE name = ?',
-        [name],
+      const [result]: any = await this.connection.query(
+        'UPDATE categories SET name = ?, description = ? WHERE name = ?',
+        [newCategory, description, category],
       );
-      return rows[0];
+      return result.affectedRows;
     } catch (error) {
       console.error(error);
-      throw new Error('Could not find category');
+      throw new Error('Could not update category');
+    }
+  }
+
+  async delete(category: string) {
+    try {
+      const [result]: any = await this.connection.query(
+        'DELETE FROM categories WHERE name = ?',
+        [category],
+      );
+      return result.affectedRows;
+    } catch (error) {
+      console.error(error);
+      throw new Error('Could not delete category');
     }
   }
 }

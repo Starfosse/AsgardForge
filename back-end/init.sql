@@ -1,3 +1,5 @@
+CREATE DATABASE IF NOT EXISTS asgardforge;
+USE asgardforge;
 CREATE USER IF NOT EXISTS 'starfosse'@'%' IDENTIFIED BY '4589';
 GRANT ALL PRIVILEGES ON asgardforge.* TO 'starfosse'@'%';
 FLUSH PRIVILEGES;

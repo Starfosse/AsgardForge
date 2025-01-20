@@ -18,7 +18,7 @@ export class ProductsRepository {
         [product.category],
       );
 
-      const result: any = await this.connection.query(
+      const [result]: any = await this.connection.query(
         'INSERT INTO products (name, description, price, promotion_price, stock, category_id, alert_stock, details, specifications, dimensions, weight, material) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         [
           product.name,
@@ -86,9 +86,8 @@ export class ProductsRepository {
 
       const nextOrder = result[0].maxOrder + 1;
 
-      // Ensuite on insère avec le nouvel ordre
       await this.connection.query(
-        'INSERT INTO product_images (product_id, image_url, image_order) VALUES (?, ?, ?)',
+        'INSERT INTO product_images (product_id, image_path, image_order) VALUES (?, ?, ?)',
         [productId, imageUrl, nextOrder],
       );
     } catch (error) {
@@ -120,6 +119,74 @@ export class ProductsRepository {
     } catch (error) {
       console.error(error);
       throw new Error('Could not find products');
+    }
+  }
+
+  async deleteProductImage(productId: number, imageUrl: string) {
+    try {
+      await this.connection.query(
+        'DELETE FROM product_images WHERE product_id = ? AND image_path = ?',
+        [productId, imageUrl],
+      );
+    } catch (error) {
+      console.error(error);
+      throw new Error('Could not delete product image');
+    }
+  }
+
+  async deleteAllImagesFromProduct(productId: number) {
+    try {
+      await this.connection.query(
+        'DELETE FROM product_images WHERE product_id = ?',
+        [productId],
+      );
+    } catch (error) {
+      console.error(error);
+      throw new Error('Could not delete product images');
+    }
+  }
+
+  async updateProduct(product: productData, id: number) {
+    try {
+      const [rows] = await this.connection.query(
+        'SELECT * FROM products WHERE id = ?',
+        [id],
+      );
+
+      const [result]: any = await this.connection.query(
+        'UPDATE products SET name = ?, description = ?, price = ?, promotion_price = ?, stock = ?, category_id = ?, alert_stock = ?, details = ?, specifications = ?, dimensions = ?, weight = ?, material = ? WHERE id = ?',
+        [
+          product.name,
+          product.description,
+          product.price,
+          product.promotionPrice,
+          product.stock,
+          rows[0].category_id,
+          product.alertStock,
+          product.details,
+          product.specifications,
+          product.dimensions,
+          product.weight,
+          product.material,
+          rows[0].id,
+        ],
+      );
+      return { message: 'Product updated' };
+    } catch (error) {
+      console.error(error);
+      throw new Error('Could not update product');
+    }
+  }
+
+  async updateProductImage(productId: number, imageUrl: string) {
+    try {
+      await this.connection.query(
+        'UPDATE product_images SET image_path = ? WHERE product_id = ?',
+        [imageUrl, productId],
+      );
+    } catch (error) {
+      console.error(error);
+      throw new Error('Could not update product image');
     }
   }
 }

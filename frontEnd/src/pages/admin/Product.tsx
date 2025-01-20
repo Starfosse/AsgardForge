@@ -5,7 +5,7 @@ export default function DashBoardProduct() {
   return (
     <div className="w-full bg-[#272E48] rounded-sm p-8">
       <ProductsList />
-      {/* <ProductForm /> */}
+      <ProductForm />
     </div>
   );
 }

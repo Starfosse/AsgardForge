@@ -1,4 +1,4 @@
-import { ProductForm } from "./ProductForm";
+import Product from "@/services/api/products/types";
 
 interface InformationsSectionProps {
   handleChange: (
@@ -6,7 +6,7 @@ interface InformationsSectionProps {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => void;
-  formData: ProductForm;
+  formData: Product;
   isUploading: boolean;
 }
 

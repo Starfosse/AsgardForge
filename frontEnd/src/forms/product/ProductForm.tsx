@@ -5,22 +5,7 @@ import StockSection from "./StockSection";
 import DetailsSection from "./DetailsSection";
 import ImageSection from "./ImageSection";
 import { productsService } from "@/services/api";
-
-export interface ProductForm {
-  name: string;
-  description: string;
-  price: number;
-  promotionPrice: number;
-  stock: number;
-  category: string;
-  alertStock: number;
-  images: File[];
-  details: string;
-  specifications: string;
-  dimensions: string;
-  weight: number;
-  material: string;
-}
+import Product from "@/services/api/products/types";
 
 interface Status {
   submitted: boolean;
@@ -29,7 +14,7 @@ interface Status {
 }
 
 export default function ProductForm() {
-  const [formData, setFormData] = useState<ProductForm>({
+  const [formData, setFormData] = useState<Product>({
     name: "",
     description: "",
     price: 0,

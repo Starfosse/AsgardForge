@@ -32,7 +32,7 @@ export const apiClient = {
 
       if (response.status === 401) {
         try {
-          const refreshResponse = await fetch("/api/auth/refresh", {
+          const refreshResponse = await fetch("/auth/refresh", {
             method: "POST",
             credentials: "include",
           });
@@ -49,7 +49,6 @@ export const apiClient = {
           if (refreshData.data?.access_token) {
             localStorage.setItem("access_token", refreshData.data.access_token);
 
-            // Nouvelle requête avec le token rafraîchi
             const newResponse = await fetch(url, {
               ...options,
               headers: new Headers({

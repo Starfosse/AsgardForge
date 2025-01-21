@@ -36,15 +36,15 @@ export class CategoryController {
     return await this.categoryRepository.findAll();
   }
 
-  @Get(':name')
-  async findOne(@Param('name') name: string) {
-    return await this.categoryRepository.findCategory(name);
+  @Get(':id')
+  async findOne(@Param('id') id: number) {
+    return await this.categoryRepository.findCategory(id);
   }
 
-  @Get(':name/products')
-  async findProducts(@Param('name') name: string) {
+  @Get(':id/products')
+  async findProducts(@Param('id') id: number) {
     try {
-      return await this.categoryService.findProductsByCategory(name);
+      return await this.categoryService.findProductsByCategory(id);
     } catch (error) {
       console.error(error);
       throw new Error('Could not find products');

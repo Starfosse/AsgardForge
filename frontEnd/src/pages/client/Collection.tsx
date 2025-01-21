@@ -1,96 +1,40 @@
-import React, { useState } from "react";
-import { Axe, Shield, Filter } from "lucide-react";
+import { productsService } from "@/services/api";
+import Product from "@/services/api/products/types";
+import { Axe, Shield } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { Category } from "../admin/ProductsList";
 
-const Collections = () => {
-  const [selectedCategory, setSelectedCategory] = useState(null);
+const Collection = () => {
+  const [category, setCategory] = useState<Category | null>(null);
+  const [productsCategory, setProductsCategory] = useState<Product[]>([]);
   const [priceRange, setPriceRange] = useState([0, 500]);
+  const { id } = useParams<{ id: string }>();
 
-  const categories = [
-    {
-      name: "Haches",
-      icon: <Axe className="w-6 h-6 text-amber-700" />,
-      products: [
-        {
-          id: 1,
-          name: "Hache de Guerre d'Odin",
-          price: 249.99,
-          image: "/api/placeholder/400/300",
-          description:
-            "Hache authentique inspirée des légendaires guerriers nordiques.",
-        },
-        {
-          id: 2,
-          name: "Hache de Forgeron",
-          price: 199.99,
-          image: "/api/placeholder/400/300",
-          description:
-            "Outil traditionnel des forgerons vikings, parfait pour les artisans.",
-        },
-      ],
-    },
-    {
-      name: "Boucliers",
-      icon: <Shield className="w-6 h-6 text-gray-600" />,
-      products: [
-        {
-          id: 3,
-          name: "Bouclier du Clan Bjorn",
-          price: 349.99,
-          image: "/api/placeholder/400/300",
-          description:
-            "Bouclier robuste représentant les traditions du clan Bjorn.",
-        },
-        {
-          id: 4,
-          name: "Bouclier de Protection Légère",
-          price: 279.99,
-          image: "/api/placeholder/400/300",
-          description: "Bouclier compact, idéal pour les combats rapprochés.",
-        },
-      ],
-    },
-  ];
+  const fetchCategory = async () => {
+    if (!id) return;
+    const response = await productsService.getCategory(parseInt(id));
+    const products = await productsService.getProductsByCategory(parseInt(id));
+    setCategory(response);
+    setProductsCategory(products);
+  };
 
-  const filteredProducts = categories.flatMap((category) =>
-    category.products.filter(
-      (product) =>
-        (selectedCategory ? category.name === selectedCategory : true) &&
-        product.price >= priceRange[0] &&
-        product.price <= priceRange[1]
-    )
+  useEffect(() => {
+    fetchCategory();
+  }, [id]);
+
+  const filteredProducts = productsCategory.filter(
+    (product) =>
+      product.price >= priceRange[0] && product.price <= priceRange[1]
   );
-
   return (
     <div className="bg-stone-100 min-h-screen">
       <div className="container mx-auto px-4 py-12">
         <h1 className="text-4xl font-bold mb-8 text-center text-stone-800">
-          Nos Produits Vikings
+          {category ? category.name : "Tous les produits"}
         </h1>
 
-        {/* Filtres */}
         <div className="mb-8 flex flex-wrap justify-center gap-4">
-          {/* Filtres par catégorie */}
-          <div className="flex gap-2">
-            {categories.map((category) => (
-              <button
-                key={category.name}
-                onClick={() =>
-                  setSelectedCategory(
-                    selectedCategory === category.name ? null : category.name
-                  )
-                }
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg transition duration-300 ${
-                  selectedCategory === category.name
-                    ? "bg-amber-700 text-white"
-                    : "bg-stone-200 text-stone-700 hover:bg-stone-300"
-                }`}
-              >
-                {category.icon}
-                {category.name}
-              </button>
-            ))}
-          </div>
-
           {/* Filtre par prix */}
           <div className="flex items-center gap-4">
             <span>Prix:</span>
@@ -114,7 +58,7 @@ const Collections = () => {
               className="bg-white rounded-lg shadow-lg overflow-hidden hover:scale-105 transition duration-300"
             >
               <img
-                src={product.image}
+                // src={product.images[0].url} //rattacher les images aux products
                 alt={product.name}
                 className="w-full h-64 object-cover"
               />
@@ -126,7 +70,7 @@ const Collections = () => {
                     {product.price} €
                   </span>
                   <a
-                    href={`/produits/${product.id}`}
+                    href={`/collections/${id}/${product.id}`}
                     className="bg-stone-800 text-white px-4 py-2 rounded hover:bg-stone-700"
                   >
                     Détails
@@ -147,4 +91,4 @@ const Collections = () => {
   );
 };
 
-export default Collections;
+export default Collection;

@@ -9,6 +9,11 @@ export const productsService = {
   getProducts: () => {
     return apiClient.fetch<Product[]>("/products", { method: "GET" });
   },
+  getProductsByCategory: (id: number) => {
+    return apiClient.fetch<Product[]>(`/category/${id}/products`, {
+      method: "GET",
+    });
+  },
   deleteProduct: (id: number) => {
     return apiClient.fetch(`/products/${id}`, { method: "DELETE" });
   },
@@ -20,6 +25,9 @@ export const productsService = {
   },
   getCategories: () => {
     return apiClient.fetch<Category[]>("/category", { method: "GET" });
+  },
+  getCategory: (id: number) => {
+    return apiClient.fetch<Category>(`/category/${id}`, { method: "GET" });
   },
   createCategory: (category: Category) => {
     return apiClient.fetch("/category", {

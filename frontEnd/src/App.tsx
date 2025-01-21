@@ -1,15 +1,18 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { GoogleCallBack } from "./components/GoogleCallBack";
+import ProductForm from "./forms/product/ProductForm";
 import LayoutAdmin from "./layouts/LayoutAdmin";
 import LayoutClient from "./layouts/LayoutClient";
 import Dashboard from "./pages/admin/Dashboard";
-import Cart from "./pages/client/Cart";
-import Collections from "./pages/client/Collection";
-import Home from "./pages/client/Home";
-import Product from "./pages/client/Product";
-import ProductForm from "./forms/product/ProductForm";
-import DashBoardProduct from "./wrapper/DashboardProduct";
 import ProductsList from "./pages/admin/ProductsList";
+import Cart from "./pages/client/Cart";
+import {
+  default as Collection,
+  default as Collections,
+} from "./pages/client/Collection";
+import Home from "./pages/client/Home";
+import ProductPage from "./pages/client/Product";
+import DashBoardProduct from "./wrapper/DashboardProduct";
 
 function App() {
   return (
@@ -45,7 +48,16 @@ function App() {
           path="/collections/:id"
           element={
             <LayoutClient>
-              <Product />
+              {/* <Product /> */}
+              <Collection />
+            </LayoutClient>
+          }
+        />
+        <Route
+          path="/collections/:id/:productId"
+          element={
+            <LayoutClient>
+              <ProductPage />
             </LayoutClient>
           }
         />

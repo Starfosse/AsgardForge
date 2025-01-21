@@ -105,11 +105,11 @@ export class ProductsRepository {
     }
   }
 
-  async findProductsByCategory(category: string) {
+  async findProductsByCategory(id: number) {
     try {
       const [rows] = await this.connection.query(
-        'SELECT * FROM products WHERE category_id = (SELECT id FROM categories WHERE name = ?)',
-        [category],
+        'SELECT * FROM products WHERE category_id = ?',
+        [id],
       );
       return rows;
     } catch (error) {

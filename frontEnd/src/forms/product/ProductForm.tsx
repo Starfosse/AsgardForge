@@ -14,11 +14,7 @@ interface Status {
   message: string;
 }
 
-interface ProductFormProps {
-  product?: Product;
-}
-
-export default function ProductForm({ product }: ProductFormProps) {
+export default function ProductForm() {
   const { id } = useParams<{ id: string }>();
   const [formData, setFormData] = useState<Product>({
     name: "",
@@ -111,7 +107,6 @@ export default function ProductForm({ product }: ProductFormProps) {
           formDataToSend.append(key, value);
         }
       }
-      console.log("formDataToSend === ", formDataToSend);
       id
         ? productsService.editProduct(parseInt(id), formDataToSend)
         : productsService.addProduct(formDataToSend);
@@ -128,6 +123,23 @@ export default function ProductForm({ product }: ProductFormProps) {
         message: "Une erreur est survenue lors de l'ajout du produit",
       }));
     } finally {
+      id
+        ? null
+        : setFormData({
+            name: "",
+            description: "",
+            price: 0,
+            promotionPrice: 0,
+            stock: 0,
+            category: "",
+            alertStock: 0,
+            images: [],
+            details: "",
+            specifications: "",
+            dimensions: "",
+            weight: 0,
+            material: "",
+          });
       setIsUploading(false);
     }
   };
@@ -145,26 +157,22 @@ export default function ProductForm({ product }: ProductFormProps) {
           handleChange={handleChange}
           formData={formData}
           isUploading={isUploading}
-          product={product}
         />
         <StockSection
           handleChange={handleChange}
           formData={formData}
           isUploading={isUploading}
-          product={product}
         />
         <DetailsSection
           handleChange={handleChange}
           formData={formData}
           isUploading={isUploading}
-          product={product}
         />
         <ImageSection
           handleImageChange={handleImageChange}
           isUploading={isUploading}
           previews={previews}
           removeImage={removeImage}
-          product={product}
         />
         {status.error && (
           <div className="p-4 bg-red-50 border-l-4 border-red-500 text-red-700">

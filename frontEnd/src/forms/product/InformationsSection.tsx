@@ -1,4 +1,5 @@
-import { Category, productsService } from "@/services/api";
+import { Category } from "@/pages/admin/ProductsList";
+import { productsService } from "@/services/api";
 import Product from "@/services/api/products/types";
 import { useEffect, useState } from "react";
 

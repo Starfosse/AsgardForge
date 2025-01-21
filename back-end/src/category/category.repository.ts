@@ -58,11 +58,11 @@ export class CategoryRepository {
     }
   }
 
-  async delete(category: string) {
+  async delete(id: number) {
     try {
       const [result]: any = await this.connection.query(
-        'DELETE FROM categories WHERE name = ?',
-        [category],
+        'DELETE FROM categories WHERE id = ?',
+        [id],
       );
       return result.affectedRows;
     } catch (error) {

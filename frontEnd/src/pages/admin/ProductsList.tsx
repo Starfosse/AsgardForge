@@ -1,17 +1,40 @@
+import React, { useEffect, useState } from "react";
 import { productsService } from "@/services/api";
 import Product from "@/services/api/products/types";
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+export interface Category {
+  id?: number;
+  name: string;
+  description: string;
+}
 
 export default function ProductsList() {
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [categoryForm, setCategoryForm] = useState<Category>({
+    name: "",
+    description: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    productsService.getProducts().then((response) => {
-      setProducts(response);
-    });
+    fetchProducts();
+    fetchCategories();
   }, []);
+
+  const fetchProducts = async () => {
+    const response = await productsService.getProducts();
+    setProducts(response);
+  };
+
+  const fetchCategories = async () => {
+    const response = await productsService.getCategories();
+    setCategories(response);
+  };
 
   const handleDelete = async (id: number) => {
     productsService.deleteProduct(id).then(() => {
@@ -23,15 +46,77 @@ export default function ProductsList() {
     navigate(`/dashboard/products/${id}`);
   };
 
-  const handleCreate = () => {
+  const handleCreateProduct = () => {
     navigate("/dashboard/products/new");
   };
+
+  const handleSubmitCategory = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      if (isEditMode) {
+        await productsService.updateCategory(categoryForm.id!, categoryForm);
+      } else {
+        await productsService.createCategory(categoryForm);
+      }
+      setIsModalOpen(false);
+      setCategoryForm({ name: "", description: "" });
+      fetchCategories();
+    } catch (error) {
+      console.error("Error with category:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const openEditModal = (category: Category) => {
+    setCategoryForm({
+      name: category.name,
+      description: category.description,
+    });
+    setIsEditMode(true);
+    setIsModalOpen(true);
+  };
+
+  const openCreateModal = () => {
+    setCategoryForm({ name: "", description: "" });
+    setIsEditMode(false);
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteCategory = async (categoryId: number) => {
+    if (
+      window.confirm("Êtes-vous sûr de vouloir supprimer cette catégorie ?")
+    ) {
+      try {
+        await productsService.deleteCategory(categoryId);
+        fetchCategories();
+      } catch (error) {
+        console.error("Error deleting category:", error);
+      }
+    }
+  };
+
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold text-gray-400 mb-6">
-        Liste des Produits
-      </h1>
-      <div className="overflow-x-auto shadow-sm rounded-lg border border-gray-200">
+    <div className="p-4 relative">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-gray-400">Liste des Produits</h1>
+        <div className="space-x-4">
+          <button
+            onClick={handleCreateProduct}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Créer un produit
+          </button>
+          <button
+            onClick={openCreateModal}
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+          >
+            Créer une catégorie
+          </button>
+        </div>
+      </div>
+      <div className="overflow-x-auto shadow-sm rounded-lg border border-gray-200 mb-8">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-[#272E48]">
             <tr>
@@ -135,7 +220,139 @@ export default function ProductsList() {
           </tbody>
         </table>
       </div>
-      <button onClick={() => handleCreate()}>créér un produit</button>
+      <div className="mt-8">
+        <h2 className="text-xl font-bold text-gray-400 mb-4">Catégories</h2>
+        <div className="overflow-x-auto shadow-sm rounded-lg border border-gray-200">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-[#272E48]">
+              <tr>
+                <th className="px-6 py-3 text-left text-sm font-bold text-gray-400">
+                  Nom
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-bold text-gray-400">
+                  Description
+                </th>
+                <th className="px-6 py-3 text-left text-sm font-bold text-gray-400">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200 bg-[#272E48]">
+              {categories.map((category) => (
+                <tr
+                  key={category.name}
+                  className="hover:bg-[#0d101b] transition-colors duration-200"
+                >
+                  <td className="px-6 py-4 text-sm text-gray-400">
+                    {category.name}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-400">
+                    {category.description}
+                  </td>
+                  <td className="px-6 py-4 text-sm space-x-3">
+                    <button
+                      onClick={() => openEditModal(category)}
+                      className="text-blue-500 hover:text-blue-700"
+                    >
+                      Modifier
+                    </button>
+                    <button
+                      onClick={() => handleDeleteCategory(category.id!)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      Supprimer
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-[#272E48] rounded-lg p-6 w-full max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-gray-400">
+                {isEditMode ? "Modifier la catégorie" : "Nouvelle catégorie"}
+              </h2>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="text-gray-400 hover:text-gray-500"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmitCategory} className="space-y-4">
+              <div>
+                <label className="block text-gray-400 mb-2" htmlFor="name">
+                  Nom
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  value={categoryForm.name}
+                  onChange={(e) =>
+                    setCategoryForm((prev) => ({
+                      ...prev,
+                      name: e.target.value,
+                    }))
+                  }
+                  className="w-full rounded-sm bg-[#1b2032] outline-1 outline outline-gray-500 p-1 px-3 text-gray-400 focus:outline-sky-500"
+                  required
+                  disabled={isSubmitting}
+                />
+              </div>
+
+              <div>
+                <label
+                  className="block text-gray-400 mb-2"
+                  htmlFor="description"
+                >
+                  Description
+                </label>
+                <textarea
+                  id="description"
+                  value={categoryForm.description}
+                  onChange={(e) =>
+                    setCategoryForm((prev) => ({
+                      ...prev,
+                      description: e.target.value,
+                    }))
+                  }
+                  className="w-full rounded-sm bg-[#1b2032] outline-1 outline outline-gray-500 p-1 px-3 text-gray-400 focus:outline-sky-500"
+                  rows={3}
+                  required
+                  disabled={isSubmitting}
+                />
+              </div>
+
+              <div className="flex justify-end space-x-3">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-4 py-2 border border-gray-500 rounded text-gray-400 hover:bg-[#1b2032]"
+                  disabled={isSubmitting}
+                >
+                  Annuler
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting
+                    ? "Traitement..."
+                    : isEditMode
+                    ? "Modifier"
+                    : "Créer"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

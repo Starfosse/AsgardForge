@@ -68,10 +68,10 @@ export class CategoryController {
     }
   }
 
-  @Delete(':name')
-  async remove(@Param('name') name: string) {
+  @Delete(':id')
+  async remove(@Param('id') id: number) {
     try {
-      return await this.categoryRepository.delete(name);
+      return await this.categoryRepository.delete(id);
     } catch (error) {
       console.error(error);
       throw new Error('Could not delete category');

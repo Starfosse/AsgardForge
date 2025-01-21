@@ -1,11 +1,6 @@
+import { Category } from "@/pages/admin/ProductsList";
 import { apiClient } from "../client";
 import Product from "./types";
-
-export interface Category {
-  id?: number;
-  name: string;
-  description: string;
-}
 
 export const productsService = {
   addProduct: (formData: FormData) => {
@@ -25,5 +20,20 @@ export const productsService = {
   },
   getCategories: () => {
     return apiClient.fetch<Category[]>("/category", { method: "GET" });
+  },
+  createCategory: (category: Category) => {
+    return apiClient.fetch("/category", {
+      method: "POST",
+      body: JSON.stringify(category),
+    });
+  },
+  updateCategory: (id: number, category: Category) => {
+    return apiClient.fetch(`/category/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(category),
+    });
+  },
+  deleteCategory: (id: number) => {
+    return apiClient.fetch(`/category/${id}`, { method: "DELETE" });
   },
 };

@@ -104,6 +104,26 @@ export class ProductsController {
     }
   }
 
+  @Get('images/:id')
+  async findImages(@Param('id') id: number) {
+    try {
+      return await this.productsRepository.findAllImagesFromProduct(id);
+    } catch (error) {
+      console.error(error);
+      throw new Error('Could not find images');
+    }
+  }
+
+  @Get('images/first/:id')
+  async findFirstImage(@Param('id') id: number) {
+    try {
+      return await this.productsRepository.findFirstImageFromProduct(id);
+    } catch (error) {
+      console.error(error);
+      throw new Error('Could not find image');
+    }
+  }
+
   @Delete(':id')
   async remove(@Param('id') name: number) {
     return this.productsRepository.deleteProduct(name);

@@ -1,6 +1,7 @@
 import { Category } from "@/pages/admin/ProductsList";
 import { apiClient } from "../client";
 import Product from "./types";
+import { ProductWithImages } from "@/pages/client/Product";
 
 export const productsService = {
   addProduct: (formData: FormData) => {
@@ -10,7 +11,7 @@ export const productsService = {
     return apiClient.fetch<Product[]>("/products", { method: "GET" });
   },
   getProductsByCategory: (id: number) => {
-    return apiClient.fetch<Product[]>(`/category/${id}/products`, {
+    return apiClient.fetch<ProductWithImages[]>(`/category/${id}/products`, {
       method: "GET",
     });
   },
@@ -21,7 +22,9 @@ export const productsService = {
     return apiClient.upload(`/products/${id}`, formData, "PUT");
   },
   getProduct: (id: number) => {
-    return apiClient.fetch<Product>(`/products/${id}`, { method: "GET" });
+    return apiClient.fetch<ProductWithImages>(`/products/${id}`, {
+      method: "GET",
+    });
   },
   getCategories: () => {
     return apiClient.fetch<Category[]>("/category", { method: "GET" });
@@ -43,5 +46,11 @@ export const productsService = {
   },
   deleteCategory: (id: number) => {
     return apiClient.fetch(`/category/${id}`, { method: "DELETE" });
+  },
+  findImages: (id: number) => {
+    return apiClient.fetch(`/products/images/${id}`, { method: "GET" });
+  },
+  findFirstImage: (id: number) => {
+    return apiClient.fetch(`/products/images/first/${id}`, { method: "GET" });
   },
 };

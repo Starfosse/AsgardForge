@@ -105,6 +105,19 @@ export class ProductsRepository {
     }
   }
 
+  async findFirstImageFromProduct(productId: number) {
+    try {
+      const [rows] = await this.connection.query(
+        'SELECT * FROM product_images WHERE product_id = ? ORDER BY image_order ASC LIMIT 1',
+        [productId],
+      );
+      return rows[0];
+    } catch (error) {
+      console.error(error);
+      throw new Error('Could not find image');
+    }
+  }
+
   async findProductsByCategory(id: number) {
     try {
       const [rows] = await this.connection.query(

@@ -1,21 +1,20 @@
 import { productsService } from "@/services/api";
-import Product from "@/services/api/products/types";
-import { Axe, Shield } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Category } from "../admin/ProductsList";
+import { ProductWithImages } from "./Product";
 
 const Collection = () => {
   const [category, setCategory] = useState<Category | null>(null);
-  const [productsCategory, setProductsCategory] = useState<Product[]>([]);
+  const [productsCategory, setProductsCategory] = useState<ProductWithImages[]>(
+    []
+  );
   const [priceRange, setPriceRange] = useState([0, 500]);
   const { id } = useParams<{ id: string }>();
 
   const fetchCategory = async () => {
     if (!id) return;
-    const response = await productsService.getCategory(parseInt(id));
     const products = await productsService.getProductsByCategory(parseInt(id));
-    setCategory(response);
     setProductsCategory(products);
   };
 
@@ -27,6 +26,7 @@ const Collection = () => {
     (product) =>
       product.price >= priceRange[0] && product.price <= priceRange[1]
   );
+  console.log(productsCategory);
   return (
     <div className="bg-stone-100 min-h-screen">
       <div className="container mx-auto px-4 py-12">
@@ -58,7 +58,7 @@ const Collection = () => {
               className="bg-white rounded-lg shadow-lg overflow-hidden hover:scale-105 transition duration-300"
             >
               <img
-                // src={product.images[0].url} //rattacher les images aux products
+                // src={product.images[0].image_path} //rattacher les images aux products
                 alt={product.name}
                 className="w-full h-64 object-cover"
               />

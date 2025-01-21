@@ -4,11 +4,35 @@ import { Axe, Shield, ShoppingCart, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+interface Images {
+  id: number;
+  product_id: number;
+  image_order: number;
+  image_path: string;
+}
+
+export interface ProductWithImages {
+  id?: number;
+  name: string;
+  description: string;
+  price: number;
+  promotionPrice: number;
+  stock: number;
+  category: string;
+  alertStock: number;
+  details: string;
+  specifications: string;
+  dimensions: string;
+  weight: number;
+  material: string;
+  images: Images[];
+}
+
 const ProductPage = () => {
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
   const { productId } = useParams<{ productId: string }>();
-  const [product, setProduct] = useState<Product | null>(null);
+  const [product, setProduct] = useState<ProductWithImages | null>(null);
   const fetchProduct = async () => {
     if (!productId) return;
     const response = await productsService.getProduct(parseInt(productId));
@@ -18,38 +42,6 @@ const ProductPage = () => {
   useEffect(() => {
     fetchProduct();
   }, [productId]);
-  // const product = {
-  //   id: 1,
-  //   name: "Hache de Guerre d'Odin",
-  //   price: 249.99,
-  //   description:
-  //     "Une hache de guerre authentique, forgée avec la précision et le respect des traditions des anciens guerriers nordiques. Chaque détail a été méticuleusement travaillé pour recréer l'essence des armes vikings.",
-  //   images: [
-  //     "/api/placeholder/800/600",
-  //     "/api/placeholder/800/600",
-  //     "/api/placeholder/800/600",
-  //   ],
-  //   details: [
-  //     {
-  //       icon: <Axe className="w-6 h-6 text-amber-700" />,
-  //       text: "Forgée à la main par nos artisans",
-  //     },
-  //     {
-  //       icon: <Shield className="w-6 h-6 text-gray-600" />,
-  //       text: "Matériaux de haute qualité",
-  //     },
-  //     {
-  //       icon: <Star className="w-6 h-6 text-yellow-500" />,
-  //       text: "Authentique reproduction historique",
-  //     },
-  //   ],
-  //   specifications: [
-  //     { name: "Longueur totale", value: "65 cm" },
-  //     { name: "Poids", value: "1.2 kg" },
-  //     { name: "Matériau", value: "Acier forgé, Manche en chêne" },
-  //     { name: "Origine", value: "Inspiration Viking, Fabrication Française" },
-  //   ],
-  // };
 
   const details = [
     {
@@ -65,7 +57,6 @@ const ProductPage = () => {
       text: "Authentique reproduction historique",
     },
   ];
-
   return (
     <div className="bg-stone-100 min-h-screen py-12">
       <div className="container mx-auto px-4 grid md:grid-cols-2 gap-12">
@@ -73,7 +64,7 @@ const ProductPage = () => {
         <div>
           <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-6">
             <img
-              // src={product?.images[selectedImage]}
+              src={product?.images[selectedImage]?.image_path}
               alt={product?.name}
               className="w-full h-[500px] object-cover"
             />
@@ -82,8 +73,8 @@ const ProductPage = () => {
             {product?.images.map((img, index) => (
               <img
                 key={index}
-                // src={img}
-                alt={`${product.name} - Vue ${index + 1}`}
+                src={img.image_path}
+                alt={`Vue ${index + 1}`}
                 className={`w-24 h-24 object-cover rounded-lg cursor-pointer transition duration-300 ${
                   selectedImage === index
                     ? "border-4 border-amber-700 opacity-100"

@@ -145,7 +145,21 @@ export default function ProductForm() {
   };
   return (
     <>
-      <h1 className="text-xl text-gray-400 mb-6">Ajouter un produit</h1>
+      <div>
+        <button
+          className="text-gray-400 hover:underline"
+          onClick={() => history.back()}
+        >
+          ← Revenir en arrière
+        </button>
+      </div>
+      <h1 className="text-2xl text-gray-400 mb-6 text-center">
+        {id ? (
+          <span>Modifier un produit</span>
+        ) : (
+          <span>Ajouter un produit</span>
+        )}
+      </h1>
       <form onSubmit={handleSubmit}>
         <InformationsSection
           handleChange={handleChange}

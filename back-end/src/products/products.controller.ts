@@ -128,7 +128,6 @@ export class ProductsController {
     @UploadedFiles() images: Array<Express.Multer.File>,
   ) {
     try {
-      console.log(id);
       const productData = {
         ...updateProductDto,
         price: updateProductDto.price ? updateProductDto.price : 0,

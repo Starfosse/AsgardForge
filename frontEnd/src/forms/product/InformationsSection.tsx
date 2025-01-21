@@ -31,7 +31,6 @@ export default function InformationsSection({
       const response = await productsService.getCategories();
       setCategories(response);
       setFormData((prev) => ({ ...prev, category: response[0].name }));
-      console.log(formData);
     } catch (error) {
       console.error(error);
     }

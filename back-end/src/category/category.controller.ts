@@ -33,12 +33,12 @@ export class CategoryController {
 
   @Get()
   async findAll() {
-    return this.categoryRepository.findAll();
+    return await this.categoryRepository.findAll();
   }
 
   @Get(':name')
   async findOne(@Param('name') name: string) {
-    return this.categoryRepository.findCategory(name);
+    return await this.categoryRepository.findCategory(name);
   }
 
   @Get(':name/products')
@@ -68,10 +68,10 @@ export class CategoryController {
     }
   }
 
-  @Delete(':name')
-  async remove(@Param('name') name: string) {
+  @Delete(':id')
+  async remove(@Param('id') id: number) {
     try {
-      return await this.categoryRepository.delete(name);
+      return await this.categoryRepository.delete(id);
     } catch (error) {
       console.error(error);
       throw new Error('Could not delete category');

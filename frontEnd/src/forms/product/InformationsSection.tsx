@@ -1,4 +1,7 @@
-import { ProductForm } from "./ProductForm";
+import { Category } from "@/pages/admin/ProductsList";
+import { productsService } from "@/services/api";
+import Product from "@/services/api/products/types";
+import { useEffect, useState } from "react";
 
 interface InformationsSectionProps {
   handleChange: (
@@ -6,15 +9,32 @@ interface InformationsSectionProps {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => void;
-  formData: ProductForm;
+  formData: Product;
   isUploading: boolean;
+  setFormData: React.Dispatch<React.SetStateAction<Product>>;
 }
 
 export default function InformationsSection({
   handleChange,
   formData,
   isUploading,
+  setFormData,
 }: InformationsSectionProps) {
+  const [categories, setCategories] = useState<Category[]>([]);
+
+  useEffect(() => {
+    handleGetCategories();
+  }, []);
+
+  const handleGetCategories = async () => {
+    try {
+      const response = await productsService.getCategories();
+      setCategories(response);
+      setFormData((prev) => ({ ...prev, category: response[0].name }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div>
       <div className="mb-4 flex flex-col">
@@ -59,10 +79,17 @@ export default function InformationsSection({
           onChange={handleChange}
           disabled={isUploading}
         >
-          <option value="Armes">Armes</option>
+          {/* <option value="Armes" >
+            Armes
+          </option>
           <option value="Armures">Armures</option>
           <option value="Outils">Outils</option>
-          <option value="Rituels">Rituels</option>
+          <option value="Rituels">Rituels</option> */}
+          {categories.map((category) => (
+            <option key={category.id} value={category.name}>
+              {category.name}
+            </option>
+          ))}
         </select>
       </div>
     </div>

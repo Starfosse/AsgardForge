@@ -44,7 +44,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       const token = localStorage.getItem("access_token");
       if (token) {
         const response = await authService.getUserProfile();
-        console.log("response", response);
         if (response) {
           const transformedUser: User = {
             id: response.id,

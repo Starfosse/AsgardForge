@@ -1,8 +1,11 @@
+import Product from "@/services/api/products/types";
+
 interface ImageSectionProps {
   handleImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isUploading: boolean;
   previews: string[];
   removeImage: (index: number) => void;
+  product?: Product;
 }
 
 export default function ImageSection({

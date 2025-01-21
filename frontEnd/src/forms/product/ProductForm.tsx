@@ -1,26 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import InformationsSection from "./InformationsSection";
 import PriceSection from "./PriceSection";
 import StockSection from "./StockSection";
 import DetailsSection from "./DetailsSection";
 import ImageSection from "./ImageSection";
 import { productsService } from "@/services/api";
-
-export interface ProductForm {
-  name: string;
-  description: string;
-  price: number;
-  promotionPrice: number;
-  stock: number;
-  category: string;
-  alertStock: number;
-  images: File[];
-  details: string;
-  specifications: string;
-  dimensions: string;
-  weight: number;
-  material: string;
-}
+import Product from "@/services/api/products/types";
+import { useParams } from "react-router-dom";
 
 interface Status {
   submitted: boolean;
@@ -29,7 +15,8 @@ interface Status {
 }
 
 export default function ProductForm() {
-  const [formData, setFormData] = useState<ProductForm>({
+  const { id } = useParams<{ id: string }>();
+  const [formData, setFormData] = useState<Product>({
     name: "",
     description: "",
     price: 0,
@@ -44,6 +31,13 @@ export default function ProductForm() {
     weight: 0,
     material: "",
   });
+  useEffect(() => {
+    if (id) {
+      productsService.getProduct(parseInt(id)).then((product) => {
+        setFormData(product);
+      });
+    }
+  }, [id]);
   const [status, setStatus] = useState<Status>({
     submitted: false,
     error: false,
@@ -96,7 +90,7 @@ export default function ProductForm() {
       images: prev.images.filter((_, i) => i !== index),
     }));
   };
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsUploading(true);
     try {
@@ -113,8 +107,9 @@ export default function ProductForm() {
           formDataToSend.append(key, value);
         }
       }
-      console.log(formDataToSend);
-      await productsService.addProduct(formDataToSend);
+      id
+        ? productsService.editProduct(parseInt(id), formDataToSend)
+        : productsService.addProduct(formDataToSend);
 
       setStatus({
         submitted: true,
@@ -128,17 +123,49 @@ export default function ProductForm() {
         message: "Une erreur est survenue lors de l'ajout du produit",
       }));
     } finally {
+      id
+        ? null
+        : setFormData({
+            name: "",
+            description: "",
+            price: 0,
+            promotionPrice: 0,
+            stock: 0,
+            category: "",
+            alertStock: 0,
+            images: [],
+            details: "",
+            specifications: "",
+            dimensions: "",
+            weight: 0,
+            material: "",
+          });
       setIsUploading(false);
     }
   };
   return (
-    <div className="p-8">
-      <h1 className="text-xl text-gray-400 mb-6">Ajouter un produit</h1>
+    <>
+      <div>
+        <button
+          className="text-gray-400 hover:underline"
+          onClick={() => history.back()}
+        >
+          ← Revenir en arrière
+        </button>
+      </div>
+      <h1 className="text-2xl text-gray-400 mb-6 text-center">
+        {id ? (
+          <span>Modifier un produit</span>
+        ) : (
+          <span>Ajouter un produit</span>
+        )}
+      </h1>
       <form onSubmit={handleSubmit}>
         <InformationsSection
           handleChange={handleChange}
           formData={formData}
           isUploading={isUploading}
+          setFormData={setFormData}
         />
         <PriceSection
           handleChange={handleChange}
@@ -181,6 +208,6 @@ export default function ProductForm() {
           {isUploading ? "Création en cours..." : "Créer le produit"}
         </button>
       </form>
-    </div>
+    </>
   );
 }

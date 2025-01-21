@@ -40,9 +40,9 @@ export class ProductsService {
     }
   }
 
-  findOne(name: string) {
+  findOne(id: number) {
     try {
-      return this.productsRepository.findProductByName(name);
+      return this.productsRepository.findProduct(id);
     } catch (error) {
       console.error(error);
       throw new Error('Could not find product');
@@ -63,9 +63,9 @@ export class ProductsService {
     }
   }
 
-  remove(name: string) {
+  remove(id: number) {
     try {
-      return this.productsRepository.deleteProduct(name);
+      return this.productsRepository.deleteProduct(id);
     } catch (error) {
       console.error(error);
       throw new Error('Could not delete product');

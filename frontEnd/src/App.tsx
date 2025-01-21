@@ -3,11 +3,13 @@ import { GoogleCallBack } from "./components/GoogleCallBack";
 import LayoutAdmin from "./layouts/LayoutAdmin";
 import LayoutClient from "./layouts/LayoutClient";
 import Dashboard from "./pages/admin/Dashboard";
-import DashBoardProduct from "./pages/admin/Product";
 import Cart from "./pages/client/Cart";
 import Collections from "./pages/client/Collection";
 import Home from "./pages/client/Home";
 import Product from "./pages/client/Product";
+import ProductForm from "./forms/product/ProductForm";
+import DashBoardProduct from "./wrapper/DashboardProduct";
+import ProductsList from "./pages/admin/ProductsList";
 
 function App() {
   return (
@@ -67,7 +69,29 @@ function App() {
           path="/dashboard/products"
           element={
             <LayoutAdmin>
-              <DashBoardProduct />
+              <DashBoardProduct>
+                <ProductsList />
+              </DashBoardProduct>
+            </LayoutAdmin>
+          }
+        />
+        <Route
+          path="/dashboard/products/:id"
+          element={
+            <LayoutAdmin>
+              <DashBoardProduct>
+                <ProductForm />
+              </DashBoardProduct>
+            </LayoutAdmin>
+          }
+        />
+        <Route
+          path="/dashboard/products/new"
+          element={
+            <LayoutAdmin>
+              <DashBoardProduct>
+                <ProductForm />
+              </DashBoardProduct>
             </LayoutAdmin>
           }
         />

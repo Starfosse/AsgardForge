@@ -6,6 +6,8 @@ interface ApiResponse<T> {
   message: string;
 }
 
+type MethodUpload = "POST" | "PUT";
+
 export const apiClient = {
   fetch: async <T>(url: string, options: RequestInit = {}): Promise<T> => {
     const headers = new Headers({
@@ -30,14 +32,14 @@ export const apiClient = {
 
       if (response.status === 401) {
         try {
-          const refreshResponse = await fetch("/api/auth/refresh", {
+          const refreshResponse = await fetch("/auth/refresh", {
             method: "POST",
             credentials: "include",
           });
 
           if (!refreshResponse.ok) {
             localStorage.removeItem("access_token");
-            window.location.href = "/login";
+            window.location.href = "/auth/google";
             throw new Error("Session expired");
           }
 
@@ -47,7 +49,6 @@ export const apiClient = {
           if (refreshData.data?.access_token) {
             localStorage.setItem("access_token", refreshData.data.access_token);
 
-            // Nouvelle requête avec le token rafraîchi
             const newResponse = await fetch(url, {
               ...options,
               headers: new Headers({
@@ -68,7 +69,7 @@ export const apiClient = {
           }
         } catch (refreshError) {
           localStorage.removeItem("access_token");
-          window.location.href = "/login";
+          window.location.href = "/auth/google";
           throw refreshError;
         }
       }
@@ -87,7 +88,11 @@ export const apiClient = {
         : new Error("Unknown error occurred");
     }
   },
-  upload: async <T>(url: string, formData: FormData): Promise<T> => {
+  upload: async <T>(
+    url: string,
+    formData: FormData,
+    methodUpload: MethodUpload
+  ): Promise<T> => {
     const headers = new Headers();
     if (!isPublicRoute(url)) {
       const token = localStorage.getItem("access_token");
@@ -100,7 +105,7 @@ export const apiClient = {
 
     try {
       const response = await fetch(url, {
-        method: "POST",
+        method: methodUpload,
         body: formData,
         headers,
       });

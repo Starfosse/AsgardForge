@@ -59,7 +59,7 @@ const Collection = () => {
               className="bg-white rounded-lg shadow-lg overflow-hidden hover:scale-105 transition duration-300"
             >
               <img
-                src={product.images[0].image_path} //rattacher les images aux products
+                // src={product.images[0].image_path} //rattacher les images aux products
                 alt={product.name}
                 className="w-full h-64 object-cover"
               />

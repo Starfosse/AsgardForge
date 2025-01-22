@@ -1,7 +1,9 @@
 import { Axe, Flame, Hammer, Shield, ShoppingCart } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { Category } from "@/pages/admin/ProductsList";
+import { productsService } from "@/services/api";
 
 const Menu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -9,6 +11,8 @@ const Menu = () => {
   const [isCartPreviewVisible, setIsCartPreviewVisible] = useState(false);
   const cartPreviewTimerRef = useRef<number | null>(null);
   const { isAuthenticated, user, login, logout } = useAuth();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const navigate = useNavigate();
   const cartItems = [
     {
       name: "Hache de Guerre d'Odin",
@@ -24,28 +28,14 @@ const Menu = () => {
     },
   ];
 
-  const categories = [
-    {
-      name: "Armes",
-      icon: <Axe className="w-6 h-6 text-amber-800" />,
-      subcategories: ["Haches", "Épées", "Boucliers", "Lances"],
-    },
-    {
-      name: "Armures",
-      icon: <Shield className="w-6 h-6 text-gray-600" />,
-      subcategories: ["Casques", "Cottes de mailles", "Protections"],
-    },
-    {
-      name: "Outils",
-      icon: <Hammer className="w-6 h-6 text-bronze-700" />,
-      subcategories: ["Forgeron", "Navigation", "Survie"],
-    },
-    {
-      name: "Rituels",
-      icon: <Flame className="w-6 h-6 text-red-700" />,
-      subcategories: ["Rituels sacrés", "Amulettes", "Herbes mystiques"],
-    },
-  ];
+  useEffect(() => {
+    fetchCategories();
+  }, []);
+
+  const fetchCategories = async () => {
+    const response = await productsService.getCategories();
+    setCategories(response);
+  };
 
   const calculateTotal = () => {
     return cartItems
@@ -99,24 +89,12 @@ const Menu = () => {
                 onMouseEnter={() => setActiveCategory(category.name)}
                 onMouseLeave={() => setActiveCategory(null)}
               >
-                <button className="flex items-center space-x-2 hover:text-amber-500 transition duration-300">
-                  {category.icon}
+                <button
+                  className="flex items-center space-x-2 hover:text-amber-500 transition duration-300"
+                  onClick={() => navigate(`/collections/${category.id}`)}
+                >
                   <span>{category.name}</span>
                 </button>
-
-                {activeCategory === category.name && (
-                  <div className="absolute z-20 left-0 mt-2 w-48 bg-stone-800 rounded-lg shadow-xl border border-amber-700 py-2">
-                    {category.subcategories.map((sub) => (
-                      <a
-                        key={sub}
-                        href="#"
-                        className="block px-4 py-2 text-sm text-amber-200 hover:bg-stone-700 hover:text-amber-400"
-                      >
-                        {sub}
-                      </a>
-                    ))}
-                  </div>
-                )}
               </div>
             ))}
 
@@ -247,25 +225,11 @@ const Menu = () => {
                 }
               >
                 <div className="flex items-center space-x-2">
-                  {category.icon}
+                  {/* {category.icon} */}
                   <span>{category.name}</span>
                 </div>
                 <span>{activeCategory === category.name ? "▲" : "▼"}</span>
               </button>
-
-              {activeCategory === category.name && (
-                <div className="bg-stone-800 py-2">
-                  {category.subcategories.map((sub) => (
-                    <a
-                      key={sub}
-                      href="#"
-                      className="block px-4 py-2 text-amber-200 hover:bg-stone-700 hover:text-amber-400"
-                    >
-                      {sub}
-                    </a>
-                  ))}
-                </div>
-              )}
             </div>
           ))}
         </div>

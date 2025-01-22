@@ -20,11 +20,11 @@ export class CategoryRepository {
       throw new Error('Could not create category');
     }
   }
-  async findCategory(category: string) {
+  async findCategory(id: number) {
     try {
       const [rows]: any = await this.connection.query(
-        'SELECT * FROM categories WHERE name = ?',
-        [category],
+        'SELECT * FROM categories WHERE id = ?',
+        [id],
       );
       return rows[0];
     } catch (error) {

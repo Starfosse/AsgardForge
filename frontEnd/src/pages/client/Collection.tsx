@@ -15,6 +15,7 @@ const Collection = () => {
   const fetchCategory = async () => {
     if (!id) return;
     const products = await productsService.getProductsByCategory(parseInt(id));
+    console.log("products -> ", products);
     setProductsCategory(products);
   };
 
@@ -26,7 +27,7 @@ const Collection = () => {
     (product) =>
       product.price >= priceRange[0] && product.price <= priceRange[1]
   );
-  console.log(productsCategory);
+  console.log("filteredProducts -> ", filteredProducts);
   return (
     <div className="bg-stone-100 min-h-screen">
       <div className="container mx-auto px-4 py-12">
@@ -58,7 +59,7 @@ const Collection = () => {
               className="bg-white rounded-lg shadow-lg overflow-hidden hover:scale-105 transition duration-300"
             >
               <img
-                // src={product.images[0].image_path} //rattacher les images aux products
+                src={product.images[0].image_path} //rattacher les images aux products
                 alt={product.name}
                 className="w-full h-64 object-cover"
               />

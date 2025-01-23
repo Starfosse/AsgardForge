@@ -6,6 +6,8 @@ import { ConfigModule } from '@nestjs/config';
 import { ProductsModule } from './products/products.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { CategoryModule } from './category/category.module';
+import { CommandsModule } from './commands/commands.module';
+import { PromotionsModule } from './promotions/promotions.module';
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { CategoryModule } from './category/category.module';
     ProductsModule,
     CloudinaryModule,
     CategoryModule,
+    CommandsModule,
+    PromotionsModule,
   ],
 })
 export class AppModule {}

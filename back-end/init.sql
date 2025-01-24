@@ -72,6 +72,7 @@ CREATE TABLE command_items (
     price DECIMAL(10, 2) NOT NULL,
     code_promotion_id BIGINT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (command_id) REFERENCES commands(id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(id),
     FOREIGN KEY (code_promotion_id) REFERENCES code_promotions(id)

@@ -1,48 +1,36 @@
 import { useAuth } from "@/contexts/AuthContext";
 import { productsService } from "@/services/api";
-import { apiClient } from "@/services/api/client";
 import { Star } from "lucide-react";
 import { useState } from "react";
 
-interface ProductReview {
+export interface ProductReview {
+  id?: number;
   customerId: number | undefined;
   rating: number;
   comment: string;
 }
 
-export default function ProductReviewForm() {
-  const { user } = useAuth();
-  const [formData, setFormData] = useState<ProductReview>({
-    customerId: user?.id,
-    rating: 0,
-    comment: "",
-  });
-  const [status, setStatus] = useState({
-    error: false,
-    message: "",
-    submitted: false,
-  });
-  const [reviewStars, setReviewStars] = useState(0);
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      setStatus({ error: false, message: "", submitted: false });
-      const response = productsService.addReview(formData);
-      setStatus({
-        error: false,
-        message: "Commentaire envoyé avec succès",
-        submitted: true,
-      });
-    } catch (error) {
-      setStatus({
-        error: true,
-        message: "Erreur lors de l'envoi du commentaire",
-        submitted: true,
-      });
-    } finally {
-      setFormData({ customerId: user?.id, rating: 0, comment: "" });
-    }
+interface ProductReviewFormProps {
+  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+  formData: ProductReview;
+  setFormData: React.Dispatch<React.SetStateAction<ProductReview>>;
+  status: {
+    error: boolean;
+    message: string;
+    submitted: boolean;
   };
+  user: any;
+}
+
+export default function ProductReviewForm({
+  handleSubmit,
+  formData,
+  setFormData,
+  status,
+  user,
+}: ProductReviewFormProps) {
+  const [reviewStars, setReviewStars] = useState(0);
+
   const isFormValid = formData.rating === 0 && formData.comment === "" && !user;
   return (
     <div className="container mx-auto px-4 mb-4">

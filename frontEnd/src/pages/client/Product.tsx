@@ -144,15 +144,6 @@ const ProductPage = () => {
             <h3 className="text-2xl font-semibold mb-4 text-stone-800">
               Spécifications
             </h3>
-
-            {/* {product.specifications.map((spec, index) => (
-                <div key={index} className="border-b pb-2">
-                   <span className="text-stone-600">Dimensions</span>
-                  <div className="font-semibold text-stone-800">
-                    {spec.value}
-                  </div>
-                </div>
-              ))} */}
             {
               <div className="grid grid-cols-2 gap-4">
                 <div className="border-b pb-2">

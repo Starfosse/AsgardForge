@@ -30,7 +30,8 @@ export interface ProductWithImages {
 
 export interface ReviewsCustomers {
   id: number;
-  customerName: string;
+  customerId?: number;
+  customerName?: string;
   rating: number;
   comment: string;
 }

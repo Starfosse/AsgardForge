@@ -2,26 +2,26 @@ import { useAuth } from "@/contexts/AuthContext";
 import ProductReviewForm, {
   ProductReview,
 } from "@/forms/productReview/productReviewForm";
+import { ReviewsCustomers } from "@/pages/client/Product";
 import { productsService } from "@/services/api";
 import { Star } from "lucide-react";
 import { useEffect, useState } from "react";
 
-interface ReviewsCustomers {
-  id: number;
-  customerId?: number;
-  customerName?: string;
-  rating: number;
-  comment: string;
-}
+// interface ReviewsCustomers {
+//   id: number;
+//   customerId?: number;
+//   customerName?: string;
+//   rating: number;
+//   comment: string;
+// }
 
 interface CustomerReviewsProps {
   reviewsCustomers: ReviewsCustomers[];
-  setReviewsCustomers: React.Dispatch<React.SetStateAction<ReviewsCustomers[]>>;
+  setReviews: React.Dispatch<React.SetStateAction<ReviewsCustomers[]>>;
 }
-
 export default function CustomerReviews({
   reviewsCustomers,
-  setReviewsCustomers,
+  setReviews,
 }: CustomerReviewsProps) {
   const fakeReviews: ReviewsCustomers[] = [
     {
@@ -80,7 +80,7 @@ export default function CustomerReviews({
         message: "Commentaire envoyé avec succès",
         submitted: true,
       });
-      setReviewsCustomers([
+      setReviews([
         ...reviewsCustomers,
         {
           id: reviewsCustomers.length + 1,

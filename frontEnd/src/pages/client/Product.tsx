@@ -51,6 +51,7 @@ const ProductPage = () => {
   const fetchReviews = async () => {
     if (!productId) return;
     const reviews = await productsService.getReviews(parseInt(productId));
+    setReviews(reviews);
   };
 
   useEffect(() => {
@@ -112,10 +113,12 @@ const ProductPage = () => {
               {product?.price} €
             </span>
             <div className="flex text-yellow-500">
-              {[...Array(5)].map((_, i) => (
+              {[...Array(reviews)].map((_, i) => (
                 <Star key={i} className="w-5 h-5 fill-current" />
               ))}
-              <span className="text-stone-600 ml-2">(5 avis)</span>
+              <span className="text-stone-600 ml-2">
+                ({reviews.length} avis)
+              </span>
             </div>
           </div>
 

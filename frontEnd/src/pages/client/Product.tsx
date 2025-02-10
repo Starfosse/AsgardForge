@@ -1,3 +1,4 @@
+import CustomerReviews from "@/components/CustomerReviews";
 import { productsService } from "@/services/api";
 import Product from "@/services/api/products/types";
 import { Axe, Shield, ShoppingCart, Star } from "lucide-react";
@@ -28,19 +29,33 @@ export interface ProductWithImages {
   images: Images[];
 }
 
+export interface ReviewsCustomers {
+  id: number;
+  customerName: string;
+  rating: number;
+  comment: string;
+}
+
 const ProductPage = () => {
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
   const { productId } = useParams<{ productId: string }>();
   const [product, setProduct] = useState<ProductWithImages | null>(null);
+  const [reviews, setReviews] = useState<ReviewsCustomers[]>([]);
   const fetchProduct = async () => {
     if (!productId) return;
     const response = await productsService.getProduct(parseInt(productId));
     setProduct(response);
   };
 
+  const fetchReviews = async () => {
+    if (!productId) return;
+    const reviews = await productsService.getReviews(parseInt(productId));
+  };
+
   useEffect(() => {
     fetchProduct();
+    fetchReviews();
   }, [productId]);
 
   const details = [
@@ -173,6 +188,8 @@ const ProductPage = () => {
               </div>
             }
           </div>
+
+          <CustomerReviews />
         </div>
       </div>
     </div>

@@ -4,11 +4,15 @@ const publicRoutes = [
   "/auth/refresh",
   "/products",
   "/products/:id",
+  "/collections",
+  "/collections/:id",
   "/category",
+  "/category/:id/products",
 ] as const;
 
-type PublicRoute = (typeof publicRoutes)[number];
-
-export function isPublicRoute(route: string): route is PublicRoute {
-  return publicRoutes.includes(route as PublicRoute);
+export function isPublicRoute(route: string): boolean {
+  const routePattern = route.replace(/\/\d+(?=\/|$)/g, "/:id");
+  return publicRoutes.some(
+    (publicRoute) => publicRoute === route || publicRoute === routePattern
+  );
 }

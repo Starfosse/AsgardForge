@@ -1,3 +1,4 @@
+import CustomerReviews from "@/components/CustomerReviews";
 import { productsService } from "@/services/api";
 import Product from "@/services/api/products/types";
 import { Axe, Shield, ShoppingCart, Star } from "lucide-react";
@@ -28,19 +29,34 @@ export interface ProductWithImages {
   images: Images[];
 }
 
+export interface ReviewsCustomers {
+  id: number;
+  customerName: string;
+  rating: number;
+  comment: string;
+}
+
 const ProductPage = () => {
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
   const { productId } = useParams<{ productId: string }>();
   const [product, setProduct] = useState<ProductWithImages | null>(null);
+  const [reviews, setReviews] = useState<ReviewsCustomers[]>([]);
   const fetchProduct = async () => {
     if (!productId) return;
     const response = await productsService.getProduct(parseInt(productId));
     setProduct(response);
   };
 
+  const fetchReviews = async () => {
+    if (!productId) return;
+    const reviews = await productsService.getReviews(parseInt(productId));
+    setReviews(reviews);
+  };
+
   useEffect(() => {
     fetchProduct();
+    fetchReviews();
   }, [productId]);
 
   const details = [
@@ -97,10 +113,12 @@ const ProductPage = () => {
               {product?.price} €
             </span>
             <div className="flex text-yellow-500">
-              {[...Array(5)].map((_, i) => (
+              {[...Array(reviews)].map((_, i) => (
                 <Star key={i} className="w-5 h-5 fill-current" />
               ))}
-              <span className="text-stone-600 ml-2">(5 avis)</span>
+              <span className="text-stone-600 ml-2">
+                ({reviews.length} avis)
+              </span>
             </div>
           </div>
 
@@ -144,15 +162,6 @@ const ProductPage = () => {
             <h3 className="text-2xl font-semibold mb-4 text-stone-800">
               Spécifications
             </h3>
-
-            {/* {product.specifications.map((spec, index) => (
-                <div key={index} className="border-b pb-2">
-                   <span className="text-stone-600">Dimensions</span>
-                  <div className="font-semibold text-stone-800">
-                    {spec.value}
-                  </div>
-                </div>
-              ))} */}
             {
               <div className="grid grid-cols-2 gap-4">
                 <div className="border-b pb-2">
@@ -182,6 +191,8 @@ const ProductPage = () => {
               </div>
             }
           </div>
+
+          <CustomerReviews />
         </div>
       </div>
     </div>

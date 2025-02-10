@@ -1,7 +1,7 @@
 import { Category } from "@/pages/admin/ProductsList";
 import { apiClient } from "../client";
 import Product from "./types";
-import { ProductWithImages } from "@/pages/client/Product";
+import { ProductWithImages, ReviewsCustomers } from "@/pages/client/Product";
 
 export const productsService = {
   addProduct: (formData: FormData) => {
@@ -52,5 +52,14 @@ export const productsService = {
   },
   findFirstImage: (id: number) => {
     return apiClient.fetch(`/products/images/first/${id}`, { method: "GET" });
+  },
+
+  addReview: (formData: FormData) => {
+    return apiClient.upload("/reviews", formData, "POST");
+  },
+  getReviews: (id: number) => {
+    return apiClient.fetch<ReviewsCustomers[]>(`/reviews/${id}`, {
+      method: "GET",
+    });
   },
 };

@@ -1,6 +1,5 @@
 import CustomerReviews from "@/components/CustomerReviews";
 import { productsService } from "@/services/api";
-import Product from "@/services/api/products/types";
 import { Axe, Shield, ShoppingCart, Star } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -47,13 +46,11 @@ const ProductPage = () => {
     const response = await productsService.getProduct(parseInt(productId));
     setProduct(response);
   };
-
   const fetchReviews = async () => {
     if (!productId) return;
     const reviews = await productsService.getReviews(parseInt(productId));
     setReviews(reviews);
   };
-
   useEffect(() => {
     fetchProduct();
     fetchReviews();
@@ -192,7 +189,7 @@ const ProductPage = () => {
             }
           </div>
 
-          <CustomerReviews />
+          <CustomerReviews reviewsCustomers={reviews} setReviews={setReviews} />
         </div>
       </div>
     </div>

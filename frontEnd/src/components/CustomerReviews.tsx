@@ -1,14 +1,28 @@
-import ProductReviewForm from "@/forms/productReview/productReviewForm";
+import { useAuth } from "@/contexts/AuthContext";
+import ProductReviewForm, {
+  ProductReview,
+} from "@/forms/productReview/productReviewForm";
+import { productsService } from "@/services/api";
 import { Star } from "lucide-react";
+import { useEffect, useState } from "react";
 
 interface ReviewsCustomers {
   id: number;
-  customerName: string;
+  customerId?: number;
+  customerName?: string;
   rating: number;
   comment: string;
 }
 
-export default function CustomerReviews() {
+interface CustomerReviewsProps {
+  reviewsCustomers: ReviewsCustomers[];
+  setReviewsCustomers: React.Dispatch<React.SetStateAction<ReviewsCustomers[]>>;
+}
+
+export default function CustomerReviews({
+  reviewsCustomers,
+  setReviewsCustomers,
+}: CustomerReviewsProps) {
   const fakeReviews: ReviewsCustomers[] = [
     {
       id: 1,
@@ -29,9 +43,72 @@ export default function CustomerReviews() {
       comment: "Produit correct, mais livraison un peu longue.",
     },
   ];
+
+  const { user } = useAuth();
+  const [formData, setFormData] = useState<ProductReview>({
+    id: 0,
+    customerId: user?.id,
+    rating: 0,
+    comment: "",
+  });
+  const [status, setStatus] = useState({
+    error: false,
+    message: "",
+    submitted: false,
+  });
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const listIdCustomer = reviewsCustomers.map((review) => review.customerId);
+    if (listIdCustomer.includes(user?.id)) {
+      setStatus({
+        error: true,
+        message: "Vous avez déjà laissé un commentaire",
+        submitted: true,
+      });
+      return;
+    }
+    try {
+      setStatus({ error: false, message: "", submitted: false });
+      const formDataToSend = new FormData();
+      formDataToSend.append("customerId", String(user?.id));
+      formDataToSend.append("rating", String(formData.rating));
+      formDataToSend.append("comment", formData.comment);
+      const response = productsService.addReview(formDataToSend);
+      setStatus({
+        error: false,
+        message: "Commentaire envoyé avec succès",
+        submitted: true,
+      });
+      setReviewsCustomers([
+        ...reviewsCustomers,
+        {
+          id: reviewsCustomers.length + 1,
+          customerId: user?.id,
+          customerName: user?.firstName,
+          rating: formData.rating,
+          comment: formData.comment,
+        },
+      ]);
+    } catch (error) {
+      setStatus({
+        error: true,
+        message: "Erreur lors de l'envoi du commentaire", //refuse si déjà un comm
+        submitted: true,
+      });
+    } finally {
+      setFormData({ customerId: user?.id, rating: 0, comment: "" });
+    }
+  };
   return (
     <div className="bg-white rounded-lg shadow-md p-6 mt-6">
-      <ProductReviewForm />
+      <ProductReviewForm
+        handleSubmit={handleSubmit}
+        formData={formData}
+        setFormData={setFormData}
+        status={status}
+        user={user}
+      />
       <h3 className="text-2xl font-semibold mb-4 text-stone-800">
         Avis clients :
       </h3>
@@ -48,6 +125,18 @@ export default function CustomerReviews() {
             <div className="text-stone-800">{review.comment}</div>
           </div>
         ))}
+        {/* {
+            reviewsCustomers.map((review) => (
+              <div key={review.id} className="border-b pb-2">
+                <span className="text-stone-600">{review.customerName}</span>
+                <div className="font-semibold text-stone-800 flex">
+                  {[...Array(review.rating)].map((_, i) => (
+                    <Star key={i} className="text-yellow-500 fill-current" />
+                  ))}
+                </div>
+                <div className="text-stone-800">{review.comment}</div>
+              </div>
+        } */}
       </div>
     </div>
   );

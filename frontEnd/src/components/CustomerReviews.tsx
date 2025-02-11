@@ -5,21 +5,15 @@ import ProductReviewForm, {
 import { ReviewsCustomers } from "@/pages/client/Product";
 import { productsService } from "@/services/api";
 import { Star } from "lucide-react";
-import { useEffect, useState } from "react";
-
-// interface ReviewsCustomers {
-//   id: number;
-//   customerId?: number;
-//   customerName?: string;
-//   rating: number;
-//   comment: string;
-// }
+import { useState } from "react";
 
 interface CustomerReviewsProps {
+  productId: number;
   reviewsCustomers: ReviewsCustomers[];
   setReviews: React.Dispatch<React.SetStateAction<ReviewsCustomers[]>>;
 }
 export default function CustomerReviews({
+  productId,
   reviewsCustomers,
   setReviews,
 }: CustomerReviewsProps) {
@@ -71,6 +65,7 @@ export default function CustomerReviews({
     try {
       setStatus({ error: false, message: "", submitted: false });
       const formDataToSend = new FormData();
+      formDataToSend.append("productId", String(productId));
       formDataToSend.append("customerId", String(user?.id));
       formDataToSend.append("rating", String(formData.rating));
       formDataToSend.append("comment", formData.comment);

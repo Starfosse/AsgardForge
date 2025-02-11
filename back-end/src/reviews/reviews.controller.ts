@@ -11,7 +11,8 @@ export class ReviewsController {
   ) {}
 
   @Post()
-  create(@Body() createReviewDto: CreateReviewDto) {
+  async create(@Body() createReviewDto: CreateReviewDto) {
+    console.log('createReviewDto === ', createReviewDto);
     return this.reviewsService.createReview(createReviewDto);
   }
 
@@ -21,7 +22,7 @@ export class ReviewsController {
   // }
 
   @Get(':productId')
-  findOne(@Param('productId') productId: string) {
+  async indOne(@Param('productId') productId: string) {
     return this.reviewsRepository.getAllReviewsByProductId(+productId); // tous les reveiw d'un product
   }
 

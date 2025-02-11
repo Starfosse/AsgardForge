@@ -54,8 +54,11 @@ export const productsService = {
     return apiClient.fetch(`/products/images/first/${id}`, { method: "GET" });
   },
 
-  addReview: (formData: FormData) => {
-    return apiClient.upload("/reviews", formData, "POST");
+  addReview: (formData: any) => {
+    return apiClient.fetch("/reviews", {
+      method: "POST",
+      body: JSON.stringify(formData),
+    });
   },
   getReviews: (id: number) => {
     return apiClient.fetch<ReviewsCustomers[]>(`/reviews/${id}`, {

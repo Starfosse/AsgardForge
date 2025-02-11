@@ -55,13 +55,13 @@ CREATE TABLE product_images (
 CREATE TABLE product_reviews(
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     product_id BIGINT NOT NULL,
-    user_id BIGINT NOT NULL,
+    user_id INT NOT NULL,
     rating INT NOT NULL,
     review TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(user_id) REFERENCES uses(id) ON DELETE CASCADE,
-    FOREIGN KEY(product_id) REFERENCES products(id) ON DELETE CASCADE,
-)
+    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY(product_id) REFERENCES products(id) ON DELETE CASCADE
+);
 
 CREATE INDEX idx_product_category ON products(category_id);
 CREATE INDEX idx_product_stock ON products(stock);

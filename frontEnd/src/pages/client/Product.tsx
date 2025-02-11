@@ -50,6 +50,7 @@ const ProductPage = () => {
   const fetchReviews = async () => {
     if (!productId) return;
     const reviews = await productsService.getReviews(parseInt(productId));
+    console.log(reviews);
     setReviews(reviews);
   };
   useEffect(() => {
@@ -190,7 +191,11 @@ const ProductPage = () => {
             }
           </div>
 
-          <CustomerReviews reviewsCustomers={reviews} setReviews={setReviews} />
+          <CustomerReviews
+            productId={productId}
+            reviewsCustomers={reviews}
+            setReviews={setReviews}
+          />
         </div>
       </div>
     </div>

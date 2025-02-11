@@ -1,14 +1,15 @@
 import { useAuth } from "@/contexts/AuthContext";
 import ProductReviewForm, {
   ProductReview,
-} from "@/forms/productReview/productReviewForm";
+} from "@/forms/productReview/ProductReviewForm";
+
 import { ReviewsCustomers } from "@/pages/client/Product";
 import { productsService } from "@/services/api";
 import { Star } from "lucide-react";
 import { useState } from "react";
 
 interface CustomerReviewsProps {
-  productId: number;
+  productId: string | undefined;
   reviewsCustomers: ReviewsCustomers[];
   setReviews: React.Dispatch<React.SetStateAction<ReviewsCustomers[]>>;
 }
@@ -62,14 +63,24 @@ export default function CustomerReviews({
       });
       return;
     }
+    if (formData.rating === 0 || formData.comment === "") {
+      setStatus({
+        error: true,
+        message: "Veuillez remplir tous les champs",
+        submitted: true,
+      });
+      return;
+    }
     try {
       setStatus({ error: false, message: "", submitted: false });
-      const formDataToSend = new FormData();
-      formDataToSend.append("productId", String(productId));
-      formDataToSend.append("customerId", String(user?.id));
-      formDataToSend.append("rating", String(formData.rating));
-      formDataToSend.append("comment", formData.comment);
-      const response = productsService.addReview(formDataToSend);
+      const reviewData = {
+        productId: Number(productId),
+        userId: Number(user?.id),
+        rating: formData.rating,
+        review: formData.comment,
+      };
+      productsService.addReview(reviewData);
+
       setStatus({
         error: false,
         message: "Commentaire envoyé avec succès",

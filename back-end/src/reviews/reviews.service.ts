@@ -1,26 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { CreateReviewDto } from './dto/create-review.dto';
-import { UpdateReviewDto } from './dto/update-review.dto';
+import { ReviewsRepository } from './reviews.repository';
 
 @Injectable()
 export class ReviewsService {
-  create(createReviewDto: CreateReviewDto) {
-    return 'This action adds a new review';
-  }
+  constructor(private reviewRepository: ReviewsRepository) {}
 
-  findAll() {
-    return `This action returns all reviews`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} review`;
-  }
-
-  update(id: number, updateReviewDto: UpdateReviewDto) {
-    return `This action updates a #${id} review`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} review`;
+  async createReview(createReviewDto: CreateReviewDto) {
+    try {
+      const reviewCreatedId = await this.reviewRepository.createReview(
+        createReviewDto.productId,
+        createReviewDto.userId,
+        createReviewDto.rating,
+        createReviewDto.review,
+      );
+      const review =
+        await this.reviewRepository.findReviewById(reviewCreatedId);
+      return review;
+    } catch (error) {
+      throw new Error('Error creating review');
+    }
   }
 }

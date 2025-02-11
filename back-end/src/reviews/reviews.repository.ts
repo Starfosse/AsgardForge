@@ -1,13 +1,21 @@
 import { Inject } from '@nestjs/common';
 import { Connection } from 'mysql2';
 
-export class ReviewsService {
+export class ReviewsRepository {
   constructor(@Inject('DATABASE_CONNECTION') private connection: Connection) {}
 
-  async findReviewsByProductId(productId: number) {
+  async findReviewById(productId: number) {
+    const [rows]: any = await this.connection.execute(
+      'SELECT * FROM reviews WHERE id = ?',
+      [productId],
+    );
+    return rows;
+  }
+
+  async getAllReviewsByProductId(reviewId: number) {
     const [rows]: any = await this.connection.execute(
       'SELECT * FROM reviews WHERE product_id = ?',
-      [productId],
+      [reviewId],
     );
     return rows;
   }

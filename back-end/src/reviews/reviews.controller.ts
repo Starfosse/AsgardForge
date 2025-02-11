@@ -1,23 +1,18 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
-import { ReviewsService } from './reviews.service';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CreateReviewDto } from './dto/create-review.dto';
-import { UpdateReviewDto } from './dto/update-review.dto';
+import { ReviewsRepository } from './reviews.repository';
+import { ReviewsService } from './reviews.service';
 
 @Controller('reviews')
 export class ReviewsController {
-  constructor(private readonly reviewsService: ReviewsService) {}
+  constructor(
+    private readonly reviewsService: ReviewsService,
+    private readonly reviewsRepository: ReviewsRepository,
+  ) {}
 
   @Post()
   create(@Body() createReviewDto: CreateReviewDto) {
-    return this.reviewsService.create(createReviewDto);
+    return this.reviewsService.createReview(createReviewDto);
   }
 
   // @Get()
@@ -25,9 +20,9 @@ export class ReviewsController {
   //   return this.reviewsService.findAll();
   // }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.reviewsService.findOne(+id); // tous les reveiw d'un product
+  @Get(':productId')
+  findOne(@Param('productId') productId: string) {
+    return this.reviewsRepository.getAllReviewsByProductId(+productId); // tous les reveiw d'un product
   }
 
   // @Patch(':id')

@@ -15,7 +15,6 @@ const Collection = () => {
   const fetchCategory = async () => {
     if (!id) return;
     const products = await productsService.getProductsByCategory(parseInt(id));
-    console.log("products -> ", products);
     setProductsCategory(products);
   };
 
@@ -27,7 +26,6 @@ const Collection = () => {
     (product) =>
       product.price >= priceRange[0] && product.price <= priceRange[1]
   );
-  console.log("filteredProducts -> ", filteredProducts);
   return (
     <div className="bg-stone-100 min-h-screen">
       <div className="container mx-auto px-4 py-12">

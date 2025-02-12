@@ -17,7 +17,6 @@ export class CategoryService {
         images,
       });
     }
-    console.log('productsWithImage -> ', productsWithImage);
     return productsWithImage;
   }
 }

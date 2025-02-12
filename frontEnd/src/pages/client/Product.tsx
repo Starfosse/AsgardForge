@@ -33,7 +33,8 @@ export interface ReviewsCustomers {
   customerId?: number;
   customerName?: string;
   rating: number;
-  comment: string;
+  review: string;
+  created_at?: string;
 }
 
 const ProductPage = () => {
@@ -42,6 +43,16 @@ const ProductPage = () => {
   const { productId } = useParams<{ productId: string }>();
   const [product, setProduct] = useState<ProductWithImages | null>(null);
   const [reviews, setReviews] = useState<ReviewsCustomers[]>([]);
+
+  const getAverageRating = () => {
+    if (reviews.length === 0) {
+      return 0; // ou autre valeur par défaut
+    }
+    const res =
+      reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
+    return res;
+  };
+
   const fetchProduct = async () => {
     if (!productId) return;
     const response = await productsService.getProduct(parseInt(productId));
@@ -50,7 +61,6 @@ const ProductPage = () => {
   const fetchReviews = async () => {
     if (!productId) return;
     const reviews = await productsService.getReviews(parseInt(productId));
-    console.log(reviews);
     setReviews(reviews);
   };
   useEffect(() => {
@@ -112,7 +122,7 @@ const ProductPage = () => {
               {product?.price} €
             </span>
             <div className="flex text-yellow-500">
-              {[...Array(reviews)].map((_, i) => (
+              {[...Array(Math.floor(getAverageRating()))].map((_, i) => (
                 <Star key={i} className="w-5 h-5 fill-current" />
               ))}
               <span className="text-stone-600 ml-2">

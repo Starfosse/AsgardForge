@@ -3,9 +3,11 @@ import { useState } from "react";
 
 export interface ProductReview {
   id?: number;
-  customerId: number | undefined;
+  customerId?: number;
+  customerName?: string | undefined;
   rating: number;
-  comment: string;
+  review: string;
+  created_at?: string;
 }
 
 interface ProductReviewFormProps {
@@ -36,13 +38,13 @@ export default function ProductReviewForm({
         </h3>
         <form onSubmit={handleSubmit}>
           <div className="flex flex-col space-y-4">
-            <div className="flex space-x-4 items-center justify-center">
+            <div className="flex space-x-4 items-end">
               <label htmlFor="rating" className="text-gray-800 -mt-4">
                 Note :
               </label>
 
               <div
-                className="flex space-x-1"
+                className="flex space-x-1 "
                 onMouseLeave={() => setReviewStars(formData.rating)}
               >
                 {[...Array(5)].map((_, i) => (
@@ -64,11 +66,11 @@ export default function ProductReviewForm({
               <textarea
                 name="comment"
                 id="comment"
-                value={formData.comment}
+                value={formData.review}
                 onChange={(e) =>
-                  setFormData({ ...formData, comment: e.target.value })
+                  setFormData({ ...formData, review: e.target.value })
                 }
-                className="w-full h-10 border border-gray-300 rounded-md px-4 py-2"
+                className="w-full h-20 border border-gray-300 rounded-md px-4 py-2"
               ></textarea>
             </div>
             <button

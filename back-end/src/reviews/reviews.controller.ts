@@ -12,27 +12,11 @@ export class ReviewsController {
 
   @Post()
   async create(@Body() createReviewDto: CreateReviewDto) {
-    console.log('createReviewDto === ', createReviewDto);
     return this.reviewsService.createReview(createReviewDto);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.reviewsService.findAll();
-  // }
-
   @Get(':productId')
   async indOne(@Param('productId') productId: string) {
-    return this.reviewsRepository.getAllReviewsByProductId(+productId); // tous les reveiw d'un product
+    return this.reviewsService.getReviews(+productId);
   }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateReviewDto: UpdateReviewDto) {
-  //   return this.reviewsService.update(+id, updateReviewDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.reviewsService.remove(+id);
-  // }
 }

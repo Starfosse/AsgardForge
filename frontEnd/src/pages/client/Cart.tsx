@@ -1,8 +1,12 @@
+import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
 import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const { cart, addToCart, substractFromCart } = useCart();
+  const { isAuthenticated, login } = useAuth();
+  const navigate = useNavigate();
 
   const calculateTotal = () => {
     return cart
@@ -106,10 +110,21 @@ const Cart = () => {
                     <span>{calculateTotal()} €</span>
                   </div>
                 </div>
-
-                <button className="w-full bg-amber-700 text-white py-3 rounded-lg hover:bg-amber-600 transition">
-                  Passer la Commande
-                </button>
+                {isAuthenticated ? (
+                  <button
+                    onClick={() => navigate("/checkout")}
+                    className="w-full bg-amber-700 text-white py-3 rounded-lg hover:bg-amber-600 transition"
+                  >
+                    Passer la Commande
+                  </button>
+                ) : (
+                  <button
+                    onClick={login}
+                    className="w-full bg-amber-700 text-white py-3 rounded-lg hover:bg-amber-600 transition"
+                  >
+                    Se connecter pour Commander
+                  </button>
+                )}
               </div>
             </div>
           </div>

@@ -40,7 +40,6 @@ export default function CustomerReviews({
   // ];
 
   const { user } = useAuth();
-  console.log("use111 === ", user);
   const [formData, setFormData] = useState<ProductReview>({
     id: 0,
     customerId: user?.id,
@@ -118,8 +117,6 @@ export default function CustomerReviews({
       setFormData({ customerId: user?.id, rating: 0, review: "" });
     }
   };
-
-  console.log("reviewsCustomers === ", reviewsCustomers);
 
   // const reviewsCustomers2 = reviewsCustomers.map((review) => ({
   //   customerName: review.customerName,

@@ -34,7 +34,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [user, setUser] = useState<User | null>(null);
-  console.log("user222 === ", user);
 
   useEffect(() => {
     checkAuthStatus();
@@ -53,7 +52,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
             firstName: response.first_name,
             email: response.email,
           };
-          console.log("transformedUser === ", transformedUser);
           setUser(transformedUser);
         }
         setIsAuthenticated(true);

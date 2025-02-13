@@ -13,6 +13,7 @@ import {
 import Home from "./pages/client/Home";
 import ProductPage from "./pages/client/Product";
 import DashBoardProduct from "./wrapper/DashboardProduct";
+import Checkout from "./pages/Checkout";
 
 function App() {
   return (
@@ -36,6 +37,14 @@ function App() {
           }
         />
         <Route path="/login/success" element={<GoogleCallBack />} />
+        <Route
+          path="/checkout"
+          element={
+            <LayoutClient>
+              <Checkout />
+            </LayoutClient>
+          }
+        />
         <Route
           path="/collections"
           element={

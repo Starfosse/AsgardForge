@@ -38,7 +38,7 @@ export class AuthController {
       secure: true,
       sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: '/api/auth/refresh',
+      path: '/auth/refresh',
     });
     const frontendURL = 'http://localhost:5173';
     return res.redirect(`${frontendURL}/login/success?token=${access_token}`);
@@ -56,7 +56,7 @@ export class AuthController {
       secure: true,
       sameSite: 'strict',
       maxAge: 7 * 24 * 60 * 60 * 1000,
-      path: '/api/auth/refresh',
+      path: '/auth/refresh',
     });
 
     return res.json({ access_token: tokens.access_token });
@@ -71,7 +71,7 @@ export class AuthController {
       httpOnly: true,
       secure: true,
       sameSite: 'strict',
-      path: '/api/auth/refresh',
+      path: '/auth/refresh',
     });
 
     return res.json({ message: 'Logged out successfully' });

@@ -1,4 +1,5 @@
 import CustomerReviews from "@/components/CustomerReviews";
+import { useCart } from "@/contexts/CartContext";
 import { productsService } from "@/services/api";
 import { Axe, Shield, ShoppingCart, Star } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -15,8 +16,8 @@ export interface ProductWithImages {
   id?: number;
   name: string;
   description: string;
-  price: number;
-  promotionPrice: number;
+  price: string;
+  promotionPrice: string;
   stock: number;
   category: string;
   alertStock: number;
@@ -43,6 +44,7 @@ const ProductPage = () => {
   const { productId } = useParams<{ productId: string }>();
   const [product, setProduct] = useState<ProductWithImages | null>(null);
   const [reviews, setReviews] = useState<ReviewsCustomers[]>([]);
+  const { addToCart } = useCart();
 
   const getAverageRating = () => {
     if (reviews.length === 0) {
@@ -160,7 +162,10 @@ const ProductPage = () => {
                 +
               </button>
             </div>
-            <button className="flex items-center bg-amber-700 text-white px-6 py-3 rounded-lg hover:bg-amber-600 transition">
+            <button
+              onClick={() => addToCart(product!, quantity)}
+              className="flex items-center bg-amber-700 text-white px-6 py-3 rounded-lg hover:bg-amber-600 transition"
+            >
               <ShoppingCart className="mr-2" />
               Ajouter au Panier
             </button>

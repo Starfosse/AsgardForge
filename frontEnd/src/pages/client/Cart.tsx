@@ -1,38 +1,11 @@
-import React, { useState } from "react";
-import { Trash2, ShoppingBag, Minus, Plus } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
+import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 
 const Cart = () => {
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Hache de Guerre d'Odin",
-      price: 249.99,
-      quantity: 1,
-      image: "/api/placeholder/400/300",
-    },
-    {
-      id: 3,
-      name: "Amulette de Protection",
-      price: 99.99,
-      quantity: 2,
-      image: "/api/placeholder/400/300",
-    },
-  ]);
-
-  const updateQuantity = (id, newQuantity) => {
-    setCartItems(
-      cartItems
-        .map((item) =>
-          item.id === id
-            ? { ...item, quantity: Math.max(0, newQuantity) }
-            : item
-        )
-        .filter((item) => item.quantity > 0)
-    );
-  };
+  const { cart, addToCart, substractFromCart } = useCart();
 
   const calculateTotal = () => {
-    return cartItems
+    return cart
       .reduce((total, item) => total + item.price * item.quantity, 0)
       .toFixed(2);
   };
@@ -44,7 +17,7 @@ const Cart = () => {
           <ShoppingBag className="mr-4 text-amber-700" /> Votre Panier
         </h1>
 
-        {cartItems.length === 0 ? (
+        {cart.length === 0 ? (
           <div className="text-center py-12 bg-white rounded-lg shadow-md">
             <p className="text-2xl text-stone-600 mb-4">
               Votre panier est vide
@@ -60,7 +33,7 @@ const Cart = () => {
           <div className="grid md:grid-cols-3 gap-8">
             {/* Liste des Produits */}
             <div className="md:col-span-2 space-y-6">
-              {cartItems.map((item) => (
+              {cart.map((item) => (
                 <div
                   key={item.id}
                   className="bg-white rounded-lg shadow-md overflow-hidden flex items-center"
@@ -79,25 +52,23 @@ const Cart = () => {
                     <div className="flex items-center space-x-4">
                       <div className="flex items-center border rounded-lg">
                         <button
-                          onClick={() =>
-                            updateQuantity(item.id, item.quantity - 1)
-                          }
+                          onClick={() => substractFromCart(item.id, 1)}
                           className="p-2 hover:bg-stone-100"
                         >
                           <Minus className="w-5 h-5" />
                         </button>
                         <span className="px-4">{item.quantity}</span>
                         <button
-                          onClick={() =>
-                            updateQuantity(item.id, item.quantity + 1)
-                          }
+                          onClick={() => addToCart(item as any, 1)}
                           className="p-2 hover:bg-stone-100"
                         >
                           <Plus className="w-5 h-5" />
                         </button>
                       </div>
                       <button
-                        onClick={() => updateQuantity(item.id, 0)}
+                        onClick={() =>
+                          substractFromCart(item.id, item.quantity)
+                        }
                         className="text-red-600 hover:text-red-800"
                       >
                         <Trash2 />

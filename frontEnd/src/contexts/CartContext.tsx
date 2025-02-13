@@ -4,7 +4,6 @@ import { createContext, useContext, useState } from "react";
 interface CartItem {
   id: number;
   name: string;
-  category: string;
   price: number;
   promotionPrice?: number;
   quantity: number;
@@ -14,6 +13,7 @@ interface CartItem {
 type CartContextType = {
   cart: CartItem[];
   addToCart: (item: ProductWithImages, quantity: number) => void;
+  substractFromCart: (id: number, quantity: number) => void;
   removeFromCart: (id: number) => void;
   clearCart: () => void;
 };
@@ -36,24 +36,40 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         {
           id: item.id!,
           name: item.name,
-          category: item.category,
-          price: item.price,
-          promotionPrice: item.promotionPrice,
+          price: Number(item.price),
+          promotionPrice: item.promotionPrice
+            ? Number(item.promotionPrice)
+            : undefined,
           quantity: quantity,
-          image: item.images[0].image_path,
+          image: item.images?.[0]?.image_path || "",
         },
       ]);
     }
   };
+
   const removeFromCart = (id: number) => {
     setCart(cart.filter((item) => item.id !== id));
+  };
+
+  const substractFromCart = (id: number, quantity: number) => {
+    if (cart.find((i) => i.id === id)!.quantity - quantity === 0) {
+      removeFromCart(id);
+    } else {
+      setCart(
+        cart.map((i) =>
+          i.id === id
+            ? { ...i, quantity: Math.max(0, i.quantity - quantity) }
+            : i
+        )
+      );
+    }
   };
   const clearCart = () => {
     setCart([]);
   };
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, removeFromCart, clearCart }}
+      value={{ cart, addToCart, removeFromCart, clearCart, substractFromCart }}
     >
       {children}
     </CartContext.Provider>

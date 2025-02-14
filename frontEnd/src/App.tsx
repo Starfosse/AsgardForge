@@ -112,14 +112,6 @@ function App() {
           }
         />
         <Route
-          path="/dashboard/analytics"
-          element={
-            <LayoutAdmin>
-              <Analytics />
-            </LayoutAdmin>
-          }
-        />
-        <Route
           path="/dashboard/products"
           element={
             <LayoutAdmin>

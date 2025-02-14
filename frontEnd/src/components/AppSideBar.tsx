@@ -21,11 +21,6 @@ const items = [
     icon: Home,
   },
   {
-    title: "Paramètres",
-    url: "/",
-    icon: Home,
-  },
-  {
     title: "Ventes",
     url: "/dashboard/orders",
     icon: Inbox,
@@ -39,16 +34,6 @@ const items = [
     title: "Clients",
     url: "/dashboard/customers",
     icon: Search,
-  },
-  {
-    title: "Analyse",
-    url: "/dashboard/analytics",
-    icon: Settings,
-  },
-  {
-    title: "Marketing",
-    url: "#",
-    icon: Settings,
   },
   {
     title: "Support",

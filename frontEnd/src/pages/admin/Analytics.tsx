@@ -1,9 +1,11 @@
 import CustomersActionsRecently from "@/components/analytics/CustomersActionsRecently";
 import LastReviews from "@/components/analytics/LastReviews";
 import RepartitionByGenderAndByAge from "@/components/analytics/RepartitionByGenderAndByAge";
+import SalesByCountry from "@/components/analytics/SalesByCountry";
 import SalesByMonth from "@/components/analytics/SalesByMonth";
 import SalesByYear from "@/components/analytics/SalesByYear";
 import VisitsByMonth from "@/components/analytics/VisitsByMonth";
+import WeekDayRushHour from "@/components/analytics/WeekdayRushHour";
 
 export default function Analytics() {
   return (
@@ -17,8 +19,12 @@ export default function Analytics() {
         <LastReviews />
         <CustomersActionsRecently />
       </div>
-      <div className="grid grid-cols-4 gap-3">
-        <RepartitionByGenderAndByAge />
+      <div className="grid grid-cols-7 gap-3">
+        <div className="col-span-2 flex flex-col gap-4">
+          <RepartitionByGenderAndByAge />
+          <SalesByCountry />
+        </div>
+        <WeekDayRushHour />
       </div>
     </div>
   );

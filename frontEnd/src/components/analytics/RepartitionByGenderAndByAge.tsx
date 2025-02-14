@@ -1,46 +1,164 @@
 import DashBoardAnalytics from "@/wrapper/DashBoardAnalytics";
-import { Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
+import {
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  Cell,
+} from "recharts";
 
-export default function RepartitionByGenderAndByAge() {
-  const data01 = [
-    { name: "18-27", value: 400 },
-    { name: "27-35", value: 300 },
-    { name: "35-49", value: 300 },
-    { name: "49+", value: 200 },
+export default function CustomersDistribution() {
+  const totalAge = 1200;
+  const ageData = [
+    {
+      name: "18-27 (33%)",
+      value: 400,
+      color: "#FF6B6B",
+      percentage: (400 / totalAge) * 100,
+    },
+    {
+      name: "27-35 (25%)",
+      value: 300,
+      color: "#4ECDC4",
+      percentage: (300 / totalAge) * 100,
+    },
+    {
+      name: "35-49 (25%)",
+      value: 300,
+      color: "#45B7D1",
+      percentage: (300 / totalAge) * 100,
+    },
+    {
+      name: "49+ (17%)",
+      value: 200,
+      color: "#EAB308",
+      percentage: (200 / totalAge) * 100,
+    },
   ];
-  const data02 = [
-    { name: "18-27 | Femmes", value: 100 },
-    { name: "18-27 | Hommes", value: 300 },
-    { name: "27-35 | Femmes", value: 50 },
-    { name: "27-35 | Hommes", value: 250 },
-    { name: "35-49 | Femmes", value: 100 },
-    { name: "35-49 | Hommes", value: 250 },
-    { name: "49+ | Femmes", value: 20 },
-    { name: "49+ | Hommes", value: 180 },
+
+  const genderLegend = [
+    { name: "Femmes", color: "#FF9F9F" },
+    { name: "Hommes", color: "#4A90E2" },
   ];
+
+  const genderData = [
+    {
+      name: "Femmes (18-27)",
+      value: 100,
+      color: "#FF9F9F",
+      percentage: (100 / 400) * 100,
+    },
+    {
+      name: "Hommes (18-27)",
+      value: 300,
+      color: "#4A90E2",
+      percentage: (300 / 400) * 100,
+    },
+    {
+      name: "Femmes (27-35)",
+      value: 50,
+      color: "#FF9F9F",
+      percentage: (50 / 300) * 100,
+    },
+    {
+      name: "Hommes (27-35)",
+      value: 250,
+      color: "#4A90E2",
+      percentage: (250 / 300) * 100,
+    },
+    {
+      name: "Femmes (35-49)",
+      value: 50,
+      color: "#FF9F9F",
+      percentage: (50 / 300) * 100,
+    },
+    {
+      name: "Hommes (35-49)",
+      value: 250,
+      color: "#4A90E2",
+      percentage: (250 / 300) * 100,
+    },
+    {
+      name: "Femmes (49+)",
+      value: 20,
+      color: "#FF9F9F",
+      percentage: (20 / 200) * 100,
+    },
+    {
+      name: "Hommes (49+)",
+      value: 180,
+      color: "#4A90E2",
+      percentage: (180 / 200) * 100,
+    },
+  ];
+
+  const CustomTooltip = ({ active, payload }: any) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-gray-800 p-2 rounded-lg border border-gray-700">
+          <p className="text-white">{`${payload[0].name}: ${
+            payload[0].value
+          } (${payload[0].payload.percentage.toFixed(1)}%)`}</p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  const renderColorfulLegendText = (value: string) => {
+    return <span className="text-gray-300">{value}</span>;
+  };
+
   return (
-    <DashBoardAnalytics className="h-[350px] col-span-1">
+    <DashBoardAnalytics className="h-[350px]">
+      <h2 className="text-white font-semibold">
+        Répartition des clients par âge et sexe :
+      </h2>
       <ResponsiveContainer width="100%" height="100%">
-        <PieChart width={400} height={400}>
+        <PieChart>
           <Pie
-            data={data01}
+            data={ageData}
             dataKey="value"
             cx="50%"
             cy="50%"
             outerRadius={60}
-            fill="#8884d8"
-          />
+          >
+            {ageData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={entry.color} />
+            ))}
+          </Pie>
           <Pie
-            data={data02}
+            data={genderData}
             dataKey="value"
             cx="50%"
             cy="50%"
             innerRadius={70}
             outerRadius={90}
-            fill="#82ca9d"
-            label
+          >
+            {genderData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={entry.color} />
+            ))}
+          </Pie>
+          <Tooltip content={<CustomTooltip />} />
+          <Legend
+            formatter={renderColorfulLegendText}
+            layout="vertical"
+            align="right"
+            verticalAlign="middle"
+            payload={[
+              ...ageData.map((item) => ({
+                value: item.name,
+                type: "square",
+                color: item.color,
+              })),
+              ...genderLegend.map((item) => ({
+                value: item.name,
+                type: "square",
+                color: item.color,
+              })),
+            ]}
           />
-          <Tooltip />
         </PieChart>
       </ResponsiveContainer>
     </DashBoardAnalytics>

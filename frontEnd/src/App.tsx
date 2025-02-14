@@ -14,6 +14,8 @@ import Home from "./pages/client/Home";
 import ProductPage from "./pages/client/Product";
 import DashBoardProduct from "./wrapper/DashboardProduct";
 import Checkout from "./pages/Checkout";
+import CustomerList from "./pages/admin/CustomerList";
+import SalesGraph from "./pages/admin/SalesGraph";
 
 function App() {
   return (
@@ -83,6 +85,26 @@ function App() {
           element={
             <LayoutAdmin>
               <Dashboard />
+            </LayoutAdmin>
+          }
+        />
+        <Route
+          path="/dashboard/sales"
+          element={
+            <LayoutAdmin>
+              <DashBoardProduct>
+                <SalesGraph />
+              </DashBoardProduct>
+            </LayoutAdmin>
+          }
+        />
+        <Route
+          path="/dashboard/customers"
+          element={
+            <LayoutAdmin>
+              <DashBoardProduct>
+                <CustomerList />
+              </DashBoardProduct>
             </LayoutAdmin>
           }
         />

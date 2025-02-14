@@ -27,7 +27,7 @@ const items = [
   },
   {
     title: "Ventes",
-    url: "#",
+    url: "/dashboard/sales",
     icon: Inbox,
   },
   {
@@ -37,7 +37,7 @@ const items = [
   },
   {
     title: "Clients",
-    url: "#",
+    url: "/dashboard/customers",
     icon: Search,
   },
   {

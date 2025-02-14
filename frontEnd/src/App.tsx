@@ -17,6 +17,8 @@ import Checkout from "./pages/Checkout";
 import CustomerList from "./pages/admin/CustomerList";
 import SalesGraph from "./pages/admin/OrdersList";
 import OrdersList from "./pages/admin/OrdersList";
+import Analytics from "./pages/admin/Analytics";
+import DashBoardAnalytics from "./wrapper/DashBoardAnalytics";
 
 function App() {
   return (
@@ -106,6 +108,14 @@ function App() {
               <DashBoardProduct>
                 <CustomerList />
               </DashBoardProduct>
+            </LayoutAdmin>
+          }
+        />
+        <Route
+          path="/dashboard/analytics"
+          element={
+            <LayoutAdmin>
+              <Analytics />
             </LayoutAdmin>
           }
         />

@@ -41,8 +41,8 @@ const items = [
     icon: Search,
   },
   {
-    title: "Profitabilité",
-    url: "#",
+    title: "Analyse",
+    url: "/dashboard/analytics",
     icon: Settings,
   },
   {

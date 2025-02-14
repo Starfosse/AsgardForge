@@ -15,7 +15,8 @@ import ProductPage from "./pages/client/Product";
 import DashBoardProduct from "./wrapper/DashboardProduct";
 import Checkout from "./pages/Checkout";
 import CustomerList from "./pages/admin/CustomerList";
-import SalesGraph from "./pages/admin/SalesGraph";
+import SalesGraph from "./pages/admin/OrdersList";
+import OrdersList from "./pages/admin/OrdersList";
 
 function App() {
   return (
@@ -89,11 +90,11 @@ function App() {
           }
         />
         <Route
-          path="/dashboard/sales"
+          path="/dashboard/orders"
           element={
             <LayoutAdmin>
               <DashBoardProduct>
-                <SalesGraph />
+                <OrdersList />
               </DashBoardProduct>
             </LayoutAdmin>
           }

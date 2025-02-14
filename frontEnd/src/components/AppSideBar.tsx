@@ -27,7 +27,7 @@ const items = [
   },
   {
     title: "Ventes",
-    url: "/dashboard/sales",
+    url: "/dashboard/orders",
     icon: Inbox,
   },
   {

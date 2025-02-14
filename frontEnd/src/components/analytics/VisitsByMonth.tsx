@@ -1,5 +1,6 @@
 import DashBoardAnalytics from "@/wrapper/DashBoardAnalytics";
 import {
+  Legend,
   Line,
   LineChart,
   ResponsiveContainer,

@@ -1,4 +1,3 @@
-import React from "react";
 import DashBoardAnalytics from "@/wrapper/DashBoardAnalytics";
 import {
   ResponsiveContainer,
@@ -19,62 +18,28 @@ interface WeekDayRushHourData {
 }
 
 const WeekDayRushHour = () => {
-  const fakeData: WeekDayRushHourData[] = [
-    {
-      day: "Lundi",
-      hours: Array.from({ length: 12 }, (_, i) => ({
-        hour: i + 8,
-        customers: Math.floor(Math.random() * 10),
-      })),
-    },
-    {
-      day: "Mardi",
-      hours: Array.from({ length: 12 }, (_, i) => ({
-        hour: i + 8,
-        customers: Math.floor(Math.random() * 10),
-      })),
-    },
-    {
-      day: "Mercredi",
-      hours: Array.from({ length: 12 }, (_, i) => ({
-        hour: i + 8,
-        customers: Math.floor(Math.random() * 10),
-      })),
-    },
-    {
-      day: "Jeudi",
-      hours: Array.from({ length: 12 }, (_, i) => ({
-        hour: i + 8,
-        customers: Math.floor(Math.random() * 10),
-      })),
-    },
-    {
-      day: "Vendredi",
-      hours: Array.from({ length: 12 }, (_, i) => ({
-        hour: i + 8,
-        customers: Math.floor(Math.random() * 10),
-      })),
-    },
-    {
-      day: "Samedi",
-      hours: Array.from({ length: 12 }, (_, i) => ({
-        hour: i + 8,
-        customers: Math.floor(Math.random() * 10),
-      })),
-    },
-    {
-      day: "Dimanche",
-      hours: Array.from({ length: 12 }, (_, i) => ({
-        hour: i + 8,
-        customers: Math.floor(Math.random() * 10),
-      })),
-    },
+  const days = [
+    "Lundi",
+    "Mardi",
+    "Mercredi",
+    "Jeudi",
+    "Vendredi",
+    "Samedi",
+    "Dimanche",
   ];
+
+  const fakeData: WeekDayRushHourData[] = days.map((day) => ({
+    day,
+    hours: Array.from({ length: 12 }, (_, i) => ({
+      hour: i + 8,
+      customers: Math.floor(Math.random() * 10),
+    })),
+  }));
 
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-gray-800 p-2 rounded-lg border border-gray-700">
+        <div className="bg-gray-800 p-2 rounded-lg border border-gray-700 overflow-x-auto whitespace-nowrap">
           <p className="text-white">
             {`${payload[0].payload.hour}h: ${payload[0].value} clients`}
           </p>

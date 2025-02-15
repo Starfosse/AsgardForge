@@ -1,4 +1,5 @@
 import DashBoardAnalytics from "@/wrapper/DashBoardAnalytics";
+import { get } from "http";
 import {
   Area,
   AreaChart,
@@ -7,6 +8,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { getRandomFakeData } from "./SalesByMonth";
 
 interface CustomerActionData {
   point: number;
@@ -26,7 +28,7 @@ const CustomersActionsRecently = () => {
     },
     {
       point: 2,
-      "Ajouter au panier": 5,
+      "Ajouter au panier": getRandomFakeData(15),
     },
     {
       point: 3,
@@ -38,7 +40,7 @@ const CustomersActionsRecently = () => {
     },
     {
       point: 5,
-      "Passage en caisse": 7,
+      "Passage en caisse": getRandomFakeData(10),
     },
     {
       point: 6,
@@ -50,7 +52,7 @@ const CustomersActionsRecently = () => {
     },
     {
       point: 8,
-      Acheter: 2,
+      Acheter: getRandomFakeData(5),
     },
     {
       point: 9,
@@ -62,7 +64,7 @@ const CustomersActionsRecently = () => {
   ];
 
   return (
-    <DashBoardAnalytics className="h-[300px] col-span-1 flex flex-col space-y-4">
+    <DashBoardAnalytics className="h-[300px] col-span-1 flex flex-col space-y-4 overflow-x-auto whitespace-nowrap">
       <h2 className="font-semibold text-white">
         Actions récentes des clients (10mn)
       </h2>

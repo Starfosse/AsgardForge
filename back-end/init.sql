@@ -63,7 +63,28 @@ CREATE TABLE product_reviews(
     FOREIGN KEY(product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
+CREATE TABLE conversations_support(
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    subject VARCHAR(255) NOT NULL,
+    -- order_id BIGINT, ajouter plus tard le numéro de commande dans le ticket
+    status boolean NOT NULL DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+)
+
+CREATE TABLE messages_support(
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    conversation_id BIGINT NOT NULL,
+    sender VARCHAR(255) NOT NULL,
+    message TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY(conversation_id) REFERENCES conversations_support(id) ON DELETE CASCADE,
+)
+
 CREATE INDEX idx_product_category ON products(category_id);
 CREATE INDEX idx_product_stock ON products(stock);
 CREATE INDEX idx_product_name ON products(name);
 CREATE INDEX idx_category_name ON categories(name);
+CREATE INDEX idx_messages_support_conversation ON messages_support(conversation_id);

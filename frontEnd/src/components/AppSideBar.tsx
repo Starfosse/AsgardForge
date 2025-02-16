@@ -37,7 +37,7 @@ const items = [
   },
   {
     title: "Support",
-    url: "#",
+    url: "/dashboard/support",
     icon: Settings,
   },
 ];

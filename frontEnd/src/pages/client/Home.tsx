@@ -1,6 +1,8 @@
 import { Flame, Hammer, Shield } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
   const featuredProducts = [
     {
       name: "Hache de Guerre d'Odin",
@@ -178,9 +180,9 @@ const Home = () => {
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-amber-400">
+                <Link to={"contact"} className="hover:text-amber-400">
                   Contact
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

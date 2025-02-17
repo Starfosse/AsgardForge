@@ -1,9 +1,10 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { ContactService } from './contact.service';
+import { ContactRepository } from './contact.repository';
 
 @Controller('contact')
 export class ContactController {
-  constructor(private readonly contactService: ContactService) {}
+  constructor(private readonly contactRepository: ContactRepository) {}
 
   // @Post()
   // create(@Body() createContactDto: CreateContactDto) {
@@ -15,10 +16,14 @@ export class ContactController {
   //   return this.contactService.findAll();
   // }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.contactService.findOne(+id);
-  // }
+  @Get(':userId')
+  async findOne(@Param('userId') userId: string) {
+    console.log('userId ===>', userId);
+    const res =
+      await this.contactRepository.findAllConversationsAndMessages(+userId);
+    console.log('res ===>', res);
+    return res;
+  }
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateContactDto: UpdateContactDto) {

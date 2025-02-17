@@ -23,7 +23,6 @@ import { ContactModule } from './contact/contact.module';
     CategoryModule,
     ReviewsModule,
     ContactModule,
-    ContactModule,
   ],
 })
 export class AppModule {}

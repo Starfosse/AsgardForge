@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import { nanoid } from "nanoid";
 import { useAuth } from "@/contexts/AuthContext";
+import { contactService } from "@/services/api";
 
 const socket = io("http://localhost:3000");
 
@@ -191,6 +192,16 @@ export default function Contact() {
     setNewMessage("");
   };
 
+  const fetchConversations = async () => {
+    if (!user) return;
+    console.log("user ===", user);
+    const res = await contactService.getConversations(user.id);
+    console.log("res conversation ===", res);
+  };
+
+  useEffect(() => {
+    fetchConversations();
+  }, [user]);
   // useEffect(() => {
   //   socket.on("message", (data) => {
   //     console.log(data);

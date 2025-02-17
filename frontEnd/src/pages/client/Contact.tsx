@@ -2,22 +2,25 @@ import CreateConversation from "@/modals/CreateConversation";
 import { Plus, Send, Shield } from "lucide-react";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
+import { nanoid } from "nanoid";
+import { useAuth } from "@/contexts/AuthContext";
 
 const socket = io("http://localhost:3000");
 
 interface Message {
-  id: string;
+  id: string | number;
   content: string;
   sender: "client" | "support";
   timestamp: Date;
 }
 
 interface Conversation {
-  id: string;
+  id: string | number;
   subject: string;
   orderId?: string;
   messages: Message[];
   status: "open" | "closed";
+  createdAt: Date;
   lastUpdate: Date;
 }
 
@@ -27,6 +30,7 @@ const mockConversations: Conversation[] = [
     subject: "Question sur la Hache de Guerre d'Odin",
     orderId: "CMD-2024-001",
     status: "open",
+    createdAt: new Date("2024-02-15T10:30:00"),
     lastUpdate: new Date("2024-02-15T10:30:00"),
     messages: [
       {
@@ -50,6 +54,7 @@ const mockConversations: Conversation[] = [
     subject: "Suivi de commande Bouclier du Clan Bjorn",
     orderId: "CMD-2024-002",
     status: "open",
+    createdAt: new Date("2024-02-15T09:00:00"),
     lastUpdate: new Date("2024-02-15T09:15:00"),
     messages: [
       {
@@ -69,6 +74,7 @@ export interface NewConversation {
 }
 
 export default function Contact() {
+  const { user } = useAuth();
   const [conversations, setConversations] =
     useState<Conversation[]>(mockConversations);
   const [selectedConversation, setSelectedConversation] =
@@ -82,23 +88,60 @@ export default function Contact() {
   });
 
   const handleCreateConversation = () => {
+    if (!user) return;
+    const tmpId = nanoid();
     const conversation: Conversation = {
-      id: `conv-${Date.now()}`,
+      id: tmpId,
       subject: newConversation.subject,
       orderId: newConversation.orderId || undefined,
       status: "open",
       lastUpdate: new Date(),
+      createdAt: new Date(),
       messages: [
         {
-          id: `msg-${Date.now()}`,
+          id: `msg-${nanoid()}`,
           content: newConversation.initialMessage,
           sender: "client",
           timestamp: new Date(),
         },
       ],
     };
-
     setConversations([conversation, ...conversations]);
+    const { id, subject, orderId, createdAt } = conversation;
+    const { content, sender } = conversation.messages[0];
+    socket.emit(
+      "createConversation",
+      {
+        id,
+        subject,
+        orderId,
+        content,
+        sender,
+        createdAt,
+        userId: user.id,
+      },
+      (response: {
+        success: boolean;
+        conversationId: number;
+        messageId: number;
+      }) => {
+        if (response.success) {
+          console.log("Conversation créée avec succès:", response);
+          setConversations((prev) =>
+            prev.map((conv) =>
+              conv.id === tmpId
+                ? {
+                    ...conv,
+                    id: response.conversationId,
+                    messages: [{ ...conv.messages[0], id: response.messageId }],
+                  }
+                : conv
+            )
+          );
+        }
+      }
+    );
+
     setSelectedConversation(conversation);
     setIsCreateModalOpen(false);
     setNewConversation({ subject: "", orderId: "", initialMessage: "" });
@@ -106,16 +149,14 @@ export default function Contact() {
 
   const handleSendMessage = () => {
     if (!newMessage.trim() || !selectedConversation) return;
-
+    const tmpId = nanoid();
     const newMessageObj: Message = {
-      id: `m${Date.now()}`,
+      id: tmpId,
       content: newMessage,
       sender: "client",
       timestamp: new Date(),
     };
     console.log("J'enverrai le message suivant au serveur:", newMessageObj);
-    socket.emit("message", newMessageObj);
-    //envoyer en json ici
     const updatedConversation = {
       ...selectedConversation,
       messages: [...selectedConversation.messages, newMessageObj],
@@ -127,18 +168,41 @@ export default function Contact() {
         conv.id === selectedConversation.id ? updatedConversation : conv
       )
     );
+    socket.emit(
+      "message",
+      newMessageObj,
+      (response: { success: boolean; messageId: number }) => {
+        if (response.success) {
+          console.log("Conversation créée avec succès:", response);
+          setSelectedConversation((prev) => {
+            if (!prev) return prev;
+            return {
+              ...prev,
+              messages: [
+                ...prev.messages,
+                { ...newMessageObj, id: response.messageId },
+              ],
+            };
+          });
+        }
+      }
+    );
     setSelectedConversation(updatedConversation);
     setNewMessage("");
   };
 
-  useEffect(() => {
-    socket.on("message", (data) => {
-      console.log(data);
-    });
-    return () => {
-      socket.off("messageResponse");
-    };
-  }, []);
+  // useEffect(() => {
+  //   socket.on("message", (data) => {
+  //     console.log(data);
+  //   });
+  //   socket.on("createConversation", (data) => {
+  //     console.log(data);
+  //   });
+  //   return () => {
+  //     socket.off("message");
+  //     socket.off("createConversation");
+  //   };
+  // }, []);
 
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat("fr-FR", {

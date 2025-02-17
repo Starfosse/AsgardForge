@@ -1,6 +1,6 @@
 export class CreateMessageDto {
-  message: string;
+  content: string;
   conversationId: number;
   sender: string;
-  createdAt: string;
+  createdAt: Date;
 }

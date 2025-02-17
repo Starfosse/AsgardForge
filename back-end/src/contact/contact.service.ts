@@ -5,7 +5,18 @@ import { ContactRepository } from './contact.repository';
 @Injectable()
 export class ContactService {
   constructor(private readonly contactRepository: ContactRepository) {}
-  createOrUpdateConversation(createContactDto: CreateContactDto) {
-    return 'This action adds a new contact';
+  async createConversationAndMessage(createContactDto: CreateContactDto) {
+    console.log('message2 ===>', createContactDto.content);
+    const conversationId =
+      await this.contactRepository.createConversation(createContactDto);
+    const createMessageDto = {
+      content: createContactDto.content,
+      conversationId: conversationId,
+      sender: createContactDto.sender,
+      createdAt: createContactDto.createdAt,
+    };
+    const messageId =
+      await this.contactRepository.createMessage(createMessageDto);
+    return { conversationId: conversationId, messageId: messageId };
   }
 }

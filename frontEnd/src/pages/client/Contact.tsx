@@ -5,6 +5,7 @@ import { io } from "socket.io-client";
 import { nanoid } from "nanoid";
 import { useAuth } from "@/contexts/AuthContext";
 import { contactService } from "@/services/api";
+import { time } from "console";
 
 const socket = io("http://localhost:3000");
 
@@ -25,49 +26,6 @@ export interface Conversation {
   lastUpdate: Date;
 }
 
-const mockConversations: Conversation[] = [
-  {
-    id: "1",
-    subject: "Question sur la Hache de Guerre d'Odin",
-    orderId: "CMD-2024-001",
-    status: "open",
-    createdAt: new Date("2024-02-15T10:30:00"),
-    lastUpdate: new Date("2024-02-15T10:30:00"),
-    messages: [
-      {
-        id: "m1",
-        content:
-          "Bonjour, j'aimerais savoir si la hache est disponible en version gaucher ?",
-        sender: "client",
-        timestamp: new Date("2024-02-15T10:30:00"),
-      },
-      {
-        id: "m2",
-        content:
-          "Bonjour noble guerrier, la Hache d'Odin est en effet disponible pour les combattants gauchers. Souhaitez-vous que je vous guide dans le processus de personnalisation ?",
-        sender: "support",
-        timestamp: new Date("2024-02-15T10:35:00"),
-      },
-    ],
-  },
-  {
-    id: "2",
-    subject: "Suivi de commande Bouclier du Clan Bjorn",
-    orderId: "CMD-2024-002",
-    status: "open",
-    createdAt: new Date("2024-02-15T09:00:00"),
-    lastUpdate: new Date("2024-02-15T09:15:00"),
-    messages: [
-      {
-        id: "m3",
-        content: "Je souhaiterais connaître l'état d'avancement de ma commande",
-        sender: "client",
-        timestamp: new Date("2024-02-15T09:15:00"),
-      },
-    ],
-  },
-];
-
 export interface NewConversation {
   subject: string;
   orderId: string;
@@ -76,8 +34,7 @@ export interface NewConversation {
 
 export default function Contact() {
   const { user } = useAuth();
-  const [conversations, setConversations] =
-    useState<Conversation[]>(mockConversations);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] =
     useState<Conversation | null>(null);
   const [newMessage, setNewMessage] = useState("");
@@ -167,9 +124,15 @@ export default function Contact() {
         conv.id === selectedConversation.id ? updatedConversation : conv
       )
     );
+    const msgConvId = {
+      content: newMessage,
+      conversationId: selectedConversation.id,
+      sender: "client",
+      timestamp: new Date(),
+    };
     socket.emit(
       "message",
-      newMessageObj,
+      msgConvId,
       (response: { success: boolean; messageId: number }) => {
         if (response.success) {
           setSelectedConversation((prev) => {
@@ -185,7 +148,6 @@ export default function Contact() {
         }
       }
     );
-    setSelectedConversation(updatedConversation);
     setNewMessage("");
   };
 

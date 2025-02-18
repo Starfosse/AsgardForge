@@ -78,7 +78,7 @@ CREATE TABLE messages_support(
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     conversation_id BIGINT NOT NULL,
     sender VARCHAR(255) NOT NULL,
-    message TEXT NOT NULL,
+    content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(conversation_id) REFERENCES conversations_support(id) ON DELETE CASCADE
 );

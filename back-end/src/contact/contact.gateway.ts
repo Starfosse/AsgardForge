@@ -33,8 +33,6 @@ export class ContactGateway {
 
   @SubscribeMessage('createConversation')
   async handleCreateConversation(@MessageBody() data: CreateContactDto) {
-    console.log('Create conversation:', data);
-    console.log('message1 ===>', data.content);
     const res = await this.contactService.createConversationAndMessage(data);
     return {
       success: true,

@@ -15,7 +15,7 @@ interface Message {
   timestamp: Date;
 }
 
-interface Conversation {
+export interface Conversation {
   id: string | number;
   subject: string;
   orderId?: string;
@@ -127,7 +127,6 @@ export default function Contact() {
         messageId: number;
       }) => {
         if (response.success) {
-          console.log("Conversation créée avec succès:", response);
           setConversations((prev) =>
             prev.map((conv) =>
               conv.id === tmpId
@@ -157,7 +156,6 @@ export default function Contact() {
       sender: "client",
       timestamp: new Date(),
     };
-    console.log("J'enverrai le message suivant au serveur:", newMessageObj);
     const updatedConversation = {
       ...selectedConversation,
       messages: [...selectedConversation.messages, newMessageObj],
@@ -174,7 +172,6 @@ export default function Contact() {
       newMessageObj,
       (response: { success: boolean; messageId: number }) => {
         if (response.success) {
-          console.log("Conversation créée avec succès:", response);
           setSelectedConversation((prev) => {
             if (!prev) return prev;
             return {
@@ -194,26 +191,21 @@ export default function Contact() {
 
   const fetchConversations = async () => {
     if (!user) return;
-    console.log("user ===", user);
     const res = await contactService.getConversations(user.id);
-    console.log("res conversation ===", res);
+    setConversations(
+      res.map((conv) => ({
+        ...conv,
+        messages: conv.messages.map((msg) => ({
+          ...msg,
+          timestamp: new Date(msg.created_at),
+        })),
+      }))
+    );
   };
 
   useEffect(() => {
     fetchConversations();
   }, [user]);
-  // useEffect(() => {
-  //   socket.on("message", (data) => {
-  //     console.log(data);
-  //   });
-  //   socket.on("createConversation", (data) => {
-  //     console.log(data);
-  //   });
-  //   return () => {
-  //     socket.off("message");
-  //     socket.off("createConversation");
-  //   };
-  // }, []);
 
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat("fr-FR", {
@@ -284,7 +276,10 @@ export default function Contact() {
                     )}
                     <p className="text-xs text-stone-500">
                       Dernière mise à jour:{" "}
-                      {formatDate(conversation.lastUpdate)}
+                      {formatDate(
+                        conversation.messages[conversation.messages.length - 1]
+                          .timestamp
+                      )}
                     </p>
                   </div>
                 ))}

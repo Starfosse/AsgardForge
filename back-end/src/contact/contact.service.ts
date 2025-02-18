@@ -6,7 +6,6 @@ import { ContactRepository } from './contact.repository';
 export class ContactService {
   constructor(private readonly contactRepository: ContactRepository) {}
   async createConversationAndMessage(createContactDto: CreateContactDto) {
-    console.log('message2 ===>', createContactDto.content);
     const conversationId =
       await this.contactRepository.createConversation(createContactDto);
     const createMessageDto = {

@@ -31,7 +31,7 @@ export class ContactRepository {
       .replace('T', ' ');
     console.log('message3 ===>', createMessageDto.content);
     const [result]: any = await this.connection.query(
-      'INSERT INTO messages_support(conversation_id, sender, message, created_at) VALUES (?, ?, ?, ?)',
+      'INSERT INTO messages_support(conversation_id, sender, content, created_at) VALUES (?, ?, ?, ?)',
       [
         createMessageDto.conversationId,
         createMessageDto.sender,
@@ -42,34 +42,11 @@ export class ContactRepository {
     return result.insertId;
   }
 
-  // async findAllConversationsAndMessages(userId: number) {
-  //   const [conversations]: any = await this.connection.query(
-  //     'SELECT * FROM conversations_support WHERE user_id = ?',
-  //     [userId],
-  //   );
-  //   const promises = conversations.map(async (conversation: any) => {
-  //     const [messages]: any = await this.connection.query(
-  //       'SELECT * FROM messages_support WHERE conversation_id = ?',
-  //       [conversation.id],
-  //     );
-  //     return {
-  //       ...conversation,
-  //       messages,
-  //     };
-  //   });
-  //   return Promise.all(promises);
-  // }
-
   async findAllConversationsAndMessages(userId: number) {
     const [results]: any = await this.connection.query(
-      "SELECT JSON_OBJECT('id', c.id, 'subject', c.subject, 'status', c.status, 'created_at', c.created_at, 'messages', (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', m.id, 'sender', m.sender, 'message', m.message, 'created_at', m.created_at)) FROM messages_support m WHERE m.conversation_id = c.id)) as conversation FROM conversations_support c WHERE c.user_id = ?",
+      "SELECT JSON_OBJECT('id', c.id, 'subject', c.subject, 'status', c.status, 'created_at', c.created_at, 'messages', (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', m.id, 'sender', m.sender, 'content', m.content, 'created_at', m.created_at)) FROM messages_support m WHERE m.conversation_id = c.id)) as conversation FROM conversations_support c WHERE c.user_id = ?",
       [userId],
     );
-    // const [results]: any = await this.connection.query(
-    //   "SELECT JSON_OBJECT(KEY 'conversation' VALUE c.*, 'messages', (SELECT JSON_ARRAYAGG(JSON_OBJECT(KEY 'message' VALUE m.*)) FROM messages_support m WHERE m.conversation_id = c.id)) as conversation FROM conversations_support c WHERE c.user_id = ?",
-    //   [userId],
-    // );
-    console.log('conversations ===>', results);
     return results.map((row) =>
       typeof row.conversation === 'string'
         ? JSON.parse(row.conversation)
@@ -77,19 +54,3 @@ export class ContactRepository {
     ) as Conversation[];
   }
 }
-
-// SELECT
-//     JSON_OBJECT(
-//         KEY 'conversation' VALUE c.*,
-//         'messages', (
-//             SELECT JSON_ARRAYAGG(
-//                 JSON_OBJECT(
-//                     KEY 'message' VALUE m.*
-//                 )
-//             )
-//             FROM messages_support m
-//             WHERE m.conversation_id = c.id
-//         )
-//     ) as conversation
-// FROM conversations_support c
-// WHERE c.user_id = ?;

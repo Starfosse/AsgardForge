@@ -43,10 +43,21 @@ export class ContactRepository {
     return result.insertId;
   }
 
-  async findAllConversationsAndMessages(userId: number) {
+  async findConversationsAndMessages(userId: number) {
     const [results]: any = await this.connection.query(
       "SELECT JSON_OBJECT('id', c.id, 'subject', c.subject, 'status', c.status, 'created_at', c.created_at, 'messages', (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', m.id, 'sender', m.sender, 'content', m.content, 'created_at', m.created_at)) FROM messages_support m WHERE m.conversation_id = c.id)) as conversation FROM conversations_support c WHERE c.user_id = ?",
       [userId],
+    );
+    return results.map((row) =>
+      typeof row.conversation === 'string'
+        ? JSON.parse(row.conversation)
+        : row.conversation,
+    ) as Conversation[];
+  }
+
+  async findAllConversationsAndMessages() {
+    const [results]: any = await this.connection.query(
+      "SELECT JSON_OBJECT('id', c.id, 'subject', c.subject, 'userId', u.id, 'firstName', u.first_name, 'lastName', u.last_name, 'status', c.status, 'created_at', c.created_at, 'messages', (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', m.id, 'sender', m.sender, 'content', m.content, 'created_at', m.created_at)) FROM messages_support m WHERE m.conversation_id = c.id)) as conversation FROM conversations_support c INNER JOIN users u ON c.user_id = u.id",
     );
     return results.map((row) =>
       typeof row.conversation === 'string'

@@ -14,3 +14,31 @@ export interface ConversationData {
   createdAt: Date;
   lastUpdate: Date;
 }
+
+export interface ConversationAdminData {
+  id: number;
+  userId: string;
+  firstName: string;
+  lastName: string;
+  created_at: Date;
+  status: "open" | "closed";
+  subject: string;
+  messages: Message[];
+}
+
+// interface Message {
+//   id: string;
+//   content: string;
+//   sender: "client" | "support";
+//   timestamp: Date;
+// }
+
+// interface Conversation {
+//   id: string | number;
+//   // customerId: string;
+//   customerFirstName: string;
+//   customerLastName: string;
+//   subject: string;
+//   createdAt: Date;
+//   messages: Message[];
+// }

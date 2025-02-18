@@ -20,11 +20,17 @@ export class ContactController {
   async findOne(@Param('userId') userId: string) {
     console.log('userId ===>', userId);
     const res =
-      await this.contactRepository.findAllConversationsAndMessages(+userId);
+      await this.contactRepository.findConversationsAndMessages(+userId);
     console.log('res ===>', res);
     return res;
   }
 
+  @Get()
+  async findAll() {
+    console.log('hello');
+    const res = await this.contactRepository.findAllConversationsAndMessages();
+    return res;
+  }
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateContactDto: UpdateContactDto) {
   //   return this.contactService.update(+id, updateContactDto);

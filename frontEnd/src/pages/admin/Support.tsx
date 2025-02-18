@@ -1,69 +1,27 @@
+import { contactService } from "@/services/api";
 import { MessageSquare, Send, User } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Types
 interface Message {
-  id: string;
+  id: string | number;
   content: string;
   sender: "client" | "support";
   timestamp: Date;
 }
 
 interface Conversation {
-  id: string;
+  id: string | number;
   customerId: string;
-  customerName: string;
-  title: string;
-  unread: boolean;
-  updatedAt: Date;
+  customerFirstName: string;
+  customerLastName: string;
+  subject: string;
+  createdAt: Date;
   messages: Message[];
 }
 
-// Mock data
-const mockConversations: Conversation[] = [
-  {
-    id: "1",
-    customerId: "C123",
-    customerName: "Jean Dupont",
-    title: "Problème avec ma commande #4567",
-    unread: true,
-    updatedAt: new Date("2024-02-15T10:30:00"),
-    messages: [
-      {
-        id: "m1",
-        content: "Bonjour, je n'ai toujours pas reçu ma commande #4567",
-        sender: "client",
-        timestamp: new Date("2024-02-15T10:30:00"),
-      },
-      {
-        id: "m2",
-        content: "Bonjour, je vérifie cela tout de suite pour vous",
-        sender: "support",
-        timestamp: new Date("2024-02-15T10:35:00"),
-      },
-    ],
-  },
-  {
-    id: "2",
-    customerId: "C124",
-    customerName: "Marie Martin",
-    title: "Demande de retour",
-    unread: false,
-    updatedAt: new Date("2024-02-15T09:15:00"),
-    messages: [
-      {
-        id: "m3",
-        content: "Je souhaite retourner un article",
-        sender: "client",
-        timestamp: new Date("2024-02-15T09:15:00"),
-      },
-    ],
-  },
-];
-
 export default function Support() {
-  const [conversations, setConversations] =
-    useState<Conversation[]>(mockConversations);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] =
     useState<Conversation | null>(null);
   const [newMessage, setNewMessage] = useState("");
@@ -103,6 +61,27 @@ export default function Support() {
     }).format(date);
   };
 
+  const fetchAllConversations = async () => {
+    const res = await contactService.getAllConversations();
+    console.log(res);
+    setConversations(
+      res.map((conv) => ({
+        ...conv,
+        customerFirstName: conv.firstName,
+        customerLastName: conv.lastName,
+        createdAt: new Date(conv.created_at),
+        customerId: conv.userId,
+        messages: conv.messages.map((msg) => ({
+          ...msg,
+          timestamp: new Date(msg.created_at),
+        })),
+      }))
+    );
+  };
+  useEffect(() => {
+    fetchAllConversations();
+  }, []);
+
   return (
     <div className="flex h-screen max-h-[850px] bg-white rounded-lg shadow-lg overflow-hidden">
       {/* Liste des conversations */}
@@ -116,23 +95,24 @@ export default function Support() {
               key={conversation.id}
               className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors duration-150 border-b border-gray-100 ${
                 selectedConversation?.id === conversation.id ? "bg-gray-50" : ""
-              } ${conversation.unread ? "font-semibold" : ""}`}
+              }`}
               onClick={() => setSelectedConversation(conversation)}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <User className="w-5 h-5 mr-2 text-gray-500" />
-                  <span>{conversation.customerName}</span>
+                  <span>
+                    {conversation.customerFirstName +
+                      " " +
+                      conversation.customerLastName}
+                  </span>
                 </div>
-                {conversation.unread && (
-                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                )}
               </div>
               <p className="text-sm text-gray-600 mt-1 truncate">
-                {conversation.title}
+                {conversation.subject}
               </p>
               <p className="text-xs text-gray-400 mt-1">
-                {formatDate(conversation.updatedAt)}
+                {formatDate(conversation.createdAt)}
               </p>
             </div>
           ))}
@@ -147,7 +127,9 @@ export default function Support() {
               <div className="flex items-center">
                 <User className="w-5 h-5 mr-2 text-gray-500" />
                 <span className="font-semibold">
-                  {selectedConversation.customerName}
+                  {selectedConversation.customerFirstName +
+                    " " +
+                    selectedConversation.customerLastName}
                 </span>
                 <span className="text-sm text-gray-500 ml-2">
                   (Client #{selectedConversation.customerId})

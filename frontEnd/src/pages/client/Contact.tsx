@@ -1,11 +1,10 @@
+import { useAuth } from "@/contexts/AuthContext";
 import CreateConversation from "@/modals/CreateConversation";
+import { contactService } from "@/services/api";
 import { Plus, Send, Shield } from "lucide-react";
+import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
-import { nanoid } from "nanoid";
-import { useAuth } from "@/contexts/AuthContext";
-import { contactService } from "@/services/api";
-import { time } from "console";
 
 const socket = io("http://localhost:3000");
 

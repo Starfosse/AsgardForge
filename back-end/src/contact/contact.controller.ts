@@ -18,16 +18,16 @@ export class ContactController {
 
   @Get(':userId')
   async findOne(@Param('userId') userId: string) {
-    console.log('userId ===>', userId);
+    // console.log('userId ===>', userId);
     const res =
       await this.contactRepository.findConversationsAndMessages(+userId);
-    console.log('res ===>', res);
+    // console.log('res ===>', res);
     return res;
   }
 
   @Get()
   async findAll() {
-    console.log('hello');
+    // console.log('hello');
     const res = await this.contactRepository.findAllConversationsAndMessages();
     return res;
   }

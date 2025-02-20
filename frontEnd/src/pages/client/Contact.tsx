@@ -4,9 +4,9 @@ import { contactService } from "@/services/api";
 import { Plus, Send, Shield } from "lucide-react";
 import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
 
-const socket = io("http://localhost:3000");
+// const socket = io("http://localhost:3000");
 
 interface Message {
   id: string | number;
@@ -43,6 +43,50 @@ export default function Contact() {
     orderId: "",
     initialMessage: "",
   });
+  const [socket, setSocket] = useState<Socket | null>(null);
+  // const sessionId = useRef(generateUniqueSessionId()); // Généré à la création du chat
+
+  useEffect(() => {
+    const newSocket = io("http://localhost:3000", {
+      query: {
+        sessionId: "sessionCurrentTest",
+        userId: "client123",
+        userType: "client", // ou 'support'
+      },
+    });
+
+    // Rejoindre automatiquement la room correspondant à la session
+    newSocket.emit("joinRoom", "sessionCurrentTest", (response: any) => {
+      console.log(response);
+    });
+    setSocket(newSocket);
+
+    newSocket.on("message", (message) => {
+      if (message.sender === "support") {
+        console.log(message);
+      }
+    });
+
+    // newSocket.on("message", () => {
+    // Écouter les événements spécifiques au support
+    // newSocket.on("supportMessage", (message) => {
+    //   // Traiter le message
+    // });
+
+    // newSocket.on("agentJoined", (agentInfo) => {
+    //   // Afficher que l'agent a rejoint
+    // });
+
+    // newSocket.on("agentTyping", () => {
+    //   // Afficher l'indicateur de frappe
+    // });
+
+    return () => {
+      // Sauvegarder l'historique si nécessaire avant de fermer
+      // newSocket.emit("clientLeaving", "sessionCurrentTest");
+      // newSocket.close();
+    };
+  }, []);
 
   const handleCreateConversation = () => {
     if (!user) return;
@@ -66,8 +110,9 @@ export default function Contact() {
     setConversations([conversation, ...conversations]);
     const { id, subject, orderId, createdAt } = conversation;
     const { content, sender } = conversation.messages[0];
-    socket.emit(
+    socket?.emit(
       "createConversation",
+      "sessionCurrentTest",
       {
         id,
         subject,
@@ -129,9 +174,10 @@ export default function Contact() {
       sender: "client",
       timestamp: new Date(),
     };
-    socket.emit(
+    socket?.emit(
       "message",
       msgConvId,
+      "sessionCurrentTest",
       (response: { success: boolean; messageId: number }) => {
         if (response.success) {
           setSelectedConversation((prev) => {

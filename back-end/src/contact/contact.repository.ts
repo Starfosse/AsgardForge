@@ -25,12 +25,12 @@ export class ContactRepository {
   }
 
   async createMessage(createMessageDto: CreateMessageDto) {
-    console.log('message1 ===>', createMessageDto.timestamp);
+    // console.log('message1 ===>', createMessageDto.timestamp);
     const formattedDate = new Date(createMessageDto.timestamp)
       .toISOString()
       .slice(0, 19)
       .replace('T', ' ');
-    console.log('message2 ===>', formattedDate);
+    // console.log('message2 ===>', formattedDate);
     const [result]: any = await this.connection.query(
       'INSERT INTO messages_support(conversation_id, sender, content, created_at) VALUES (?, ?, ?, ?)',
       [

@@ -1,6 +1,7 @@
 import { contactService } from "@/services/api";
 import { MessageSquare, Send, User } from "lucide-react";
 import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
 
 // Types
 interface Message {
@@ -80,6 +81,65 @@ export default function Support() {
   };
   useEffect(() => {
     fetchAllConversations();
+  }, []);
+
+  useEffect(() => {
+    const newSocket = io("http://localhost:3000", {
+      query: {
+        sessionId: "sessionCurrentTest",
+        userId: "support",
+        userType: "support", // ou 'support'
+      },
+    });
+
+    // Rejoindre automatiquement la room correspondant à la session
+    newSocket.emit("joinRoom", "sessionCurrentTest", (response: any) => {
+      console.log(response);
+    });
+
+    newSocket.on("message", (data) => {
+      console.log(data);
+      if (data.sender === "client") {
+        console.log("Message reçu du client");
+        const newMessageObj: Message = {
+          id: data.messageId,
+          content: data.message,
+          sender: "client",
+          timestamp: new Date(data.timestamp),
+        };
+        const updatedConversations = conversations.map((conv) => {
+          console.log("parsing");
+          if (conv.id === data.conversationId) {
+            console.log("Conversation trouvée");
+            return {
+              ...conv,
+              messages: [...conv.messages, newMessageObj],
+            };
+          }
+          return conv;
+        });
+        setConversations(updatedConversations);
+      }
+    });
+
+    // Écouter les événements spécifiques au support
+    // newSocket.on("supportMessage", (message) => {
+    //   // Traiter le message
+    // });
+
+    // newSocket.on("agentJoined", (agentInfo) => {
+    //   // Afficher que l'agent a rejoint
+    // });
+
+    // newSocket.on("agentTyping", () => {
+    //   // Afficher l'indicateur de frappe
+    // });
+
+    return () => {
+      // Sauvegarder l'historique si nécessaire avant de fermer
+      // newSocket.emit("clientLeaving", "sessionCurrentTest");
+      // newSocket.close();
+    };
   }, []);
 
   return (

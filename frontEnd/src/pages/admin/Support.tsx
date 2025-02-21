@@ -147,6 +147,29 @@ export default function Support() {
       }
     });
 
+    newSocket.on("newTicket", (data) => {
+      const newConversation: Conversation = {
+        id: data.conversationId,
+        customerId: data.userId,
+        customerFirstName: data.userFirstName,
+        customerLastName: data.userLastName,
+        subject: data.subject,
+        createdAt: new Date(data.createdAt),
+        messages: [
+          {
+            id: data.id,
+            content: data.content,
+            sender: "client",
+            timestamp: new Date(data.createdAt),
+          },
+        ],
+      };
+      setConversations((prevConversations) => [
+        newConversation,
+        ...prevConversations,
+      ]);
+    });
+
     return () => {
       newSocket.close();
     };

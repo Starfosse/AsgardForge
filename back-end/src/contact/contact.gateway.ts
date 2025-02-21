@@ -1,4 +1,5 @@
 import {
+  ConnectedSocket,
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
@@ -68,11 +69,21 @@ export class ContactGateway {
 
   @SubscribeMessage('createConversation')
   async handleCreateConversation(
-    client: Socket,
-    @MessageBody() data: CreateContactDto,
-    sessionId: string,
+    @ConnectedSocket() client: Socket,
+    @MessageBody() payload: [string, CreateContactDto],
   ) {
+    const userFirstName = client.handshake?.query?.userFirstName;
+    const userLastName = client.handshake?.query?.userLastName;
+    const [sessionId, data] = payload;
+    console.log(data);
     const res = await this.contactService.createConversationAndMessage(data);
+    this.server.to(sessionId).emit('newTicket', {
+      ...data,
+      conversationId: res.conversationId,
+      messageId: res.messageId,
+      userFirstName,
+      userLastName,
+    });
     return {
       success: true,
       conversationId: res.conversationId,

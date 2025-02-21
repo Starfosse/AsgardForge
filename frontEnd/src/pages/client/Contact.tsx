@@ -44,18 +44,21 @@ export default function Contact() {
     initialMessage: "",
   });
   const [socket, setSocket] = useState<Socket | null>(null);
-  // const sessionId = useRef(generateUniqueSessionId()); // Généré à la création du chat
 
   useEffect(() => {
+    if (!user) return;
+    console.log("user.firstName", user.firstName);
+    console.log("user.lastName", user.lastName);
     const newSocket = io("http://localhost:3000", {
       query: {
         sessionId: "sessionCurrentTest",
         userId: "client123",
-        userType: "client", // ou 'support'
+        userType: "client",
+        userFirstName: user.firstName,
+        userLastName: user.lastName,
       },
     });
 
-    // Rejoindre automatiquement la room correspondant à la session
     newSocket.emit("joinRoom", "sessionCurrentTest", (response: any) => {
       console.log(response);
     });
@@ -86,26 +89,10 @@ export default function Contact() {
       });
     });
 
-    // newSocket.on("message", () => {
-    // Écouter les événements spécifiques au support
-    // newSocket.on("supportMessage", (message) => {
-    //   // Traiter le message
-    // });
-
-    // newSocket.on("agentJoined", (agentInfo) => {
-    //   // Afficher que l'agent a rejoint
-    // });
-
-    // newSocket.on("agentTyping", () => {
-    //   // Afficher l'indicateur de frappe
-    // });
-
     return () => {
-      // Sauvegarder l'historique si nécessaire avant de fermer
-      // newSocket.emit("clientLeaving", "sessionCurrentTest");
-      // newSocket.close();
+      newSocket.close();
     };
-  }, []);
+  }, [user]);
 
   const handleCreateConversation = () => {
     if (!user) return;
@@ -147,22 +134,25 @@ export default function Contact() {
         messageId: number;
       }) => {
         if (response.success) {
-          setConversations((prev) =>
-            prev.map((conv) =>
-              conv.id === tmpId
-                ? {
-                    ...conv,
-                    id: response.conversationId,
-                    messages: [{ ...conv.messages[0], id: response.messageId }],
-                  }
-                : conv
-            )
-          );
+          setConversations((prev) => {
+            return prev.map((conv) => {
+              if (conv.id === tmpId) {
+                const newConv = {
+                  ...conv,
+                  id: response.conversationId,
+                  messages: [{ ...conv.messages[0], id: response.messageId }],
+                };
+                setSelectedConversation(newConv);
+                return newConv;
+              }
+              return conv;
+            });
+          });
         }
       }
     );
 
-    setSelectedConversation(conversation);
+    // setSelectedConversation(conversation);
     setIsCreateModalOpen(false);
     setNewConversation({ subject: "", orderId: "", initialMessage: "" });
   };

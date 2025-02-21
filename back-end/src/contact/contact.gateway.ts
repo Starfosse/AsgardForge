@@ -25,21 +25,6 @@ export class ContactGateway {
   ) {}
   @WebSocketServer() server: Server;
 
-  // async handleConnection(socket: Socket) {
-  //   const { sessionId, userType } = socket.handshake.query;
-
-  //   if (!sessionId || !userType) {
-  //     socket.disconnect();
-  //     return;
-  //   }
-
-  //   await this.contactService.handleConnection(
-  //     socket,
-  //     sessionId.toString(),
-  //     userType.toString(),
-  //   );
-  // }
-
   @SubscribeMessage('joinRoom')
   async handleJoinRoom(client: Socket, roomId: string) {
     client.join(roomId);
@@ -92,16 +77,4 @@ export class ContactGateway {
       messageId: res.messageId,
     };
   }
-
-  // afterInit(server: Server) {
-  //   console.log('WebSocket Gateway initialized');
-  // }
-
-  // handleConnection(client: Socket) {
-  //   console.log(`Client connected: ${client.id}`);
-  // }
-
-  // handleDisconnect(client: Socket) {
-  //   console.log(`Client disconnected: ${client.id}`);
-  // }
 }

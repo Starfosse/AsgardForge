@@ -1,6 +1,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import CreateConversation from "@/modals/CreateConversation";
 import { contactService } from "@/services/api";
+import formatDate from "@/utils/formatDate";
 import { Plus, Send, Shield } from "lucide-react";
 import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
@@ -222,16 +223,6 @@ export default function Contact() {
   useEffect(() => {
     fetchConversations();
   }, [user]);
-
-  const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat("fr-FR", {
-      hour: "2-digit",
-      minute: "2-digit",
-      day: "2-digit",
-      month: "2-digit",
-      year: "2-digit",
-    }).format(date);
-  };
 
   return (
     <div className="bg-stone-100 min-h-screen">

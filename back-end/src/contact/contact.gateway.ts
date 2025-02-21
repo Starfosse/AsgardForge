@@ -25,20 +25,20 @@ export class ContactGateway {
   ) {}
   @WebSocketServer() server: Server;
 
-  async handleConnection(socket: Socket) {
-    const { sessionId, userType } = socket.handshake.query;
+  // async handleConnection(socket: Socket) {
+  //   const { sessionId, userType } = socket.handshake.query;
 
-    if (!sessionId || !userType) {
-      socket.disconnect();
-      return;
-    }
+  //   if (!sessionId || !userType) {
+  //     socket.disconnect();
+  //     return;
+  //   }
 
-    await this.contactService.handleConnection(
-      socket,
-      sessionId.toString(),
-      userType.toString(),
-    );
-  }
+  //   await this.contactService.handleConnection(
+  //     socket,
+  //     sessionId.toString(),
+  //     userType.toString(),
+  //   );
+  // }
 
   @SubscribeMessage('joinRoom')
   async handleJoinRoom(client: Socket, roomId: string) {
@@ -51,11 +51,13 @@ export class ContactGateway {
     const [data, sessionId] = payload;
     const res = await this.contactRepository.createMessage(data);
     if (data.sender === 'client') {
+      console.log('msgClientToSupport BackEnd');
       this.server.to('sessionCurrentTest').emit('msgClientToSupport', {
         ...data,
         id: res,
       });
     } else {
+      console.log('msgSupportToClient BackEnd');
       this.server.to(sessionId).emit('msgSupportToClient', {
         ...data,
         id: res,
@@ -91,15 +93,15 @@ export class ContactGateway {
     };
   }
 
-  afterInit(server: Server) {
-    console.log('WebSocket Gateway initialized');
-  }
+  // afterInit(server: Server) {
+  //   console.log('WebSocket Gateway initialized');
+  // }
 
   // handleConnection(client: Socket) {
   //   console.log(`Client connected: ${client.id}`);
   // }
 
-  handleDisconnect(client: Socket) {
-    console.log(`Client disconnected: ${client.id}`);
-  }
+  // handleDisconnect(client: Socket) {
+  //   console.log(`Client disconnected: ${client.id}`);
+  // }
 }

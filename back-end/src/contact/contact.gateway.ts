@@ -52,7 +52,7 @@ export class ContactGateway {
     const res = await this.contactRepository.createMessage(data);
     // console.log('message', res);
     // console.log('sessionId', sessionId);
-    this.server.to('sessionCurrentTest').emit('message', {
+    this.server.to('sessionCurrentTest').emit('message1', {
       ...data,
       id: res,
     });

@@ -3,7 +3,6 @@ import { MessageSquare, Send, User } from "lucide-react";
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
-// Types
 interface Message {
   id: string | number;
   content: string;
@@ -79,6 +78,7 @@ export default function Support() {
       }))
     );
   };
+
   useEffect(() => {
     fetchAllConversations();
   }, []);
@@ -88,16 +88,15 @@ export default function Support() {
       query: {
         sessionId: "sessionCurrentTest",
         userId: "support",
-        userType: "support", // ou 'support'
+        userType: "support",
       },
     });
 
-    // Rejoindre automatiquement la room correspondant à la session
     newSocket.emit("joinRoom", "sessionCurrentTest", (response: any) => {
       console.log(response);
     });
 
-    newSocket.on("message", (data) => {
+    newSocket.on("message1", (data) => {
       console.log(data);
       if (data.sender === "client") {
         console.log("Message reçu du client");
@@ -107,44 +106,34 @@ export default function Support() {
           sender: "client",
           timestamp: new Date(data.timestamp),
         };
+        console.log("conversations ===> ", conversations);
         const updatedConversations = conversations.map((conv) => {
           console.log("parsing");
           if (conv.id === data.conversationId) {
             console.log("Conversation trouvée");
-            return {
+            const updatedConv = {
               ...conv,
               messages: [...conv.messages, newMessageObj],
             };
+            if (selectedConversation?.id === data.conversationId) {
+              setSelectedConversation(updatedConv);
+            }
+            return updatedConv;
           }
           return conv;
         });
+        console.log("updatedConversations", updatedConversations);
         setConversations(updatedConversations);
       }
     });
 
-    // Écouter les événements spécifiques au support
-    // newSocket.on("supportMessage", (message) => {
-    //   // Traiter le message
-    // });
-
-    // newSocket.on("agentJoined", (agentInfo) => {
-    //   // Afficher que l'agent a rejoint
-    // });
-
-    // newSocket.on("agentTyping", () => {
-    //   // Afficher l'indicateur de frappe
-    // });
-
     return () => {
-      // Sauvegarder l'historique si nécessaire avant de fermer
-      // newSocket.emit("clientLeaving", "sessionCurrentTest");
-      // newSocket.close();
+      newSocket.close();
     };
   }, []);
 
   return (
     <div className="flex h-screen max-h-[850px] bg-white rounded-lg shadow-lg overflow-hidden">
-      {/* Liste des conversations */}
       <div className="w-80 h-full border-r border-gray-200 flex flex-col">
         <div className="p-4 border-b border-gray-200">
           <h2 className="text-lg font-semibold">Conversations</h2>
@@ -178,8 +167,6 @@ export default function Support() {
           ))}
         </div>
       </div>
-
-      {/* Zone de messages */}
       <div className="flex-1 h-full flex flex-col bg-gray-50">
         {selectedConversation ? (
           <>

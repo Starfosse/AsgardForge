@@ -48,14 +48,18 @@ export class ContactGateway {
   @SubscribeMessage('message')
   async handleMessage(@MessageBody() payload: [CreateMessageDto, string]) {
     const [data, sessionId] = payload;
-    // console.log('data', data);
     const res = await this.contactRepository.createMessage(data);
-    // console.log('message', res);
-    // console.log('sessionId', sessionId);
-    this.server.to('sessionCurrentTest').emit('message1', {
-      ...data,
-      id: res,
-    });
+    if (data.sender === 'client') {
+      this.server.to('sessionCurrentTest').emit('msgClientToSupport', {
+        ...data,
+        id: res,
+      });
+    } else {
+      this.server.to(sessionId).emit('msgSupportToClient', {
+        ...data,
+        id: res,
+      });
+    }
     return {
       success: true,
       messageId: res,

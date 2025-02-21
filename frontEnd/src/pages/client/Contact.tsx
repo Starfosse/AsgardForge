@@ -61,10 +61,29 @@ export default function Contact() {
     });
     setSocket(newSocket);
 
-    newSocket.on("message", (message) => {
-      if (message.sender === "support") {
-        console.log(message);
-      }
+    newSocket.on("msgSupportToClient", (data) => {
+      const newMessageObj: Message = {
+        id: data.id,
+        content: data.content,
+        sender: "support",
+        timestamp: new Date(data.timestamp),
+      };
+      setConversations((prevConversations) => {
+        return prevConversations.map((conv) => {
+          if (conv.id === data.conversationId) {
+            const updatedConv = {
+              ...conv,
+              messages: [...conv.messages, newMessageObj],
+            };
+            if (selectedConversation?.id === conv.id) {
+              setSelectedConversation(updatedConv);
+            }
+
+            return updatedConv;
+          }
+          return conv;
+        });
+      });
     });
 
     // newSocket.on("message", () => {

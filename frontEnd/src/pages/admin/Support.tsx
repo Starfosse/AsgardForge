@@ -1,7 +1,7 @@
 import { contactService } from "@/services/api";
 import { MessageSquare, Send, User } from "lucide-react";
-import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import { useEffect, useRef, useState } from "react";
+import { io, Socket } from "socket.io-client";
 
 interface Message {
   id: string | number;
@@ -25,6 +25,7 @@ export default function Support() {
   const [selectedConversation, setSelectedConversation] =
     useState<Conversation | null>(null);
   const [newMessage, setNewMessage] = useState("");
+  const [socket, setSocket] = useState<Socket | null>(null);
 
   const handleSendMessage = () => {
     if (!newMessage.trim() || !selectedConversation) return;
@@ -47,10 +48,33 @@ export default function Support() {
         conv.id === selectedConversation.id ? updatedConversation : conv
       )
     );
-    setSelectedConversation(updatedConversation);
+    const msgConvId = {
+      content: newMessage,
+      conversationId: selectedConversation.id,
+      sender: "support",
+      timestamp: new Date(),
+    };
+    socket?.emit(
+      "message",
+      msgConvId,
+      "sessionCurrentTest",
+      (response: { success: boolean; messageId: number }) => {
+        if (response.success) {
+          setSelectedConversation((prev) => {
+            if (!prev) return prev;
+            return {
+              ...prev,
+              messages: [
+                ...prev.messages,
+                { ...newMessageObj, id: response.messageId },
+              ],
+            };
+          });
+        }
+      }
+    );
     setNewMessage("");
   };
-
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat("fr-FR", {
       hour: "2-digit",
@@ -63,7 +87,6 @@ export default function Support() {
 
   const fetchAllConversations = async () => {
     const res = await contactService.getAllConversations();
-    console.log(res);
     setConversations(
       res.map((conv) => ({
         ...conv,
@@ -95,35 +118,32 @@ export default function Support() {
     newSocket.emit("joinRoom", "sessionCurrentTest", (response: any) => {
       console.log(response);
     });
+    setSocket(newSocket);
 
-    newSocket.on("message1", (data) => {
-      console.log(data);
+    newSocket.on("msgClientToSupport", (data) => {
       if (data.sender === "client") {
-        console.log("Message reçu du client");
         const newMessageObj: Message = {
-          id: data.messageId,
-          content: data.message,
+          id: data.id,
+          content: data.content,
           sender: "client",
           timestamp: new Date(data.timestamp),
         };
-        console.log("conversations ===> ", conversations);
-        const updatedConversations = conversations.map((conv) => {
-          console.log("parsing");
-          if (conv.id === data.conversationId) {
-            console.log("Conversation trouvée");
-            const updatedConv = {
-              ...conv,
-              messages: [...conv.messages, newMessageObj],
-            };
-            if (selectedConversation?.id === data.conversationId) {
-              setSelectedConversation(updatedConv);
+        setConversations((prevConversations) => {
+          return prevConversations.map((conv) => {
+            if (conv.id === data.conversationId) {
+              const updatedConv = {
+                ...conv,
+                messages: [...conv.messages, newMessageObj],
+              };
+              if (selectedConversation?.id === conv.id) {
+                setSelectedConversation(updatedConv);
+              }
+
+              return updatedConv;
             }
-            return updatedConv;
-          }
-          return conv;
+            return conv;
+          });
         });
-        console.log("updatedConversations", updatedConversations);
-        setConversations(updatedConversations);
       }
     });
 

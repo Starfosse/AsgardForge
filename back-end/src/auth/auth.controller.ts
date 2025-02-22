@@ -46,8 +46,8 @@ export class AuthController {
 
   @Post('refresh')
   async refresh(@Req() req: Request, @Res() res: Response) {
-    console.log('req.cookies === ', req.cookies);
-    console.log('req.cookies2 === ', req.cookies['refresh_token']);
+    // console.log('req.cookies === ', req.cookies);
+    // console.log('req.cookies2 === ', req.cookies['refresh_token']);
     const refresh_token = req.cookies['refresh_token'];
     const tokens = await this.authService.refreshTokens(refresh_token);
 
@@ -58,7 +58,7 @@ export class AuthController {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       path: '/auth/refresh',
     });
-
+    console.log('tokens === ', tokens);
     return res.json({ access_token: tokens.access_token });
   }
 

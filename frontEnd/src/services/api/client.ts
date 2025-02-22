@@ -36,24 +36,21 @@ export const apiClient = {
             method: "POST",
             credentials: "include",
           });
-
           if (!refreshResponse.ok) {
             localStorage.removeItem("access_token");
             window.location.href = "/auth/google";
             throw new Error("Session expired");
           }
-
-          const refreshData: ApiResponse<{ access_token: string }> =
+          const refreshData: { access_token: string } =
             await refreshResponse.json();
-
-          if (refreshData.data?.access_token) {
-            localStorage.setItem("access_token", refreshData.data.access_token);
+          if (refreshData.access_token) {
+            localStorage.setItem("access_token", refreshData.access_token);
 
             const newResponse = await fetch(url, {
               ...options,
               headers: new Headers({
                 ...headers,
-                Authorization: `Bearer ${refreshData.data.access_token}`,
+                Authorization: `Bearer ${refreshData.access_token}`,
               }),
             });
 

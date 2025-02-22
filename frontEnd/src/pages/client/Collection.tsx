@@ -11,7 +11,7 @@ const Collection = () => {
   );
   const [priceRange, setPriceRange] = useState([0, 500]);
   const { id } = useParams<{ id: string }>();
-
+  const { categoryName } = useParams<{ categoryName: string }>();
   const fetchCategory = async () => {
     if (!id) return;
     const products = await productsService.getProductsByCategory(parseInt(id));
@@ -70,7 +70,7 @@ const Collection = () => {
                     {product.price} €
                   </span>
                   <Link
-                    to={`/${id}/${product.id}`}
+                    to={`/${categoryName}/${id}/${product.name}/${product.id}`}
                     className="bg-stone-800 text-white px-4 py-2 rounded hover:bg-stone-700"
                   >
                     Détails

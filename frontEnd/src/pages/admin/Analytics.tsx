@@ -7,7 +7,7 @@ import SalesByYear from "@/components/analytics/SalesByYear";
 import VisitsByMonth from "@/components/analytics/VisitsByMonth";
 import WeekDayRushHour from "@/components/analytics/WeekdayRushHour";
 
-export default function Dashboard() {
+export default function Analytics() {
   return (
     <div className="flex flex-col gap-4">
       <div className="grid grid-cols-3 gap-4">
@@ -29,3 +29,5 @@ export default function Dashboard() {
     </div>
   );
 }
+//par catégorie ou par produit de catégorie
+//revenu total en barre au fur et à mesure des années

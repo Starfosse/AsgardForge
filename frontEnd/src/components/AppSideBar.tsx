@@ -16,18 +16,13 @@ import { Link } from "react-router-dom";
 
 const items = [
   {
-    title: "Tableau de bord",
+    title: "Accueil",
     url: "/dashboard",
     icon: Home,
   },
   {
-    title: "Paramètres",
-    url: "/",
-    icon: Home,
-  },
-  {
     title: "Ventes",
-    url: "#",
+    url: "/dashboard/orders",
     icon: Inbox,
   },
   {
@@ -37,22 +32,12 @@ const items = [
   },
   {
     title: "Clients",
-    url: "#",
+    url: "/dashboard/customers",
     icon: Search,
   },
   {
-    title: "Profitabilité",
-    url: "#",
-    icon: Settings,
-  },
-  {
-    title: "Marketing",
-    url: "#",
-    icon: Settings,
-  },
-  {
     title: "Support",
-    url: "#",
+    url: "/dashboard/support",
     icon: Settings,
   },
 ];
@@ -76,12 +61,12 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarTrigger onClick={handleOpen} />
-          <SidebarGroupContent className="pr-4 mr-4 space-y-5">
+          <SidebarGroupContent className="pr-4 mr-4 ">
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem
                   key={item.title}
-                  className="pr-4 mr-4 space-y-5 group"
+                  className="pr-4 mr-4 pt-2  group"
                 >
                   <SidebarMenuButton asChild>
                     <Link
@@ -89,7 +74,7 @@ export function AppSidebar() {
                       className="flex items-center gap-11 -ml-[0.4rem] "
                     >
                       <item.icon style={{ width: "24px", height: "24px" }} />
-                      <span className="text-lg text-[#BDD1F8] font-mono font-thin">
+                      <span className="text-xl text-[#BDD1F8] font-mono font-bold">
                         {item.title}
                       </span>
                     </Link>

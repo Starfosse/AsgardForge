@@ -3,17 +3,21 @@ import { GoogleCallBack } from "./components/GoogleCallBack";
 import ProductForm from "./forms/product/ProductForm";
 import LayoutAdmin from "./layouts/LayoutAdmin";
 import LayoutClient from "./layouts/LayoutClient";
+import Checkout from "./pages/Checkout";
+import CustomerList from "./pages/admin/CustomerList";
 import Dashboard from "./pages/admin/Dashboard";
+import OrdersList from "./pages/admin/OrdersList";
 import ProductsList from "./pages/admin/ProductsList";
+import Support from "./pages/admin/Support";
 import Cart from "./pages/client/Cart";
 import {
   default as Collection,
   default as Collections,
 } from "./pages/client/Collection";
+import Contact from "./pages/client/Contact";
 import Home from "./pages/client/Home";
 import ProductPage from "./pages/client/Product";
 import DashBoardProduct from "./wrapper/DashboardProduct";
-import Checkout from "./pages/Checkout";
 
 function App() {
   return (
@@ -79,10 +83,38 @@ function App() {
           }
         />
         <Route
+          path="/contact"
+          element={
+            <LayoutClient>
+              <Contact />
+            </LayoutClient>
+          }
+        />
+        <Route
           path="/dashboard"
           element={
             <LayoutAdmin>
               <Dashboard />
+            </LayoutAdmin>
+          }
+        />
+        <Route
+          path="/dashboard/orders"
+          element={
+            <LayoutAdmin>
+              <DashBoardProduct>
+                <OrdersList />
+              </DashBoardProduct>
+            </LayoutAdmin>
+          }
+        />
+        <Route
+          path="/dashboard/customers"
+          element={
+            <LayoutAdmin>
+              <DashBoardProduct>
+                <CustomerList />
+              </DashBoardProduct>
             </LayoutAdmin>
           }
         />
@@ -113,6 +145,14 @@ function App() {
               <DashBoardProduct>
                 <ProductForm />
               </DashBoardProduct>
+            </LayoutAdmin>
+          }
+        />
+        <Route
+          path="/dashboard/support/"
+          element={
+            <LayoutAdmin>
+              <Support />
             </LayoutAdmin>
           }
         />

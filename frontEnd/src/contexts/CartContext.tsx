@@ -1,4 +1,4 @@
-import { ProductWithImages } from "@/pages/client/Product";
+import Product from "@/services/api/products/types";
 import { createContext, useContext, useState } from "react";
 
 interface CartItem {
@@ -12,7 +12,7 @@ interface CartItem {
 
 type CartContextType = {
   cart: CartItem[];
-  addToCart: (item: ProductWithImages, quantity: number) => void;
+  addToCart: (item: Product, quantity: number) => void;
   substractFromCart: (id: number, quantity: number) => void;
   removeFromCart: (id: number) => void;
   clearCart: () => void;
@@ -22,7 +22,7 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
-  const addToCart = (item: ProductWithImages, quantity: number) => {
+  const addToCart = (item: Product, quantity: number) => {
     const existingItem = cart.find((i) => i.id === item.id);
     if (existingItem) {
       setCart(

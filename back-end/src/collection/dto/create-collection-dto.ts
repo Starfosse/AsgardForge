@@ -1,4 +1,4 @@
-export class CreateCategoryDto {
+export class CreateCollectionDto {
   name: string;
   description: string;
 }

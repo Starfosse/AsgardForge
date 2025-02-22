@@ -118,7 +118,7 @@ export class ProductsRepository {
     }
   }
 
-  async findProductsByCategory(id: number) {
+  async findProductsByCollection(id: number) {
     try {
       const [rows] = await this.connection.query(
         'SELECT * FROM products WHERE category_id = ?',

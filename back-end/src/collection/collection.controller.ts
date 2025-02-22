@@ -7,21 +7,21 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
-import { CategoryService } from './category.service';
-import { CategoryRepository } from './category.repository';
-import { CreateCategoryDto } from './dto/create-category-dto';
+import { CollectionService } from './collection.service';
+import { CollectionRepository } from './collection.repository';
+import { CreateCollectionDto } from './dto/create-collection-dto';
 
-@Controller('category')
+@Controller('collection')
 export class CategoryController {
   constructor(
-    private readonly categoryService: CategoryService,
-    private readonly categoryRepository: CategoryRepository,
+    private readonly collectionService: CollectionService,
+    private readonly collectionRepository: CollectionRepository,
   ) {}
 
   @Post()
-  async create(@Body() createCategoryDto: CreateCategoryDto) {
+  async create(@Body() createCategoryDto: CreateCollectionDto) {
     try {
-      return await this.categoryRepository.create(
+      return await this.collectionRepository.create(
         createCategoryDto.name,
         createCategoryDto.description,
       );
@@ -33,18 +33,18 @@ export class CategoryController {
 
   @Get()
   async findAll() {
-    return await this.categoryRepository.findAll();
+    return await this.collectionRepository.findAll();
   }
 
   @Get(':id')
   async findOne(@Param('id') id: number) {
-    return await this.categoryRepository.findCategory(id);
+    return await this.collectionRepository.findCollection(id);
   }
 
   @Get(':id/products')
   async findProducts(@Param('id') id: number) {
     try {
-      return await this.categoryService.findProductsByCategory(id);
+      return await this.collectionService.findProductsByCollection(id);
     } catch (error) {
       console.error(error);
       throw new Error('Could not find products');
@@ -54,10 +54,10 @@ export class CategoryController {
   @Patch(':name')
   async update(
     @Param('name') name: string,
-    @Body() createCategoryDto: CreateCategoryDto,
+    @Body() createCategoryDto: CreateCollectionDto,
   ) {
     try {
-      return await this.categoryRepository.update(
+      return await this.collectionRepository.update(
         name,
         createCategoryDto.name,
         createCategoryDto.description,
@@ -71,7 +71,7 @@ export class CategoryController {
   @Delete(':id')
   async remove(@Param('id') id: number) {
     try {
-      return await this.categoryRepository.delete(id);
+      return await this.collectionRepository.delete(id);
     } catch (error) {
       console.error(error);
       throw new Error('Could not delete category');

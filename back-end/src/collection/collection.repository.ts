@@ -3,24 +3,24 @@ import { Connection } from 'mysql2/promise';
 import { DATABASE_CONNECTION } from 'src/database/database.module';
 
 @Injectable()
-export class CategoryRepository {
+export class CollectionRepository {
   constructor(
     @Inject(DATABASE_CONNECTION)
     private connection: Connection,
   ) {}
-  async create(category: string, description: string) {
+  async create(collection: string, description: string) {
     try {
       const [result]: any = await this.connection.query(
         'INSERT INTO categories (name, description) VALUES (?, ?)',
-        [category, description],
+        [collection, description],
       );
       return result.insertId;
     } catch (error) {
       console.error(error);
-      throw new Error('Could not create category');
+      throw new Error('Could not create collection');
     }
   }
-  async findCategory(id: number) {
+  async findCollection(id: number) {
     try {
       const [rows]: any = await this.connection.query(
         'SELECT * FROM categories WHERE id = ?',
@@ -29,7 +29,7 @@ export class CategoryRepository {
       return rows[0];
     } catch (error) {
       console.error(error);
-      throw new Error('Could not find category');
+      throw new Error('Could not find collection');
     }
   }
 
@@ -41,20 +41,20 @@ export class CategoryRepository {
       return rows;
     } catch (error) {
       console.error(error);
-      throw new Error('Could not find categories');
+      throw new Error('Could not find collections');
     }
   }
 
-  async update(category: string, newCategory: string, description: string) {
+  async update(collection: string, newCollection: string, description: string) {
     try {
       const [result]: any = await this.connection.query(
         'UPDATE categories SET name = ?, description = ? WHERE name = ?',
-        [newCategory, description, category],
+        [newCollection, description, collection],
       );
       return result.affectedRows;
     } catch (error) {
       console.error(error);
-      throw new Error('Could not update category');
+      throw new Error('Could not update collection');
     }
   }
 
@@ -67,7 +67,7 @@ export class CategoryRepository {
       return result.affectedRows;
     } catch (error) {
       console.error(error);
-      throw new Error('Could not delete category');
+      throw new Error('Could not delete collection');
     }
   }
 }

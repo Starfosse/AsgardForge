@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { ProductsRepository } from 'src/products/products.repository';
 
 @Injectable()
-export class CategoryService {
+export class CollectionService {
   constructor(private readonly productsRepository: ProductsRepository) {}
-  async findProductsByCategory(id: number) {
+  async findProductsByCollection(id: number) {
     const productsWithImage = [];
-    const products = await this.productsRepository.findProductsByCategory(id);
+    const products = await this.productsRepository.findProductsByCollection(id);
     for (const values of Object.values(products)) {
       const product = values;
       const images = await this.productsRepository.findFirstImageFromProduct(

@@ -10,10 +10,7 @@ import OrdersList from "./pages/admin/OrdersList";
 import ProductsList from "./pages/admin/ProductsList";
 import Support from "./pages/admin/Support";
 import Cart from "./pages/client/Cart";
-import {
-  default as Collection,
-  default as Collections,
-} from "./pages/client/Collection";
+import CollectionPage from "./pages/client/Collection";
 import Contact from "./pages/client/Contact";
 import Home from "./pages/client/Home";
 import ProductPage from "./pages/client/Product";
@@ -50,16 +47,16 @@ function App() {
           }
         />
         <Route
-          path="/:categoryName/:id"
+          path="/:collectionName/:id"
           element={
             <LayoutClient>
               {/* <Product /> */}
-              <Collection />
+              <CollectionPage />
             </LayoutClient>
           }
         />
         <Route
-          path="/:categoryName/:id/:productName/:productId"
+          path="/:collectionName/:id/:productName/:productId"
           element={
             <LayoutClient>
               <ProductPage />

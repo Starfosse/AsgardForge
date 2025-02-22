@@ -79,12 +79,10 @@ export default function ProductForm() {
     setStatus((prev) => ({ ...prev, error: false, message: "" }));
     const newPreviews = files.map((file) => URL.createObjectURL(file));
     setPreviews((prev) => [...prev, ...newPreviews]);
-    if (formData.imagesFiles) {
-      setFormData((prev) => ({
-        ...prev,
-        imagesFiles: [...prev.imagesFiles, ...files],
-      }));
-    }
+    setFormData((prev) => ({
+      ...prev,
+      imagesFiles: [...prev.imagesFiles!, ...files],
+    }));
   };
 
   const removeImage = (index: number) => {

@@ -44,7 +44,7 @@ const Menu = () => {
               >
                 <button
                   className="flex items-center space-x-2 hover:text-amber-500 transition duration-300"
-                  onClick={() => navigate(`/collections/${category.id}`)}
+                  onClick={() => navigate(`/${category.id}`)}
                 >
                   <span>{category.name}</span>
                 </button>

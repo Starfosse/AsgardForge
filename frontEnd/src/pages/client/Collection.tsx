@@ -24,7 +24,8 @@ const Collection = () => {
 
   const filteredProducts = productsCategory.filter(
     (product) =>
-      product.price >= priceRange[0] && product.price <= priceRange[1]
+      Number(product.price) >= priceRange[0] &&
+      Number(product.price) <= priceRange[1]
   );
   return (
     <div className="bg-stone-100 min-h-screen">
@@ -69,7 +70,7 @@ const Collection = () => {
                     {product.price} €
                   </span>
                   <Link
-                    to={`/collections/${id}/${product.id}`}
+                    to={`/${id}/${product.id}`}
                     className="bg-stone-800 text-white px-4 py-2 rounded hover:bg-stone-700"
                   >
                     Détails

@@ -50,15 +50,7 @@ function App() {
           }
         />
         <Route
-          path="/collections"
-          element={
-            <LayoutClient>
-              <Collections />
-            </LayoutClient>
-          }
-        />
-        <Route
-          path="/collections/:id"
+          path="/:id"
           element={
             <LayoutClient>
               {/* <Product /> */}
@@ -67,7 +59,7 @@ function App() {
           }
         />
         <Route
-          path="/collections/:id/:productId"
+          path="/:id/:productId"
           element={
             <LayoutClient>
               <ProductPage />

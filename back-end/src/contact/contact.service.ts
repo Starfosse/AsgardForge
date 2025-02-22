@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateContactDto } from './dto/create-conversation.dto';
 import { ContactRepository } from './contact.repository';
-import { timestamp } from 'rxjs';
+import { CreateContactDto } from './dto/create-conversation.dto';
 
 @Injectable()
 export class ContactService {

@@ -1,6 +1,6 @@
 import { productsService } from "@/services/api";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Category } from "../admin/ProductsList";
 import { ProductWithImages } from "./Product";
 
@@ -68,12 +68,12 @@ const Collection = () => {
                   <span className="text-2xl font-bold text-amber-700">
                     {product.price} €
                   </span>
-                  <a
-                    href={`/collections/${id}/${product.id}`}
+                  <Link
+                    to={`/collections/${id}/${product.id}`}
                     className="bg-stone-800 text-white px-4 py-2 rounded hover:bg-stone-700"
                   >
                     Détails
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>

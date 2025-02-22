@@ -11,7 +11,7 @@ interface CustomerData {
 }
 
 export default function CustomerList() {
-  const fakeCustomer = [
+  const fakeCustomer: CustomerData[] = [
     {
       id: 1,
       firstName: "John",

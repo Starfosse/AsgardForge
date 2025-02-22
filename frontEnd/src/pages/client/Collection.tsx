@@ -1,14 +1,12 @@
 import { productsService } from "@/services/api";
+import Product from "@/services/api/products/types";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Category } from "../admin/ProductsList";
-import { ProductWithImages } from "./Product";
 
 const Collection = () => {
   const [category, setCategory] = useState<Category | null>(null);
-  const [productsCategory, setProductsCategory] = useState<ProductWithImages[]>(
-    []
-  );
+  const [productsCategory, setProductsCategory] = useState<Product[]>([]);
   const [priceRange, setPriceRange] = useState([0, 500]);
   const { id } = useParams<{ id: string }>();
   const { categoryName } = useParams<{ categoryName: string }>();

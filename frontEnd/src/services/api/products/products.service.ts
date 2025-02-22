@@ -1,7 +1,7 @@
 import { Category } from "@/pages/admin/ProductsList";
 import { apiClient } from "../client";
 import Product from "./types";
-import { ProductWithImages, ReviewsCustomers } from "@/pages/client/Product";
+import { ReviewsCustomers } from "@/pages/client/Product";
 
 export const productsService = {
   addProduct: (formData: FormData) => {
@@ -11,7 +11,7 @@ export const productsService = {
     return apiClient.fetch<Product[]>("/products", { method: "GET" });
   },
   getProductsByCategory: (id: number) => {
-    return apiClient.fetch<ProductWithImages[]>(`/category/${id}/products`, {
+    return apiClient.fetch<Product[]>(`/category/${id}/products`, {
       method: "GET",
     });
   },
@@ -22,7 +22,7 @@ export const productsService = {
     return apiClient.upload(`/products/${id}`, formData, "PUT");
   },
   getProduct: (id: number) => {
-    return apiClient.fetch<ProductWithImages>(`/products/${id}`, {
+    return apiClient.fetch<Product>(`/products/${id}`, {
       method: "GET",
     });
   },

@@ -9,16 +9,16 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
-import { CurrentUser } from 'src/user/decorators/current-user.decorator';
-import { User, UserService } from 'src/user/user.service';
+import { Customer, CustomerService } from 'src/customer/customer.service';
 import { AuthRepository } from './auth.repository';
 import { AuthService } from './auth.service';
+import { CurrentCustomer } from 'src/customer/decorators/current-customer.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
-    private userService: UserService,
+    private customerService: CustomerService,
     private authRepository: AuthRepository,
   ) {}
 
@@ -29,10 +29,12 @@ export class AuthController {
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   async googleLoginCallback(@Req() req, @Res() res: Response) {
-    if (!req.user) throw new UnauthorizedException('Authentication failed');
-    const savedUser = await this.userService.findOrCreateUser(req.user);
+    if (!req.customer) throw new UnauthorizedException('Authentication failed');
+    const savedCustomer = await this.customerService.findOrCreateCustomer(
+      req.customer,
+    );
     const { access_token, refresh_token } =
-      await this.authService.generateTokens(savedUser);
+      await this.authService.generateTokens(savedCustomer);
     res.cookie('refresh_token', refresh_token, {
       httpOnly: true,
       secure: true,
@@ -64,8 +66,8 @@ export class AuthController {
 
   @Post('logout')
   @UseGuards(AuthGuard('jwt'))
-  async logout(@CurrentUser() user: User, @Res() res: Response) {
-    await this.authRepository.revokeRefreshToken(user.id);
+  async logout(@CurrentCustomer() customer: Customer, @Res() res: Response) {
+    await this.authRepository.revokeRefreshToken(customer.id);
 
     res.clearCookie('refresh_token', {
       httpOnly: true,

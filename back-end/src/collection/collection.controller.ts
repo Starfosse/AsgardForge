@@ -12,22 +12,22 @@ import { CollectionRepository } from './collection.repository';
 import { CreateCollectionDto } from './dto/create-collection-dto';
 
 @Controller('collection')
-export class CategoryController {
+export class CollectionController {
   constructor(
     private readonly collectionService: CollectionService,
     private readonly collectionRepository: CollectionRepository,
   ) {}
 
   @Post()
-  async create(@Body() createCategoryDto: CreateCollectionDto) {
+  async create(@Body() createCollectionDto: CreateCollectionDto) {
     try {
       return await this.collectionRepository.create(
-        createCategoryDto.name,
-        createCategoryDto.description,
+        createCollectionDto.name,
+        createCollectionDto.description,
       );
     } catch (error) {
       console.error(error);
-      throw new Error('Could not create category');
+      throw new Error('Could not create collection');
     }
   }
 
@@ -54,17 +54,17 @@ export class CategoryController {
   @Patch(':name')
   async update(
     @Param('name') name: string,
-    @Body() createCategoryDto: CreateCollectionDto,
+    @Body() createCollectionDto: CreateCollectionDto,
   ) {
     try {
       return await this.collectionRepository.update(
         name,
-        createCategoryDto.name,
-        createCategoryDto.description,
+        createCollectionDto.name,
+        createCollectionDto.description,
       );
     } catch (error) {
       console.error(error);
-      throw new Error('Could not update category');
+      throw new Error('Could not update collection');
     }
   }
 
@@ -74,7 +74,7 @@ export class CategoryController {
       return await this.collectionRepository.delete(id);
     } catch (error) {
       console.error(error);
-      throw new Error('Could not delete category');
+      throw new Error('Could not delete collection');
     }
   }
 }

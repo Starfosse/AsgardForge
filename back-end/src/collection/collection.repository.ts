@@ -11,7 +11,7 @@ export class CollectionRepository {
   async create(collection: string, description: string) {
     try {
       const [result]: any = await this.connection.query(
-        'INSERT INTO categories (name, description) VALUES (?, ?)',
+        'INSERT INTO collections (name, description) VALUES (?, ?)',
         [collection, description],
       );
       return result.insertId;
@@ -23,7 +23,7 @@ export class CollectionRepository {
   async findCollection(id: number) {
     try {
       const [rows]: any = await this.connection.query(
-        'SELECT * FROM categories WHERE id = ?',
+        'SELECT * FROM collections WHERE id = ?',
         [id],
       );
       return rows[0];
@@ -36,7 +36,7 @@ export class CollectionRepository {
   async findAll() {
     try {
       const [rows]: any = await this.connection.query(
-        'SELECT * from categories',
+        'SELECT * from collections',
       );
       return rows;
     } catch (error) {
@@ -48,7 +48,7 @@ export class CollectionRepository {
   async update(collection: string, newCollection: string, description: string) {
     try {
       const [result]: any = await this.connection.query(
-        'UPDATE categories SET name = ?, description = ? WHERE name = ?',
+        'UPDATE collections SET name = ?, description = ? WHERE name = ?',
         [newCollection, description, collection],
       );
       return result.affectedRows;
@@ -61,7 +61,7 @@ export class CollectionRepository {
   async delete(id: number) {
     try {
       const [result]: any = await this.connection.query(
-        'DELETE FROM categories WHERE id = ?',
+        'DELETE FROM collections WHERE id = ?',
         [id],
       );
       return result.affectedRows;

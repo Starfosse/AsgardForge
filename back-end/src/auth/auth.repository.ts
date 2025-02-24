@@ -8,22 +8,22 @@ export class AuthRepository {
     @Inject(DATABASE_CONNECTION)
     private connection: Connection,
   ) {}
-  async generateRefreshTokens(hashedRefreshToken, userId) {
+  async generateRefreshTokens(hashedRefreshToken, customerId) {
     try {
       await this.connection.execute(
-        'UPDATE users SET refresh_token = ?, updated_at = NOW() WHERE id = ?',
-        [hashedRefreshToken, userId],
+        'UPDATE customers SET refresh_token = ?, updated_at = NOW() WHERE id = ?',
+        [hashedRefreshToken, customerId],
       );
     } catch (error) {
       console.error('Error generating refresh tokens:', error);
       throw new Error('Could not generate refresh tokens');
     }
   }
-  async findRefreshToken(userId) {
+  async findRefreshToken(customerId) {
     try {
       const [rows]: any = await this.connection.execute(
-        'SELECT refresh_token FROM users WHERE id = ?',
-        [userId],
+        'SELECT refresh_token FROM customers WHERE id = ?',
+        [customerId],
       );
       if (!rows || !rows[0] || !rows[0].refresh_token) return false;
       return rows[0].refresh_token;
@@ -33,11 +33,11 @@ export class AuthRepository {
     }
   }
 
-  async revokeRefreshToken(userId: number): Promise<void> {
+  async revokeRefreshToken(customerId: number): Promise<void> {
     try {
       await this.connection.execute(
-        'UPDATE users SET refresh_token = NULL, updated_at = NOW() WHERE id = ?',
-        [userId],
+        'UPDATE customers SET refresh_token = NULL, updated_at = NOW() WHERE id = ?',
+        [customerId],
       );
     } catch (error) {
       console.error('Error revoking refresh token:', error);

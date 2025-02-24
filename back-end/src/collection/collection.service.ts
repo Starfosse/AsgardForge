@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { ProductsRepository } from 'src/products/products.repository';
+import { ProductRepository } from 'src/product/product.repository';
 
 @Injectable()
 export class CollectionService {
-  constructor(private readonly productsRepository: ProductsRepository) {}
+  constructor(private readonly productRepository: ProductRepository) {}
   async findProductsByCollection(id: number) {
     const productsWithImage = [];
-    const products = await this.productsRepository.findProductsByCollection(id);
+    const products = await this.productRepository.findProductsByCollection(id);
     for (const values of Object.values(products)) {
       const product = values;
-      const images = await this.productsRepository.findFirstImageFromProduct(
+      const images = await this.productRepository.findFirstImageFromProduct(
         values.id,
       );
       productsWithImage.push({

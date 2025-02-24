@@ -4,9 +4,9 @@ import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { Connection } from 'mysql2/promise';
 import { DATABASE_CONNECTION } from 'src/database/database.module';
-import { User } from 'src/user/user.service';
 import { AuthRepository } from './auth.repository';
-import { UserRepository } from 'src/user/user.repository';
+import { CustomerRepository } from 'src/customer/customer.repository';
+import { Customer } from 'src/customer/customer.service';
 
 @Injectable()
 export class AuthService {
@@ -15,15 +15,15 @@ export class AuthService {
     @Inject(DATABASE_CONNECTION)
     private connection: Connection,
     private authRepository: AuthRepository,
-    private userRepository: UserRepository,
+    private customerRepository: CustomerRepository,
   ) {}
 
-  async generateTokens(user: User) {
+  async generateTokens(customer: Customer) {
     try {
       const accessToken = jwt.sign(
         {
-          sub: user.id,
-          email: user.email,
+          sub: customer.id,
+          email: customer.email,
         },
         this.configService.get('JWT_ACCESS_SECRET'),
         {
@@ -33,7 +33,7 @@ export class AuthService {
 
       const refreshToken = jwt.sign(
         {
-          sub: user.id,
+          sub: customer.id,
           tokenType: 'refresh',
         },
         this.configService.get('JWT_REFRESH_SECRET'),
@@ -46,7 +46,7 @@ export class AuthService {
 
       await this.authRepository.generateRefreshTokens(
         hashedRefreshToken,
-        user.id,
+        customer.id,
       );
 
       return {
@@ -59,11 +59,14 @@ export class AuthService {
     }
   }
 
-  async validateRefreshToken(token: string, userId: number): Promise<boolean> {
+  async validateRefreshToken(
+    token: string,
+    customerId: number,
+  ): Promise<boolean> {
     try {
-      const userRefreshToken =
-        await this.authRepository.findRefreshToken(userId);
-      return await bcrypt.compare(token, userRefreshToken);
+      const customerRefreshToken =
+        await this.authRepository.findRefreshToken(customerId);
+      return await bcrypt.compare(token, customerRefreshToken);
     } catch (error) {
       console.error('Error validating refresh token:', error);
       throw new Error('Failed to validate refresh token');
@@ -90,12 +93,12 @@ export class AuthService {
       }
 
       const [rows]: any = await this.connection.execute(
-        'SELECT * FROM users WHERE id = ?',
+        'SELECT * FROM customers WHERE id = ?',
         [payload.sub],
       );
 
-      const user = await this.userRepository.findById(payload.sub);
-      return await this.generateTokens(user);
+      const customer = await this.customerRepository.findById(payload.sub);
+      return await this.generateTokens(customer);
     } catch (error) {
       if (error.name === 'JsonWebTokenError') {
         throw new Error('Invalid refresh token format');

@@ -4,7 +4,7 @@ CREATE USER IF NOT EXISTS 'starfosse'@'%' IDENTIFIED BY '4589';
 GRANT ALL PRIVILEGES ON asgardforge.* TO 'starfosse'@'%';
 FLUSH PRIVILEGES;
 
-CREATE TABLE users (
+CREATE TABLE customers (
     id INT AUTO_INCREMENT PRIMARY KEY,
     google_id VARCHAR(255),
     last_name VARCHAR(100),
@@ -16,7 +16,7 @@ CREATE TABLE users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE categories (
+CREATE TABLE collections (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL UNIQUE,
     description TEXT,
@@ -31,7 +31,7 @@ CREATE TABLE products (
     price DECIMAL(10, 2) NOT NULL,
     promotion_price DECIMAL(10, 2),
     stock INT NOT NULL DEFAULT 0,
-    category_id BIGINT NOT NULL,
+    collection_id BIGINT NOT NULL,
     alert_stock INT NOT NULL DEFAULT 0,
     details TEXT,
     specifications TEXT,
@@ -40,7 +40,7 @@ CREATE TABLE products (
     material VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (category_id) REFERENCES categories(id)
+    FOREIGN KEY (collection_id) REFERENCES collections(id)
 );
 
 CREATE TABLE product_images (
@@ -55,23 +55,23 @@ CREATE TABLE product_images (
 CREATE TABLE product_reviews(
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     product_id BIGINT NOT NULL,
-    user_id INT NOT NULL,
+    customer_id INT NOT NULL,
     rating INT NOT NULL,
     review TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY(customer_id) REFERENCES customers(id) ON DELETE CASCADE,
     FOREIGN KEY(product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
 CREATE TABLE conversations_support(
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    user_id INT NOT NULL,
+    customer_id INT NOT NULL,
     subject VARCHAR(255) NOT NULL,
     -- order_id BIGINT, ajouter plus tard le numéro de commande dans le ticket
     status ENUM('open', 'closed') NOT NULL DEFAULT 'open',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+    FOREIGN KEY(customer_id) REFERENCES customers(id) ON DELETE CASCADE
 );
 
 CREATE TABLE messages_support(
@@ -83,8 +83,8 @@ CREATE TABLE messages_support(
     FOREIGN KEY(conversation_id) REFERENCES conversations_support(id) ON DELETE CASCADE
 );
 
-CREATE INDEX idx_product_category ON products(category_id);
+CREATE INDEX idx_product_collection ON products(collection_id);
 CREATE INDEX idx_product_stock ON products(stock);
 CREATE INDEX idx_product_name ON products(name);
-CREATE INDEX idx_category_name ON categories(name);
-CREATE INDEX idx_messages_support_conversation ON messages_support(conversation_id);
+CREATE INDEX idx_collection_name ON collections(name);
+CREATE INDEX idx_message_support_conversation ON messages_support(conversation_id);

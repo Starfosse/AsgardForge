@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CustomerRepository } from 'src/customer/customer.repository';
+import { CustomerRepository } from '../../src/customer/customer.repository';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { ReviewRepository } from './review.repository';
 

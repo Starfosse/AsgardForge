@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { Connection } from 'mysql2/promise';
-import { DATABASE_CONNECTION } from 'src/database/database.module';
+import { DATABASE_CONNECTION } from '../../src/database/database.module';
 import { CreateContactDto } from './dto/create-conversation.dto';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { Conversation } from './dto/conversation.dto';

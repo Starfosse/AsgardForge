@@ -9,10 +9,10 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Request, Response } from 'express';
-import { Customer, CustomerService } from 'src/customer/customer.service';
 import { AuthRepository } from './auth.repository';
 import { AuthService } from './auth.service';
-import { CurrentCustomer } from 'src/customer/decorators/current-customer.decorator';
+import { CurrentCustomer } from '../../src/customer/decorators/current-customer.decorator';
+import { Customer, CustomerService } from '../../src/customer/customer.service';
 
 @Controller('auth')
 export class AuthController {

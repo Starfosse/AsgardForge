@@ -1,6 +1,6 @@
 import { Inject } from '@nestjs/common';
 import { Connection } from 'mysql2';
-import { DATABASE_CONNECTION } from 'src/database/database.module';
+import { DATABASE_CONNECTION } from '../../src/database/database.module';
 
 export class ReviewRepository {
   constructor(@Inject(DATABASE_CONNECTION) private connection: Connection) {}

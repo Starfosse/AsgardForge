@@ -24,7 +24,7 @@ export default function ProductForm() {
     stock: 0,
     category: "",
     alertStock: 0,
-    images: [],
+    imagesFiles: [],
     details: "",
     specifications: "",
     dimensions: "",
@@ -79,7 +79,10 @@ export default function ProductForm() {
     setStatus((prev) => ({ ...prev, error: false, message: "" }));
     const newPreviews = files.map((file) => URL.createObjectURL(file));
     setPreviews((prev) => [...prev, ...newPreviews]);
-    setFormData((prev) => ({ ...prev, images: [...prev.images, ...files] }));
+    setFormData((prev) => ({
+      ...prev,
+      imagesFiles: [...prev.imagesFiles!, ...files],
+    }));
   };
 
   const removeImage = (index: number) => {
@@ -87,7 +90,7 @@ export default function ProductForm() {
     setPreviews((prev) => prev.filter((_, i) => i !== index));
     setFormData((prev) => ({
       ...prev,
-      images: prev.images.filter((_, i) => i !== index),
+      imagesFiles: prev.imagesFiles!.filter((_, i) => i !== index),
     }));
   };
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -97,8 +100,8 @@ export default function ProductForm() {
       setStatus((prev) => ({ ...prev, error: false, message: "" }));
       const formDataToSend = new FormData();
       for (const [key, value] of Object.entries(formData)) {
-        if (key === "images") {
-          formData.images.forEach((image) => {
+        if (key === "imagesFiles") {
+          formData.imagesFiles!.forEach((image) => {
             formDataToSend.append("images", image);
           });
         } else if (typeof value === "number") {

@@ -5,5 +5,5 @@ export class CreateContactDto {
   content: string;
   sender: string;
   createdAt: Date;
-  userId: number;
+  customerId: number;
 }

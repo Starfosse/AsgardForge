@@ -18,27 +18,6 @@ export default function CustomerReviews({
   reviewsCustomers,
   setReviews,
 }: CustomerReviewsProps) {
-  // const fakeReviews: ReviewsCustomers[] = [
-  //   {
-  //     id: 1,
-  //     customerName: "Jean Dupont",
-  //     rating: 4,
-  //     comment: "Super produit, je recommande !",
-  //   },
-  //   {
-  //     id: 2,
-  //     customerName: "Marie Durand",
-  //     rating: 5,
-  //     comment: "Excellent produit, je suis ravie !",
-  //   },
-  //   {
-  //     id: 3,
-  //     customerName: "Paul Martin",
-  //     rating: 3,
-  //     comment: "Produit correct, mais livraison un peu longue.",
-  //   },
-  // ];
-
   const { user } = useAuth();
   const [formData, setFormData] = useState<ProductReview>({
     id: 0,
@@ -117,15 +96,6 @@ export default function CustomerReviews({
       setFormData({ customerId: user?.id, rating: 0, review: "" });
     }
   };
-
-  // const reviewsCustomers2 = reviewsCustomers.map((review) => ({
-  //   customerName: review.customerName,
-  //   rating: review.rating,
-  //   comment: review.review,
-  //   // created_at: new Date(review.created_at).toLocaleDateString("fr-FR"),
-  // }));
-
-  // console.log(reviewsCustomers2);
   return (
     <div className="bg-white rounded-lg shadow-md p-6 mt-6">
       <ProductReviewForm

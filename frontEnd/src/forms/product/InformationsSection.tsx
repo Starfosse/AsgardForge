@@ -1,5 +1,5 @@
-import { Category } from "@/pages/admin/ProductsList";
-import { productsService } from "@/services/api";
+import { collectionsService } from "@/services/api/collection/collections.service";
+import Collection from "@/services/api/collection/types";
 import Product from "@/services/api/products/types";
 import { useEffect, useState } from "react";
 
@@ -20,7 +20,7 @@ export default function InformationsSection({
   isUploading,
   setFormData,
 }: InformationsSectionProps) {
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Collection[]>([]);
 
   useEffect(() => {
     handleGetCategories();
@@ -28,7 +28,7 @@ export default function InformationsSection({
 
   const handleGetCategories = async () => {
     try {
-      const response = await productsService.getCategories();
+      const response = await collectionsService.getCollections();
       setCategories(response);
       setFormData((prev) => ({ ...prev, category: response[0].name }));
     } catch (error) {

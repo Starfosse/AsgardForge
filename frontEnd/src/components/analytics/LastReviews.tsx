@@ -48,7 +48,7 @@ export default function LastReviews() {
     },
   ];
   return (
-    <DashBoardAnalytics className="h-[300px] overflow-x-auto col-span-1 flex flex-col justify-center space-y-4 text-gray-400 overflow-x-auto whitespace-nowrap">
+    <DashBoardAnalytics className="h-[300px] col-span-1 flex flex-col justify-center space-y-4 text-gray-400 overflow-x-auto whitespace-nowrap">
       <h2 className="font-semibold text-white pt-20">Derniers avis : </h2>
       <div className="flex flex-col space-y-2 divide-y divide-gray-200">
         {fakeData.map((comment) => (

@@ -2,19 +2,15 @@ import React, { useEffect, useState } from "react";
 import { productsService } from "@/services/api";
 import Product from "@/services/api/products/types";
 import { useNavigate } from "react-router-dom";
-
-export interface Category {
-  id?: number;
-  name: string;
-  description: string;
-}
+import { collectionsService } from "@/services/api/collection/collections.service";
+import Collection from "@/services/api/collection/types";
 
 export default function ProductsList() {
   const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [collections, setCollections] = useState<Collection[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [categoryForm, setCategoryForm] = useState<Category>({
+  const [collectionForm, setCollectionForm] = useState<Collection>({
     name: "",
     description: "",
   });
@@ -32,8 +28,8 @@ export default function ProductsList() {
   };
 
   const fetchCategories = async () => {
-    const response = await productsService.getCategories();
-    setCategories(response);
+    const response = await collectionsService.getCollections();
+    setCollections(response);
   };
 
   const handleDelete = async (id: number) => {
@@ -55,41 +51,44 @@ export default function ProductsList() {
     setIsSubmitting(true);
     try {
       if (isEditMode) {
-        await productsService.updateCategory(categoryForm.id!, categoryForm);
+        await collectionsService.updateCollection(
+          collectionForm.id!,
+          collectionForm
+        );
       } else {
-        await productsService.createCategory(categoryForm);
+        await collectionsService.createCollection(collectionForm);
       }
       setIsModalOpen(false);
-      setCategoryForm({ name: "", description: "" });
+      setCollectionForm({ name: "", description: "" });
       fetchCategories();
     } catch (error) {
-      console.error("Error with category:", error);
+      console.error("Error with collection:", error);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const openEditModal = (category: Category) => {
-    setCategoryForm({
-      name: category.name,
-      description: category.description,
+  const openEditModal = (collection: Collection) => {
+    setCollectionForm({
+      name: collection.name,
+      description: collection.description,
     });
     setIsEditMode(true);
     setIsModalOpen(true);
   };
 
   const openCreateModal = () => {
-    setCategoryForm({ name: "", description: "" });
+    setCollectionForm({ name: "", description: "" });
     setIsEditMode(false);
     setIsModalOpen(true);
   };
 
-  const handleDeleteCategory = async (categoryId: number) => {
+  const handleDeleteCollection = async (collectionId: number) => {
     if (
       window.confirm("Êtes-vous sûr de vouloir supprimer cette catégorie ?")
     ) {
       try {
-        await productsService.deleteCategory(categoryId);
+        await collectionsService.deleteCollection(collectionId);
         fetchCategories();
       } catch (error) {
         console.error("Error deleting category:", error);
@@ -238,26 +237,26 @@ export default function ProductsList() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 bg-[#272E48]">
-              {categories.map((category) => (
+              {collections.map((collection) => (
                 <tr
-                  key={category.name}
+                  key={collection.name}
                   className="hover:bg-[#0d101b] transition-colors duration-200"
                 >
                   <td className="px-6 py-4 text-sm text-gray-400">
-                    {category.name}
+                    {collection.name}
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-400">
-                    {category.description}
+                    {collection.description}
                   </td>
                   <td className="px-6 py-4 text-sm space-x-3">
                     <button
-                      onClick={() => openEditModal(category)}
+                      onClick={() => openEditModal(collection)}
                       className="text-blue-500 hover:text-blue-700"
                     >
                       Modifier
                     </button>
                     <button
-                      onClick={() => handleDeleteCategory(category.id!)}
+                      onClick={() => handleDeleteCollection(collection.id!)}
                       className="text-red-500 hover:text-red-700"
                     >
                       Supprimer
@@ -292,9 +291,9 @@ export default function ProductsList() {
                 <input
                   type="text"
                   id="name"
-                  value={categoryForm.name}
+                  value={collectionForm.name}
                   onChange={(e) =>
-                    setCategoryForm((prev) => ({
+                    setCollectionForm((prev) => ({
                       ...prev,
                       name: e.target.value,
                     }))
@@ -314,9 +313,9 @@ export default function ProductsList() {
                 </label>
                 <textarea
                   id="description"
-                  value={categoryForm.description}
+                  value={collectionForm.description}
                   onChange={(e) =>
-                    setCategoryForm((prev) => ({
+                    setCollectionForm((prev) => ({
                       ...prev,
                       description: e.target.value,
                     }))

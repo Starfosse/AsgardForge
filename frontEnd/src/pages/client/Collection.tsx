@@ -1,36 +1,37 @@
-import { productsService } from "@/services/api";
+import { collectionsService } from "@/services/api/collection/collections.service";
+import Collection from "@/services/api/collection/types";
+import Product from "@/services/api/products/types";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { Category } from "../admin/ProductsList";
-import { ProductWithImages } from "./Product";
+import { Link, useParams } from "react-router-dom";
 
-const Collection = () => {
-  const [category, setCategory] = useState<Category | null>(null);
-  const [productsCategory, setProductsCategory] = useState<ProductWithImages[]>(
-    []
-  );
+export default function CollectionPage() {
+  const [collection, setCollection] = useState<Collection | null>(null);
+  const [productsCollection, setProductsCollection] = useState<Product[]>([]);
   const [priceRange, setPriceRange] = useState([0, 500]);
   const { id } = useParams<{ id: string }>();
-
+  const { categoryName } = useParams<{ categoryName: string }>();
   const fetchCategory = async () => {
     if (!id) return;
-    const products = await productsService.getProductsByCategory(parseInt(id));
-    setProductsCategory(products);
+    const products = await collectionsService.getProductsByCollection(
+      parseInt(id)
+    );
+    setProductsCollection(products);
   };
 
   useEffect(() => {
     fetchCategory();
   }, [id]);
 
-  const filteredProducts = productsCategory.filter(
+  const filteredProducts = productsCollection.filter(
     (product) =>
-      product.price >= priceRange[0] && product.price <= priceRange[1]
+      Number(product.price) >= priceRange[0] &&
+      Number(product.price) <= priceRange[1]
   );
   return (
     <div className="bg-stone-100 min-h-screen">
       <div className="container mx-auto px-4 py-12">
         <h1 className="text-4xl font-bold mb-8 text-center text-stone-800">
-          {category ? category.name : "Tous les produits"}
+          {collection ? collection.name : "Tous les produits"}
         </h1>
 
         <div className="mb-8 flex flex-wrap justify-center gap-4">
@@ -68,12 +69,12 @@ const Collection = () => {
                   <span className="text-2xl font-bold text-amber-700">
                     {product.price} €
                   </span>
-                  <a
-                    href={`/collections/${id}/${product.id}`}
+                  <Link
+                    to={`/${categoryName}/${id}/${product.name}/${product.id}`}
                     className="bg-stone-800 text-white px-4 py-2 rounded hover:bg-stone-700"
                   >
                     Détails
-                  </a>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -88,6 +89,4 @@ const Collection = () => {
       </div>
     </div>
   );
-};
-
-export default Collection;
+}

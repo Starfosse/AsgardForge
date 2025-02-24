@@ -1,16 +1,16 @@
-import { Category } from "@/pages/admin/ProductsList";
-import { productsService } from "@/services/api";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import CartPreviewMenu from "./CartPreviewMenu";
 import CartPreviewMenuMobile from "./CartPreviewMenuMobile";
+import { collectionsService } from "@/services/api/collection/collections.service";
+import Collection from "@/services/api/collection/types";
 
 const Menu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const { isAuthenticated, user, login, logout } = useAuth();
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Collection[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,7 +18,7 @@ const Menu = () => {
   }, []);
 
   const fetchCategories = async () => {
-    const response = await productsService.getCategories();
+    const response = await collectionsService.getCollections();
     setCategories(response);
   };
 
@@ -44,7 +44,7 @@ const Menu = () => {
               >
                 <button
                   className="flex items-center space-x-2 hover:text-amber-500 transition duration-300"
-                  onClick={() => navigate(`/collections/${category.id}`)}
+                  onClick={() => navigate(`/${category.name}/${category.id}`)}
                 >
                   <span>{category.name}</span>
                 </button>

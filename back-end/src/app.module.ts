@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
-import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
-import { ProductsModule } from './products/products.module';
+import { AuthModule } from './auth/auth.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
-import { CategoryModule } from './category/category.module';
-import { ReviewsModule } from './reviews/reviews.module';
+import { CollectionModule } from './collection/collection.module';
 import { ContactModule } from './contact/contact.module';
+import { DatabaseModule } from './database/database.module';
+import { ReviewModule } from './review/review.module';
+import { CustomerModule } from './customer/customer.module';
+import { ProductModule } from './product/product.module';
 
 @Module({
   imports: [
@@ -16,12 +16,12 @@ import { ContactModule } from './contact/contact.module';
       envFilePath: '.env',
     }),
     AuthModule,
-    UserModule,
+    CustomerModule,
     DatabaseModule,
-    ProductsModule,
+    ProductModule,
     CloudinaryModule,
-    CategoryModule,
-    ReviewsModule,
+    CollectionModule,
+    ReviewModule,
     ContactModule,
   ],
 })

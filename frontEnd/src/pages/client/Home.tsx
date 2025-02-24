@@ -1,8 +1,7 @@
 import { Flame, Hammer, Shield } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Home = () => {
-  const navigate = useNavigate();
   const featuredProducts = [
     {
       name: "Hache de Guerre d'Odin",
@@ -86,12 +85,12 @@ const Home = () => {
                   <span className="text-2xl font-bold text-amber-700">
                     {product.price} €
                   </span>
-                  <a
-                    href={`/produits/${product.id}`}
+                  {/* <Link
+                    to={`/produits/${product.id}`}
                     className="bg-stone-800 text-white px-4 py-2 rounded hover:bg-stone-700"
                   >
                     Voir le Produit
-                  </a>
+                  </Link> */}
                 </div>
               </div>
             </div>

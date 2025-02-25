@@ -33,7 +33,7 @@ describe('CollectionController (e2e)', () => {
 
   it('/collections', async () => {
     const collection: CreateCollectionDto = {
-      name: 'collectionTestName',
+      name: 'collectionTestNameCollection',
       description: 'collectionTestDecription',
     };
 
@@ -99,7 +99,6 @@ describe('CollectionController (e2e)', () => {
       .expect((response) => {
         expect(response.body.data.length).toEqual(5);
       });
-    console.log('products ===', products.body.data);
     await request(app.getHttpServer())
       .patch(`/api/collections/${collectionName.body.data.name}`)
       .send({
@@ -118,7 +117,6 @@ describe('CollectionController (e2e)', () => {
       });
 
     products.body.data.forEach(async (product) => {
-      console.log('product ===', product);
       await request(app.getHttpServer())
         .delete(`/api/products/${product.id}`)
         .expect(200);

@@ -34,7 +34,7 @@ describe('ProductController (e2e)', () => {
 
   it('/products', async () => {
     const collection: CreateCollectionDto = {
-      name: 'collectionTestName',
+      name: 'collectionTestNameProduct',
       description: 'collectionTestDecription',
     };
 

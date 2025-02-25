@@ -26,6 +26,21 @@ describe('AuthController (e2e)', () => {
           return true;
         },
       })
+      .overrideGuard(AuthGuard('jwt'))
+      .useValue({
+        canActivate: (context) => {
+          const req = context.switchToHttp().getRequest();
+          req.customer = {
+            id: '1',
+            google_id: '123',
+            first_name: 'John',
+            last_name: 'Doe',
+            email: 'test@test.fr',
+          };
+          return true;
+        },
+      })
+
       .compile();
 
     app = moduleFixture.createNestApplication();
@@ -56,5 +71,25 @@ describe('AuthController (e2e)', () => {
     expect(response.header['set-cookie'][0]).toContain('refresh_token=');
     expect(response.header['set-cookie'][0]).toContain('HttpOnly');
     expect(response.header['set-cookie'][0]).toContain('Secure');
+
+    const responseRefresh = await request(app.getHttpServer())
+      .post('/api/auth/refresh')
+      .set('Cookie', response.header['set-cookie'])
+      .expect(200);
+
+    expect(responseRefresh.body.access_token).toBeDefined();
+
+    const access_token = response.header.location.split('=')[1];
+    console.log('access_token === ', access_token);
+
+    const responseLogout = await request(app.getHttpServer())
+      .post('/api/auth/logout')
+      .expect(201);
+    // const responseLogout = await request(app.getHttpServer())
+    //   .post('/api/auth/logout')
+    //   .set('Authorization', `Bearer ${access_token}`)
+    //   .expect(201);
+
+    expect(responseLogout.body.message).toBe('Logged out successfully');
   });
 });

@@ -75,12 +75,11 @@ describe('AuthController (e2e)', () => {
     const cutomerInfo = await request(app.getHttpServer())
       .get('/api/customers/me')
       .expect(200);
-    console.log('cutomerInfo.body.data === ', cutomerInfo.body.data);
 
     const responseRefresh = await request(app.getHttpServer())
       .post('/api/auth/refresh')
       .set('Cookie', response.header['set-cookie'])
-      .expect(200);
+      .expect(201);
 
     expect(responseRefresh.body.access_token).toBeDefined();
 

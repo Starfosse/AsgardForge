@@ -56,8 +56,6 @@ export class CollectionController {
     @Param('name') name: string,
     @Body() createCollectionDto: CreateCollectionDto,
   ) {
-    console.log('name ===', name);
-    console.log('createcollectiondto ===', createCollectionDto);
     try {
       return await this.collectionRepository.update(
         name,

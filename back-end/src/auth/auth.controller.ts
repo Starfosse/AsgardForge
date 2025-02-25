@@ -58,7 +58,6 @@ export class AuthController {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       path: '/auth/refresh',
     });
-    console.log('tokens === ', tokens);
     return res.json({ access_token: tokens.access_token });
   }
 

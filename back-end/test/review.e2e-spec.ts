@@ -21,10 +21,10 @@ describe('ReviewController (e2e)', () => {
         canActivate: (context) => {
           const req = context.switchToHttp().getRequest();
           req.customer = {
-            google_id: '123',
-            first_name: 'John',
-            last_name: 'Doe',
-            email: 'test@test.fr',
+            google_id: '123Review',
+            first_name: 'JohnReview',
+            last_name: 'DoeReview',
+            email: 'test@test.frReview',
           };
           return true;
         },
@@ -105,7 +105,6 @@ describe('ReviewController (e2e)', () => {
       .expect((response) => {
         expect(response.body.data).toBeDefined();
       });
-    console.log('productId.body.data === ', productId.body.data);
     const review: CreateReviewDto = {
       productId: productId.body.data,
       customerId: 1,
@@ -128,6 +127,3 @@ describe('ReviewController (e2e)', () => {
       });
   });
 });
-
-//find customer by id
-// cleaning review

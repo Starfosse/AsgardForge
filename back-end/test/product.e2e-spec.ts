@@ -85,8 +85,41 @@ describe('ProductController (e2e)', () => {
       // .attach('image', 'path/to/test-image.jpg')
       .expect(201)
       .expect((response) => {
-        console.log('response.body.data === ', response.body.data);
         expect(response.body.data).toBeDefined();
+      });
+
+    const product = await request(app.getHttpServer())
+      .get(`/api/products/${productId.body.data}`)
+      .expect(200)
+      .expect((response) => {
+        expect(response.body.data).toBeDefined();
+        expect(response.body.data.name).toBe('Test Product');
+        expect(response.body.data.description).toBe('Test Description');
+        expect(response.body.data.price).toBe('100.00');
+      });
+
+    const newProduct = await request(app.getHttpServer())
+      .patch(`/api/products/${productId.body.data}`)
+      .send({
+        name: 'New Product',
+        description: 'New Description',
+        price: 200,
+        promotionPrice: 180,
+        stock: 200,
+        collection: collection.name,
+        alertStock: 20,
+        details: 'New Details',
+        specifications: 'New Specifications',
+        dimensions: 'New Dimensions',
+        weight: 200,
+        material: 'New Material',
+      })
+      .expect(200)
+      .expect((response) => {
+        expect(response.body.data).toBeDefined();
+        expect(response.body.data.name).toBe('New Product');
+        expect(response.body.data.description).toBe('New Description');
+        expect(response.body.data.price).toBe(200);
       });
 
     await request(app.getHttpServer())

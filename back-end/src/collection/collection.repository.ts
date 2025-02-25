@@ -51,7 +51,10 @@ export class CollectionRepository {
         'UPDATE collections SET name = ?, description = ? WHERE name = ?',
         [newCollection, description, collection],
       );
-      return result.affectedRows;
+      console.log('result.insertId ===', result.insertId);
+      console.log('result.affectedRows ===', result.affectedRows);
+      console.log('result ===', result);
+      return result.insertId;
     } catch (error) {
       console.error(error);
       throw new Error('Could not update collection');

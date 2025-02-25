@@ -32,8 +32,7 @@ describe('ProductController (e2e)', () => {
     await app.close();
   });
 
-  //créer une collection au préalable
-  it('/products (POST)', async () => {
+  it('/products', async () => {
     const collection: CreateCollectionDto = {
       name: 'collectionTestName',
       description: 'collectionTestDecription',
@@ -42,25 +41,25 @@ describe('ProductController (e2e)', () => {
     const products = await request(app.getHttpServer())
       .get('/api/products')
       .expect(200);
-    console.log('products === ', products.body.data);
     if (products.body.data.length > 0) {
-      products.body.data.forEach(async (product) => {
-        await request(app.getHttpServer()).delete(
-          `/api/products/${product.id}`,
-        );
-      });
+      await Promise.all(
+        products.body.data.map((product) =>
+          request(app.getHttpServer()).delete(`/api/products/${product.id}`),
+        ),
+      );
     }
 
     const collections = await request(app.getHttpServer())
       .get('/api/collections')
       .expect(200);
-    console.log('collections === ', collections.body.data);
     if (collections.body.data.length > 0) {
-      collections.body.data.forEach(async (collection) => {
-        await request(app.getHttpServer()).delete(
-          `/api/collections/${collection.id}`,
-        );
-      });
+      await Promise.all(
+        collections.body.data.map((collection) =>
+          request(app.getHttpServer()).delete(
+            `/api/collections/${collection.id}`,
+          ),
+        ),
+      );
     }
 
     const collectionId = await request(app.getHttpServer())
@@ -126,8 +125,8 @@ describe('ProductController (e2e)', () => {
       .delete(`/api/products/${productId.body.data}`)
       .expect(200);
 
-    await request(app.getHttpServer()).delete(
-      `/api/collections/${collectionId.body.data}`,
-    );
+    await request(app.getHttpServer())
+      .delete(`/api/collections/${collectionId.body.data}`)
+      .expect(200);
   });
 });

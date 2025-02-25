@@ -11,6 +11,7 @@ export class ReviewService {
   ) {}
 
   async createReview(createReviewDto: CreateReviewDto) {
+    console.log('createReviewDto', createReviewDto);
     try {
       const reviewCreatedId = await this.reviewRepository.createReview(
         createReviewDto.productId,
@@ -20,6 +21,7 @@ export class ReviewService {
       );
       const review =
         await this.reviewRepository.findReviewById(reviewCreatedId);
+      console.log('review', review);
       return review;
     } catch (error) {
       throw new Error('Error creating review');
@@ -27,15 +29,19 @@ export class ReviewService {
   }
 
   async getReviews(productId: number) {
+    console.log('productId', productId);
     try {
       const reviewsWithCustomersNames = [];
       const reviews =
         await this.reviewRepository.getAllReviewsByProductId(productId);
+      console.log('reviews', reviews);
       for (const review of reviews) {
+        console.log('review.customerId', review.customer_id);
         const reviewWithCustomerName = {
           ...review,
+
           customerName: (
-            await this.customerRepository.findById(review.customerId)
+            await this.customerRepository.findById(review.customer_id)
           ).first_name,
         };
         reviewsWithCustomersNames.push(reviewWithCustomerName);

@@ -7,6 +7,7 @@ import { TransformResponseInterceptor } from '../src/interceptors/transform.inte
 import { CreateCollectionDto } from 'src/collection/dto/create-collection-dto';
 import { CreateReviewDto } from 'src/review/dto/create-review.dto';
 import { after } from 'node:test';
+import { AuthGuard } from '@nestjs/passport';
 
 describe('ReviewController (e2e)', () => {
   let app: INestApplication;
@@ -14,7 +15,21 @@ describe('ReviewController (e2e)', () => {
   beforeEach(async () => {
     const moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideGuard(AuthGuard('google'))
+      .useValue({
+        canActivate: (context) => {
+          const req = context.switchToHttp().getRequest();
+          req.customer = {
+            google_id: '123',
+            first_name: 'John',
+            last_name: 'Doe',
+            email: 'test@test.fr',
+          };
+          return true;
+        },
+      })
+      .compile();
 
     app = moduleFixture.createNestApplication();
 
@@ -39,6 +54,11 @@ describe('ReviewController (e2e)', () => {
       name: 'collectionTestNameProduct',
       description: 'collectionTestDecription',
     };
+
+    const response = await request(app.getHttpServer())
+      .get('/api/auth/google/callback')
+      .expect(302);
+
     const products = await request(app.getHttpServer())
       .get('/api/products')
       .expect(200);
@@ -85,12 +105,14 @@ describe('ReviewController (e2e)', () => {
       .expect((response) => {
         expect(response.body.data).toBeDefined();
       });
+    console.log('productId.body.data === ', productId.body.data);
     const review: CreateReviewDto = {
       productId: productId.body.data,
       customerId: 1,
       rating: 5,
       review: 'Test Review',
     };
+
     await request(app.getHttpServer())
       .post('/api/reviews')
       .send(review)

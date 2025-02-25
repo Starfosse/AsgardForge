@@ -72,6 +72,11 @@ describe('AuthController (e2e)', () => {
     expect(response.header['set-cookie'][0]).toContain('HttpOnly');
     expect(response.header['set-cookie'][0]).toContain('Secure');
 
+    const cutomerInfo = await request(app.getHttpServer())
+      .get('/api/customers/me')
+      .expect(200);
+    console.log('cutomerInfo.body.data === ', cutomerInfo.body.data);
+
     const responseRefresh = await request(app.getHttpServer())
       .post('/api/auth/refresh')
       .set('Cookie', response.header['set-cookie'])
@@ -85,10 +90,6 @@ describe('AuthController (e2e)', () => {
     const responseLogout = await request(app.getHttpServer())
       .post('/api/auth/logout')
       .expect(201);
-    // const responseLogout = await request(app.getHttpServer())
-    //   .post('/api/auth/logout')
-    //   .set('Authorization', `Bearer ${access_token}`)
-    //   .expect(201);
 
     expect(responseLogout.body.message).toBe('Logged out successfully');
   });

@@ -88,7 +88,7 @@ describe('ProductController (e2e)', () => {
         expect(response.body.data).toBeDefined();
       });
 
-    const product = await request(app.getHttpServer())
+    await request(app.getHttpServer())
       .get(`/api/products/${productId.body.data}`)
       .expect(200)
       .expect((response) => {
@@ -98,7 +98,7 @@ describe('ProductController (e2e)', () => {
         expect(response.body.data.price).toBe('100.00');
       });
 
-    const newProduct = await request(app.getHttpServer())
+    await request(app.getHttpServer())
       .patch(`/api/products/${productId.body.data}`)
       .send({
         name: 'New Product',

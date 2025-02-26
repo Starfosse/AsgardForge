@@ -4,14 +4,14 @@ import { ShoppingBag } from "lucide-react";
 interface OrderSummaryProps {
   status: { error: boolean; message: string; isSubmitting: boolean };
   cart: CartItem[];
+  total: string;
 }
 
-export default function OrderSummary({ status, cart }: OrderSummaryProps) {
-  const calculateTotal = () => {
-    return cart
-      .reduce((total, item) => total + item.price * item.quantity, 0)
-      .toFixed(2);
-  };
+export default function OrderSummary({
+  status,
+  cart,
+  total,
+}: OrderSummaryProps) {
   return (
     <div>
       <div className="bg-white rounded-lg shadow-md p-6 sticky top-12">
@@ -46,7 +46,7 @@ export default function OrderSummary({ status, cart }: OrderSummaryProps) {
 
           <div className="flex justify-between">
             <span>Sous-total</span>
-            <span>{calculateTotal()} €</span>
+            <span>{total} €</span>
           </div>
           <div className="flex justify-between">
             <span>Livraison</span>
@@ -55,7 +55,7 @@ export default function OrderSummary({ status, cart }: OrderSummaryProps) {
           <hr className="border-stone-300" />
           <div className="flex justify-between font-bold text-xl">
             <span>Total</span>
-            <span>{calculateTotal()} €</span>
+            <span>{total} €</span>
           </div>
         </div>
 

@@ -15,6 +15,7 @@ import Contact from "./pages/client/Contact";
 import Home from "./pages/client/Home";
 import ProductPage from "./pages/client/Product";
 import DashBoardProduct from "./wrapper/DashboardProduct";
+import OrderConfirmation from "./pages/client/OrderConfirmation";
 
 function App() {
   return (
@@ -34,6 +35,14 @@ function App() {
           element={
             <LayoutClient>
               <Home />
+            </LayoutClient>
+          }
+        />
+        <Route
+          path="/order/confirmation/:id"
+          element={
+            <LayoutClient>
+              <OrderConfirmation />
             </LayoutClient>
           }
         />

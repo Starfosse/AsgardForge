@@ -21,7 +21,7 @@ export class OrderRepository {
           order.address,
           order.city,
           order.zipCode,
-          10,
+          order.total,
         ],
       );
       return result.insertId;
@@ -49,6 +49,18 @@ export class OrderRepository {
   `,
         values,
       );
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async findOne(id: number) {
+    try {
+      const [rows]: any = await this.connection.query(
+        'SELECT * FROM orders WHERE id = ?',
+        [id],
+      );
+      return rows[0];
     } catch (error) {
       console.error(error);
     }

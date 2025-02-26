@@ -7,4 +7,5 @@ export class CreateOrderDto {
   readonly address: string;
   readonly city: string;
   readonly zipCode: string;
+  readonly total: number;
 }

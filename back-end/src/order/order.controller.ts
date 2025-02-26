@@ -1,21 +1,21 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CreateOrderItemDto } from './dto/create-order-item.dto';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrderService } from './order.service';
+import { OrderRepository } from './order.repository';
 
 @Controller('orders')
 export class OrderController {
-  constructor(private readonly orderService: OrderService) {}
+  constructor(
+    private readonly orderService: OrderService,
+    private readonly orderRepository: OrderRepository,
+  ) {}
 
   @Post()
   create(
     @Body() requestData: { order: CreateOrderDto; cart: CreateOrderItemDto[] },
   ) {
-    // console.log('order | controller', order);
-    // console.log('cart | controller', cart);
     const { order, cart } = requestData;
-    console.log('order', order);
-    console.log('cart', cart);
     return this.orderService.create(order, cart);
   }
 
@@ -24,10 +24,10 @@ export class OrderController {
   //   return this.orderService.findAll();
   // }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.orderService.findOne(+id);
-  // }
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.orderRepository.findOne(+id);
+  }
 
   // @Patch(':id')
   // update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {

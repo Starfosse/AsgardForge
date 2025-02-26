@@ -9,7 +9,7 @@ import Collection from "@/services/api/collection/types";
 const Menu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const { isAuthenticated, user, login, logout } = useAuth();
+  const { isAuthenticated, customer, login, logout } = useAuth();
   const [categories, setCategories] = useState<Collection[]>([]);
   const navigate = useNavigate();
 
@@ -56,7 +56,7 @@ const Menu = () => {
           </div>
           {isAuthenticated ? (
             <div className="hidden md:flex md:flex-col items-center ">
-              <div className="text-sm">Bonjour {user?.firstName}</div>
+              <div className="text-sm">Bonjour {customer?.firstName}</div>
               <button className="hover:text-amber-500" onClick={logout}>
                 Se déconnecter
               </button>
@@ -85,7 +85,7 @@ const Menu = () => {
         <div className="md:hidden bg-stone-900">
           {isAuthenticated ? (
             <div className="border-t border-stone-700 p-4 hover:bg-stone-800 w-full flex items-center justify-between space-x-4">
-              <div>Bonjour {user?.firstName}</div>
+              <div>Bonjour {customer?.firstName}</div>
               <button className="hover:text-amber-500" onClick={logout}>
                 Se déconnecter
               </button>

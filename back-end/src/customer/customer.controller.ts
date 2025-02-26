@@ -1,8 +1,8 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { Customer } from './customer.service';
 import { CustomerRepository } from './customer.repository';
-import { CurrentCustomer } from './decorators/current-customer.decorator';
+import { Customer } from './customer.service';
+import { CurrentUser } from './decorators/current-customer.decorator';
 
 @Controller('customers')
 export class CustomerController {
@@ -10,8 +10,9 @@ export class CustomerController {
 
   @Get('me')
   @UseGuards(AuthGuard('jwt'))
-  async getMe(@CurrentCustomer() customer: Customer) {
-    const customerInfo = await this.customerRepository.findById(customer.id);
+  async getMe(@CurrentUser() user: Customer) {
+    console.log('customer ===', user);
+    const customerInfo = await this.customerRepository.findById(user.id);
     return { ...customerInfo };
   }
 }

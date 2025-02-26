@@ -32,7 +32,7 @@ export interface NewConversation {
 }
 
 export default function Contact() {
-  const { user } = useAuth();
+  const { customer } = useAuth();
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] =
     useState<Conversation | null>(null);
@@ -45,7 +45,7 @@ export default function Contact() {
   });
 
   const handleCreateConversation = () => {
-    if (!user) return;
+    if (!customer) return;
     const tmpId = nanoid();
     const conversation: Conversation = {
       id: tmpId,
@@ -75,7 +75,7 @@ export default function Contact() {
         content,
         sender,
         createdAt,
-        userId: user.id,
+        customerId: customer.id,
       },
       (response: {
         success: boolean;
@@ -151,8 +151,8 @@ export default function Contact() {
   };
 
   const fetchConversations = async () => {
-    if (!user) return;
-    const res = await contactService.getConversations(user.id);
+    if (!customer) return;
+    const res = await contactService.getConversations(customer.id);
     setConversations(
       res.map((conv) => ({
         ...conv,
@@ -166,7 +166,7 @@ export default function Contact() {
 
   useEffect(() => {
     fetchConversations();
-  }, [user]);
+  }, [customer]);
 
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat("fr-FR", {

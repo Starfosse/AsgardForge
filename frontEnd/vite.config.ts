@@ -19,27 +19,31 @@ export default defineConfig({
       overlay: true,
     },
     proxy: {
-      "/auth": {
+      "/api/": {
         target: "http://localhost:3000",
         changeOrigin: true,
       },
-      "/user": {
+      "/api/auth": {
         target: "http://localhost:3000",
         changeOrigin: true,
       },
-      "/products": {
+      "/api/customers": {
         target: "http://localhost:3000",
         changeOrigin: true,
       },
-      "/category": {
+      "/api/products": {
         target: "http://localhost:3000",
         changeOrigin: true,
       },
-      "/reviews": {
+      "/api/category": {
         target: "http://localhost:3000",
         changeOrigin: true,
       },
-      "/contact": {
+      "/api/reviews": {
+        target: "http://localhost:3000",
+        changeOrigin: true,
+      },
+      "/api/contact": {
         target: "http://localhost:3000",
         changeOrigin: true,
       },

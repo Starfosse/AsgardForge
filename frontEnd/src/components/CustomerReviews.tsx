@@ -18,10 +18,10 @@ export default function CustomerReviews({
   reviewsCustomers,
   setReviews,
 }: CustomerReviewsProps) {
-  const { user } = useAuth();
+  const { customer } = useAuth();
   const [formData, setFormData] = useState<ProductReview>({
     id: 0,
-    customerId: user?.id,
+    customerId: customer?.id,
     rating: 0,
     review: "",
     created_at: "",
@@ -35,7 +35,7 @@ export default function CustomerReviews({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const listIdCustomer = reviewsCustomers.map((review) => review.customerId);
-    if (!user) {
+    if (!customer) {
       setStatus({
         error: true,
         message: "Veuillez vous connecter pour laisser un commentaire",
@@ -43,7 +43,7 @@ export default function CustomerReviews({
       });
       return;
     }
-    if (listIdCustomer.includes(user.id)) {
+    if (listIdCustomer.includes(customer.id)) {
       setStatus({
         error: true,
         message: "Vous avez déjà laissé un commentaire",
@@ -64,7 +64,7 @@ export default function CustomerReviews({
       setStatus({ error: false, message: "", submitted: false });
       const reviewData = {
         productId: Number(productId),
-        userId: user!.id,
+        customerId: customer!.id,
         rating: formData.rating,
         review: formData.review,
       };
@@ -79,8 +79,8 @@ export default function CustomerReviews({
         ...reviewsCustomers,
         {
           id: reviewsCustomers.length + 1,
-          customerId: user?.id,
-          customerName: user?.firstName,
+          customerId: customer?.id,
+          customerName: customer?.firstName,
           rating: formData.rating,
           review: formData.review,
           created_at: new Date().toISOString(),
@@ -93,7 +93,7 @@ export default function CustomerReviews({
         submitted: true,
       });
     } finally {
-      setFormData({ customerId: user?.id, rating: 0, review: "" });
+      setFormData({ customerId: customer?.id, rating: 0, review: "" });
     }
   };
   return (
@@ -103,7 +103,7 @@ export default function CustomerReviews({
         formData={formData}
         setFormData={setFormData}
         status={status}
-        user={user}
+        customer={customer}
       />
       <h3 className="text-2xl font-semibold mb-4 text-stone-800">
         Avis clients :

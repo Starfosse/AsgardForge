@@ -16,7 +16,7 @@ export class ReviewController {
   }
 
   @Get(':productId')
-  async indOne(@Param('productId') productId: string) {
+  async findOne(@Param('productId') productId: string) {
     return this.reviewService.getReviews(+productId);
   }
 }

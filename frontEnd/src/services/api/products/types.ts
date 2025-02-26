@@ -12,7 +12,7 @@ export default interface Product {
   price: number;
   promotionPrice: number;
   stock: number;
-  category: string;
+  collection: string;
   alertStock: number;
   images?: Images[];
   imagesFiles?: File[];

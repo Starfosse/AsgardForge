@@ -11,7 +11,7 @@ import {
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { CloudinaryService } from '../../src/cloudinary/cloudinary.service';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { ProductService } from './product.service';
 import { ProductRepository } from './product.repository';

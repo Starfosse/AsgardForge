@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CustomerRepository } from '../../src/customer/customer.repository';
+import { CustomerRepository } from 'src/customer/customer.repository';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { ReviewRepository } from './review.repository';
 
@@ -34,8 +34,9 @@ export class ReviewService {
       for (const review of reviews) {
         const reviewWithCustomerName = {
           ...review,
+
           customerName: (
-            await this.customerRepository.findById(review.customerId)
+            await this.customerRepository.findById(review.customer_id)
           ).first_name,
         };
         reviewsWithCustomersNames.push(reviewWithCustomerName);

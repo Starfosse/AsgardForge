@@ -4,38 +4,40 @@ import Product from "./types";
 
 export const productsService = {
   addProduct: (formData: FormData) => {
-    return apiClient.upload("/products", formData, "POST");
+    return apiClient.upload("/api/products", formData, "POST");
   },
   getProducts: () => {
-    return apiClient.fetch<Product[]>("/products", { method: "GET" });
+    return apiClient.fetch<Product[]>("/api/products", { method: "GET" });
   },
 
   deleteProduct: (id: number) => {
-    return apiClient.fetch(`/products/${id}`, { method: "DELETE" });
+    return apiClient.fetch(`/api/products/${id}`, { method: "DELETE" });
   },
   editProduct: (id: number, formData: FormData) => {
-    return apiClient.upload(`/products/${id}`, formData, "PUT");
+    return apiClient.upload(`/api/products/${id}`, formData, "PUT");
   },
   getProduct: (id: number) => {
-    return apiClient.fetch<Product>(`/products/${id}`, {
+    return apiClient.fetch<Product>(`/api/products/${id}`, {
       method: "GET",
     });
   },
   findImages: (id: number) => {
-    return apiClient.fetch(`/products/images/${id}`, { method: "GET" });
+    return apiClient.fetch(`/api/products/images/${id}`, { method: "GET" });
   },
   findFirstImage: (id: number) => {
-    return apiClient.fetch(`/products/images/first/${id}`, { method: "GET" });
+    return apiClient.fetch(`/api/products/images/first/${id}`, {
+      method: "GET",
+    });
   },
 
   addReview: (formData: any) => {
-    return apiClient.fetch("/reviews", {
+    return apiClient.fetch("/api/reviews", {
       method: "POST",
       body: JSON.stringify(formData),
     });
   },
   getReviews: (id: number) => {
-    return apiClient.fetch<ReviewsCustomers[]>(`/reviews/${id}`, {
+    return apiClient.fetch<ReviewsCustomers[]>(`/api/reviews/${id}`, {
       method: "GET",
     });
   },

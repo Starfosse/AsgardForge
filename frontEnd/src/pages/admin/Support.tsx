@@ -63,7 +63,6 @@ export default function Support() {
 
   const fetchAllConversations = async () => {
     const res = await contactService.getAllConversations();
-    console.log(res);
     setConversations(
       res.map((conv) => ({
         ...conv,

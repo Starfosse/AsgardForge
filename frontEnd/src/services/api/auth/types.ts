@@ -1,4 +1,4 @@
-export interface UserResponse {
+export interface CustomerResponse {
   id: number;
   google_id: string;
   last_name: string;

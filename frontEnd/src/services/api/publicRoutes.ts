@@ -1,12 +1,12 @@
 const publicRoutes = [
-  "/auth/google",
-  "/auth/google/callback",
-  "/products",
-  "/products/:id",
-  "/collections",
-  "/collections/:id",
-  "/collection",
-  "/collection/:id/products",
+  "/api/auth/google",
+  "/api/auth/google/callback",
+  "/api/products",
+  "/api/products/:id",
+  "/api/collections",
+  "/api/collections/:id",
+  "/api/collection",
+  "/api/collection/:id/products",
 ] as const;
 
 export function isPublicRoute(route: string): boolean {

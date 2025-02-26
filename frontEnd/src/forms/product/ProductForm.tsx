@@ -22,7 +22,7 @@ export default function ProductForm() {
     price: 0,
     promotionPrice: 0,
     stock: 0,
-    category: "",
+    collection: "",
     alertStock: 0,
     imagesFiles: [],
     details: "",
@@ -97,6 +97,7 @@ export default function ProductForm() {
     e.preventDefault();
     setIsUploading(true);
     try {
+      console.log("formdata ===", formData);
       setStatus((prev) => ({ ...prev, error: false, message: "" }));
       const formDataToSend = new FormData();
       for (const [key, value] of Object.entries(formData)) {
@@ -134,7 +135,7 @@ export default function ProductForm() {
             price: 0,
             promotionPrice: 0,
             stock: 0,
-            category: "",
+            collection: "",
             alertStock: 0,
             images: [],
             details: "",

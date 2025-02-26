@@ -19,7 +19,7 @@ interface ProductReviewFormProps {
     message: string;
     submitted: boolean;
   };
-  user: any;
+  customer: any;
 }
 
 export default function ProductReviewForm({
@@ -27,7 +27,7 @@ export default function ProductReviewForm({
   formData,
   setFormData,
   status,
-  user,
+  customer,
 }: ProductReviewFormProps) {
   const [reviewStars, setReviewStars] = useState(0);
   return (
@@ -80,7 +80,7 @@ export default function ProductReviewForm({
               } text-white px-6 py-2 rounded-md`}
               disabled={status.submitted}
             >
-              {user ? <span>Envoyer</span> : <span>Connectez-vous</span>}
+              {customer ? <span>Envoyer</span> : <span>Connectez-vous</span>}
             </button>
           </div>
           {status.error && (

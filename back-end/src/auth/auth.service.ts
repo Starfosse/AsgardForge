@@ -3,10 +3,10 @@ import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 import { Connection } from 'mysql2/promise';
-import { DATABASE_CONNECTION } from '../../src/database/database.module';
+import { DATABASE_CONNECTION } from 'src/database/database.module';
 import { AuthRepository } from './auth.repository';
-import { CustomerRepository } from '../../src/customer/customer.repository';
-import { Customer } from '../../src/customer/customer.service';
+import { CustomerRepository } from 'src/customer/customer.repository';
+import { Customer } from 'src/customer/customer.service';
 
 @Injectable()
 export class AuthService {

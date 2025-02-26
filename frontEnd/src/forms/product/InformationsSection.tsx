@@ -29,8 +29,12 @@ export default function InformationsSection({
   const handleGetCategories = async () => {
     try {
       const response = await collectionsService.getCollections();
+      console.log("reponse of categories", response);
       setCategories(response);
-      setFormData((prev) => ({ ...prev, category: response[0].name }));
+      console.log("categories", categories);
+      console.log("response[0].name ===", response[0].name);
+      setFormData((prev) => ({ ...prev, collection: response[0].name }));
+      console.log("formData categories", formData);
     } catch (error) {
       console.error(error);
     }
@@ -75,7 +79,7 @@ export default function InformationsSection({
           className="rounded-sm bg-[#272E48] outline-1 outline outline-gray-500 p-1 px-3 text-gray-400 focus:outline-sky-500"
           id={"category"}
           name={"category"}
-          value={formData.category}
+          value={formData.collection}
           onChange={handleChange}
           disabled={isUploading}
         >

@@ -7,7 +7,7 @@ import {
 } from "react";
 import { authService } from "../services/api";
 
-interface User {
+interface Customer {
   id: number;
   googleId: string;
   lastName: string;
@@ -18,7 +18,7 @@ interface User {
 type AuthContextType = {
   isAuthenticated: boolean;
   isLoading: boolean;
-  user: User | null;
+  customer: Customer | null;
   login: () => void;
   logout: () => void;
   checkAuthStatus: () => void;
@@ -33,7 +33,7 @@ type AuthProviderProps = {
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [user, setUser] = useState<User | null>(null);
+  const [customer, setCustomer] = useState<Customer | null>(null);
 
   useEffect(() => {
     checkAuthStatus();
@@ -43,23 +43,23 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     try {
       const token = localStorage.getItem("access_token");
       if (token) {
-        const response = await authService.getUserProfile();
+        const response = await authService.getCustomerProfile();
         if (response) {
-          const transformedUser: User = {
+          const transformedCustomer: Customer = {
             id: response.id,
             googleId: response.google_id,
             lastName: response.last_name,
             firstName: response.first_name,
             email: response.email,
           };
-          setUser(transformedUser);
+          setCustomer(transformedCustomer);
         }
         setIsAuthenticated(true);
       }
     } catch (error) {
       console.error(error);
       localStorage.removeItem("access_token");
-      setUser(null);
+      setCustomer(null);
       setIsAuthenticated(false);
     } finally {
       setIsLoading(false);
@@ -67,7 +67,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const login = () => {
-    window.location.href = "/auth/google";
+    window.location.href = "/api/auth/google";
   };
 
   const logout = async () => {
@@ -77,7 +77,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       console.error(error);
     } finally {
       localStorage.removeItem("access_token");
-      setUser(null);
+      setCustomer(null);
       setIsAuthenticated(false);
     }
   };
@@ -87,7 +87,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       value={{
         isAuthenticated,
         isLoading,
-        user,
+        customer,
         login,
         logout,
         checkAuthStatus,

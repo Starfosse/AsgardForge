@@ -34,8 +34,6 @@ export default function Checkout() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Ajoutez ici la logique pour traiter la commande
-    console.log("Commande soumise:", formData);
   };
 
   return (

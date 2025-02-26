@@ -3,12 +3,12 @@ import { ConversationAdminData, ConversationData } from "./types";
 
 export const contactService = {
   getConversations: (userId: number) => {
-    return apiClient.fetch<ConversationData[]>(`/contact/${userId}`, {
+    return apiClient.fetch<ConversationData[]>(`/api/contact/${userId}`, {
       method: "GET",
     });
   },
   getAllConversations: () => {
-    return apiClient.fetch<ConversationAdminData[]>(`/contact`, {
+    return apiClient.fetch<ConversationAdminData[]>(`/api/contact`, {
       method: "GET",
     });
   },

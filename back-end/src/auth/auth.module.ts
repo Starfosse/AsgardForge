@@ -5,7 +5,7 @@ import { AuthRepository } from './auth.repository';
 import { AuthService } from './auth.service';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { CustomerModule } from '../../src/customer/customer.module';
+import { CustomerModule } from 'src/customer/customer.module';
 
 @Module({
   imports: [

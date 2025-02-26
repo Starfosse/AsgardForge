@@ -32,13 +32,13 @@ export const apiClient = {
 
       if (response.status === 401) {
         try {
-          const refreshResponse = await fetch("/auth/refresh", {
+          const refreshResponse = await fetch("/api/auth/refresh", {
             method: "POST",
             credentials: "include",
           });
           if (!refreshResponse.ok) {
             localStorage.removeItem("access_token");
-            window.location.href = "/auth/google";
+            window.location.href = "/api/auth/google";
             throw new Error("Session expired");
           }
           const refreshData: { access_token: string } =
@@ -66,7 +66,7 @@ export const apiClient = {
           }
         } catch (refreshError) {
           localStorage.removeItem("access_token");
-          window.location.href = "/auth/google";
+          window.location.href = "/api/auth/google";
           throw refreshError;
         }
       }

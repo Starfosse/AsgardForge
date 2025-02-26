@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Connection } from 'mysql2/promise';
-import { DATABASE_CONNECTION } from '../../src/database/database.module';
+import { DATABASE_CONNECTION } from 'src/database/database.module';
 import { productData } from './product.service';
 
 @Injectable()
@@ -12,10 +12,12 @@ export class ProductRepository {
 
   async createProduct(product: productData) {
     try {
+      console.log('product ===', product);
       const [rows] = await this.connection.query(
         'SELECT * FROM collections WHERE name = ?',
         [product.collection],
       );
+      console.log('rows[0] ===', rows[0]);
       const [result]: any = await this.connection.query(
         'INSERT INTO products (name, description, price, promotion_price, stock, collection_id, alert_stock, details, specifications, dimensions, weight, material) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         [
@@ -37,7 +39,7 @@ export class ProductRepository {
       return result.insertId;
     } catch (error) {
       console.error(error);
-      throw new Error('Could not create product');
+      throw new Error('Could not create product (repository)');
     }
   }
 

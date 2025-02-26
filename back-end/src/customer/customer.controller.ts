@@ -11,7 +11,6 @@ export class CustomerController {
   @Get('me')
   @UseGuards(AuthGuard('jwt'))
   async getMe(@CurrentUser() user: Customer) {
-    console.log('customer ===', user);
     const customerInfo = await this.customerRepository.findById(user.id);
     return { ...customerInfo };
   }

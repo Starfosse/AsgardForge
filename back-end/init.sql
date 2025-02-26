@@ -10,6 +10,10 @@ CREATE TABLE customers (
     last_name VARCHAR(100),
     first_name VARCHAR(100),
     email VARCHAR(100),
+    phone VARCHAR(20),
+    address VARCHAR(255),
+    city VARCHAR(100),
+    postal_code VARCHAR(10),
     access_token VARCHAR(255),
     refresh_token VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -81,6 +85,23 @@ CREATE TABLE messages_support(
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(conversation_id) REFERENCES conversations_support(id) ON DELETE CASCADE
+);
+
+CREATE TABLE orders(
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    customer_id INT NOT NULL,
+    recipient_first_name VARCHAR(100) NOT NULL,
+    recipient_last_name VARCHAR(100) NOT NULL,
+    recipient_email VARCHAR(100) NOT NULL,
+    recipient_phone VARCHAR(20),
+    shipping_address VARCHAR(255) NOT NULL,
+    shipping_city VARCHAR(100) NOT NULL,
+    shipping_postal_code VARCHAR(10) NOT NULL,
+    total DECIMAL(10, 2) NOT NULL,
+    status ENUM('pending', 'processing', 'completed', 'cancelled') NOT NULL DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY(customer_id) REFERENCES customers(id) ON DELETE CASCADE
 );
 
 CREATE INDEX idx_product_collection ON products(collection_id);

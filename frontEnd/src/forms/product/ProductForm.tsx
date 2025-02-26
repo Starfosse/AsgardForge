@@ -97,7 +97,6 @@ export default function ProductForm() {
     e.preventDefault();
     setIsUploading(true);
     try {
-      console.log("formdata ===", formData);
       setStatus((prev) => ({ ...prev, error: false, message: "" }));
       const formDataToSend = new FormData();
       for (const [key, value] of Object.entries(formData)) {

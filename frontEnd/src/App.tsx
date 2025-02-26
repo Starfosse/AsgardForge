@@ -3,7 +3,7 @@ import { GoogleCallBack } from "./components/GoogleCallBack";
 import ProductForm from "./forms/product/ProductForm";
 import LayoutAdmin from "./layouts/LayoutAdmin";
 import LayoutClient from "./layouts/LayoutClient";
-import Checkout from "./pages/Checkout";
+import Checkout from "./pages/client/Checkout";
 import CustomerList from "./pages/admin/CustomerList";
 import Dashboard from "./pages/admin/Dashboard";
 import OrdersList from "./pages/admin/OrdersList";

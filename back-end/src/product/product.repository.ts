@@ -12,12 +12,10 @@ export class ProductRepository {
 
   async createProduct(product: productData) {
     try {
-      console.log('product ===', product);
       const [rows] = await this.connection.query(
         'SELECT * FROM collections WHERE name = ?',
         [product.collection],
       );
-      console.log('rows[0] ===', rows[0]);
       const [result]: any = await this.connection.query(
         'INSERT INTO products (name, description, price, promotion_price, stock, collection_id, alert_stock, details, specifications, dimensions, weight, material) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         [

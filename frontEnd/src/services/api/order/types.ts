@@ -1,4 +1,5 @@
 export interface OrderCommand {
+  customerId: number | undefined;
   firstName: string;
   lastName: string;
   email: string;

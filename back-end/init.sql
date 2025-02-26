@@ -67,6 +67,8 @@ CREATE TABLE product_reviews(
     FOREIGN KEY(product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
+-- primary key (product_id, customer_id) -> à modifier pour plus tard
+
 CREATE TABLE conversations_support(
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     customer_id INT NOT NULL,
@@ -102,6 +104,17 @@ CREATE TABLE orders(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY(customer_id) REFERENCES customers(id) ON DELETE CASCADE
+);
+
+CREATE TABLE products_order(
+    order_id BIGINT NOT NULL,
+    product_id BIGINT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    promotion_price DECIMAL(10, 2),
+    quantity INT NOT NULL,
+    PRIMARY KEY(order_id, product_id),
+    FOREIGN KEY(order_id) REFERENCES orders(id) ON DELETE CASCADE,
+    FOREIGN KEY(product_id) REFERENCES products(id) ON DELETE CASCADE
 );
 
 CREATE INDEX idx_product_collection ON products(collection_id);

@@ -1,12 +1,12 @@
-import { useCart } from "@/contexts/CartContext";
+import { CartItem } from "@/contexts/CartContext";
 import { ShoppingBag } from "lucide-react";
 
 interface OrderSummaryProps {
   status: { error: boolean; message: string; isSubmitting: boolean };
+  cart: CartItem[];
 }
 
-export default function OrderSummary({ status }: OrderSummaryProps) {
-  const { cart } = useCart();
+export default function OrderSummary({ status, cart }: OrderSummaryProps) {
   const calculateTotal = () => {
     return cart
       .reduce((total, item) => total + item.price * item.quantity, 0)

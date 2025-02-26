@@ -1,12 +1,17 @@
 import OrderSummary from "@/components/OrderSummary";
+import { useAuth } from "@/contexts/AuthContext";
+import { useCart } from "@/contexts/CartContext";
 import CheckoutForm from "@/forms/checkout/CheckoutForm";
-import { checkoutService } from "@/services/api";
-import { OrderCommand } from "@/services/api/checkout/types";
+import { orderService } from "@/services/api";
+import { OrderCommand } from "@/services/api/order/types";
 import { CreditCard } from "lucide-react";
 import React, { useState } from "react";
 
 export default function Checkout() {
+  const { cart } = useCart();
+  const { customer } = useAuth();
   const [paymentForm, setPaymentForm] = useState<OrderCommand>({
+    customerId: customer?.id,
     firstName: "",
     lastName: "",
     email: "",
@@ -34,8 +39,11 @@ export default function Checkout() {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
+      if (paymentForm.customerId === undefined)
+        throw new Error("Vous devez être connecté pour passer une commande");
       setStatus((prev) => ({ ...prev, isSubmitting: true }));
-      const orderId = await checkoutService.createOrder(paymentForm);
+      const orderId = await orderService.createOrder(paymentForm, cart);
+      console.log("orderId ===", orderId);
       //navigate to page with success and orderId
       setStatus((prev) => ({
         ...prev,
@@ -68,7 +76,7 @@ export default function Checkout() {
             isSubmitting={status.isSubmitting}
           />
           <div>
-            <OrderSummary status={status} />
+            <OrderSummary status={status} cart={cart} />
           </div>
         </div>
       </div>

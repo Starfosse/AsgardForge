@@ -13,10 +13,14 @@ export class OrderController {
 
   @Post()
   create(
-    @Body() requestData: { order: CreateOrderDto; cart: CreateOrderItemDto[] },
+    @Body()
+    requestData: {
+      orderData: CreateOrderDto;
+      cart: CreateOrderItemDto[];
+    },
   ) {
-    const { order, cart } = requestData;
-    return this.orderService.create(order, cart);
+    const { orderData, cart } = requestData;
+    return this.orderService.create(orderData, cart);
   }
 
   // @Get()
@@ -24,8 +28,14 @@ export class OrderController {
   //   return this.orderService.findAll();
   // }
 
+  @Get('user/:userId')
+  findAllByUserId(@Param('userId') userId: string) {
+    return this.orderRepository.findAllByUserId(+userId);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
+    console.log('id ===', id);
     return this.orderRepository.findOne(+id);
   }
 

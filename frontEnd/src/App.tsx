@@ -16,6 +16,8 @@ import Home from "./pages/client/Home";
 import ProductPage from "./pages/client/Product";
 import DashBoardProduct from "./wrapper/DashboardProduct";
 import OrderConfirmation from "./pages/client/OrderConfirmation";
+import OrderHistory from "./pages/client/OrderHistory";
+import OrderDetails from "./pages/client/OrderDetails";
 
 function App() {
   return (
@@ -39,10 +41,26 @@ function App() {
           }
         />
         <Route
-          path="/order/confirmation/:id"
+          path="/order/confirmation/:orderId"
           element={
             <LayoutClient>
               <OrderConfirmation />
+            </LayoutClient>
+          }
+        />
+        <Route
+          path="order/history"
+          element={
+            <LayoutClient>
+              <OrderHistory />
+            </LayoutClient>
+          }
+        />
+        <Route
+          path="order/history/:orderId"
+          element={
+            <LayoutClient>
+              <OrderDetails />
             </LayoutClient>
           }
         />

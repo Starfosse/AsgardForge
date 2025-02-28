@@ -100,13 +100,13 @@ CREATE TABLE orders(
     shipping_city VARCHAR(100) NOT NULL,
     shipping_postal_code VARCHAR(10) NOT NULL,
     total DECIMAL(10, 2) NOT NULL,
-    status ENUM('pending', 'processing', 'completed', 'cancelled') NOT NULL DEFAULT 'pending',
+    status ENUM('pending', 'processing','shipped', 'completed', 'cancelled') NOT NULL DEFAULT 'pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY(customer_id) REFERENCES customers(id) ON DELETE CASCADE
 );
 
-CREATE TABLE products_order(
+CREATE TABLE order_items(
     order_id BIGINT NOT NULL,
     product_id BIGINT NOT NULL,
     price DECIMAL(10, 2) NOT NULL,

@@ -37,7 +37,7 @@ export class OrderRepository {
         orderId,
         item.id,
         item.price,
-        item.promotionPrice,
+        item.promotionPrice || item.price,
         item.quantity,
       ]);
 
@@ -54,13 +54,25 @@ export class OrderRepository {
     }
   }
 
-  async findOne(id: number) {
+  async findOne(orderId: number) {
     try {
       const [rows]: any = await this.connection.query(
-        'SELECT * FROM orders WHERE id = ?',
-        [id],
+        "SELECT JSON_OBJECT('id', o.id, 'recipientFirstName', o.recipient_first_name, 'recipientLastName', o.recipient_last_name, 'recipientEmail', o.recipient_email, 'recipientPhone', o.recipient_phone, 'shippingAddress', o.shipping_address, 'shippingCity', o.shipping_city, 'shippingPostalCode', o.shipping_postal_code, 'total', o.total, 'items',(SELECT JSON_ARRAYAGG(JSON_OBJECT('product', JSON_OBJECT('id', p.id, 'name', p.name, 'imagePath', (SELECT pi.image_path FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.image_order LIMIT 1)), 'price', oi.price, 'promotionPrice', oi.promotion_price, 'quantity', oi.quantity)) FROM order_items oi JOIN products p ON oi.product_id = p.id WHERE oi.order_id = o.id)) as 'order' FROM orders o WHERE o.id = ?",
+        [orderId],
       );
-      return rows[0];
+      return rows[0].order;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  async findAllByUserId(userId: number) {
+    try {
+      const [rows]: any = await this.connection.query(
+        "SELECT JSON_OBJECT('id', o.id, 'recipientFirstName', o.recipient_first_name, 'recipientLastName', o.recipient_last_name, 'recipientEmail', o.recipient_email, 'recipientPhone', o.recipient_phone, 'shippingAddress', o.shipping_address, 'shippingCity', o.shipping_city, 'shippingPostalCode', o.shipping_postal_code, 'total', o.total, 'createdAt', o.created_at, 'status', o.status, 'items',(SELECT JSON_ARRAYAGG(JSON_OBJECT('product', JSON_OBJECT('id', p.id, 'name', p.name, 'imagePath', (SELECT pi.image_path FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.image_order LIMIT 1)), 'price', oi.price, 'promotionPrice', oi.promotion_price, 'quantity', oi.quantity)) FROM order_items oi JOIN products p ON oi.product_id = p.id WHERE oi.order_id = o.id)) as 'order' FROM orders o WHERE o.customer_id = ?",
+        [userId],
+      );
+      return rows.map((row) => row.order);
     } catch (error) {
       console.error(error);
     }

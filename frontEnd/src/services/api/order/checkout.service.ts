@@ -1,6 +1,11 @@
 import { CartItem } from "@/contexts/CartContext";
 import { apiClient } from "../client";
-import { OrderCommand } from "./types";
+import {
+  OrderCommand,
+  OrderHistoryDetails,
+  OrderSummary,
+  OrderSummaryConfirmation,
+} from "./types";
 import { OrderCommandForm } from "@/pages/client/Checkout";
 
 export const orderService = {
@@ -19,6 +24,17 @@ export const orderService = {
     return apiClient.fetch("/api/orders", {
       method: "POST",
       body: JSON.stringify({ orderData, cart }),
+    });
+  },
+  getOrder: (orderId: number) => {
+    return apiClient.fetch<OrderHistoryDetails>(`/api/orders/${orderId}`, {
+      method: "GET",
+    });
+  },
+
+  getOrdersByUserId: (userId: number) => {
+    return apiClient.fetch<OrderSummary[]>(`/api/orders/user/${userId}`, {
+      method: "GET",
     });
   },
 };

@@ -4,7 +4,7 @@ import { useCart } from "@/contexts/CartContext";
 import CheckoutForm from "@/forms/checkout/CheckoutForm";
 import { orderService } from "@/services/api";
 import { CreditCard } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export interface OrderCommandForm {
@@ -28,7 +28,7 @@ export default function Checkout() {
   const navigate = useNavigate();
   const { customer } = useAuth();
   const [paymentForm, setPaymentForm] = useState<OrderCommandForm>({
-    customerId: customer?.id,
+    customerId: customer?.id || undefined,
     firstName: "",
     lastName: "",
     email: "",
@@ -42,7 +42,16 @@ export default function Checkout() {
     cvv: "",
     total: calculateTotal(),
   });
-
+  useEffect(() => {
+    setPaymentForm((prev) => ({
+      ...prev,
+      customerId: customer?.id || undefined,
+      firstName: customer?.firstName || "",
+      lastName: customer?.lastName || "",
+      email: customer?.email || "",
+      // phone: customer?.phone || "",
+    }));
+  }, [customer]);
   const [status, setStatus] = useState({
     error: false,
     message: "",
@@ -68,7 +77,7 @@ export default function Checkout() {
       setStatus((prev) => ({ ...prev, isSubmitting: true }));
       const orderId = await orderService.createOrder(paymentForm, cart);
       console.log("orderId ===", orderId);
-      //navigate to page with success and orderId
+      navigate(`/order/confirmation/${orderId}`);
       setStatus((prev) => ({
         ...prev,
         error: false,

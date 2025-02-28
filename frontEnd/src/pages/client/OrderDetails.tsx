@@ -1,11 +1,11 @@
-import Actions from "@/components/order/Actions";
-import CustomerData from "@/components/order/CustomerData";
-import OrderCost from "@/components/order/OrderCost";
+import Actions from "@/components/order-details/Actions";
+import CustomerData from "@/components/order-details/CustomerData";
+import OrderCost from "@/components/order-details/OrderCost";
 import {
   default as ItemsOrdered,
   default as OrderStatus,
-} from "@/components/order/OrderStatus";
-import Support from "@/components/order/Support";
+} from "@/components/order-details/OrderStatus";
+import Support from "@/components/order-details/Support";
 import { useAuth } from "@/contexts/AuthContext";
 import { OrderHistoryDetails, orderService } from "@/services/api";
 import { ChevronLeft } from "lucide-react";

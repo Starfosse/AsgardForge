@@ -1,6 +1,5 @@
 import { useCart } from "@/contexts/CartContext";
 import CartPreview from "@/modals/CartPreview";
-import Cart from "@/pages/client/Cart";
 import { ShoppingCart } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";

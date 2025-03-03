@@ -13,6 +13,10 @@ export interface Customer {
   lastName: string;
   firstName: string;
   email: string;
+  phone?: string;
+  address?: string;
+  city?: string;
+  postalCode?: string;
 }
 
 type AuthContextType = {
@@ -22,6 +26,7 @@ type AuthContextType = {
   login: () => void;
   logout: () => void;
   checkAuthStatus: () => void;
+  updateCustomerData: (data: Customer) => void;
 };
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -66,6 +71,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
+  const updateCustomerData = (data: Customer) => {
+    setCustomer(data);
+  };
+
   const login = () => {
     window.location.href = "/api/auth/google";
   };
@@ -91,6 +100,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
         login,
         logout,
         checkAuthStatus,
+        updateCustomerData,
       }}
     >
       {children}

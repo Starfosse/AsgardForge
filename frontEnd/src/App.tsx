@@ -18,6 +18,7 @@ import DashBoardProduct from "./wrapper/DashboardProduct";
 import OrderConfirmation from "./pages/client/OrderConfirmation";
 import OrderHistory from "./pages/client/OrderHistory";
 import OrderDetails from "./pages/client/OrderDetails";
+import Profile from "./forms/profile/ProfileForm";
 
 function App() {
   return (
@@ -37,6 +38,14 @@ function App() {
           element={
             <LayoutClient>
               <Home />
+            </LayoutClient>
+          }
+        />
+        <Route
+          path="profile"
+          element={
+            <LayoutClient>
+              <Profile />
             </LayoutClient>
           }
         />

@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Connection } from 'mysql2/promise';
 import { DATABASE_CONNECTION } from 'src/database/database.module';
 import { Customer } from './customer.service';
+import { UpdateCustomerDto } from './dto/update-customer.dto';
 
 @Injectable()
 export class CustomerRepository {
@@ -72,6 +73,27 @@ export class CustomerRepository {
     } catch (error) {
       console.error('Error finding customer by id:', error);
       throw new Error('Could not find customer by id');
+    }
+  }
+
+  async update(id: number, data: UpdateCustomerDto): Promise<void> {
+    try {
+      await this.connection.execute(
+        'UPDATE customers SET last_name = ?, first_name = ?, email = ?, phone = ?, address = ?, city = ?, postal_code = ? WHERE id = ?',
+        [
+          data.lastName,
+          data.firstName,
+          data.email,
+          data.phone,
+          data.address,
+          data.city,
+          data.postalCode,
+          id,
+        ],
+      );
+    } catch (error) {
+      console.error('Error updating customer:', error);
+      throw new Error('Could not update customer');
     }
   }
 }

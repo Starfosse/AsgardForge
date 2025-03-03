@@ -29,12 +29,8 @@ export default function InformationsSection({
   const handleGetCategories = async () => {
     try {
       const response = await collectionsService.getCollections();
-      console.log("reponse of categories", response);
       setCategories(response);
-      console.log("categories", categories);
-      console.log("response[0].name ===", response[0].name);
       setFormData((prev) => ({ ...prev, collection: response[0].name }));
-      console.log("formData categories", formData);
     } catch (error) {
       console.error(error);
     }

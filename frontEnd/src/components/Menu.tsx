@@ -5,9 +5,12 @@ import CartPreviewMenu from "./CartPreviewMenu";
 import CartPreviewMenuMobile from "./CartPreviewMenuMobile";
 import { collectionsService } from "@/services/api/collection/collections.service";
 import Collection from "@/services/api/collection/types";
+import ProfileMenu from "@/modals/ProfileMenu";
+import { LogIn } from "lucide-react";
 
 const Menu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const { isAuthenticated, customer, login, logout } = useAuth();
   const [categories, setCategories] = useState<Collection[]>([]);
@@ -24,16 +27,13 @@ const Menu = () => {
 
   return (
     <nav className="bg-stone-900 text-amber-300 shadow-lg border-b-4 border-amber-700">
-      <div className="mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto px-4 sm:px-6 lg:px-12">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
           <Link to="/" className="flex items-center">
             <span className="text-2xl font-runic tracking-wider">
               AsgardForge
             </span>
           </Link>
-
-          {/* Desktop Menu */}
           <div className="hidden md:flex space-x-4 items-center">
             {categories.map((category) => (
               <div
@@ -50,26 +50,19 @@ const Menu = () => {
                 </button>
               </div>
             ))}
-
-            {/* Cart Button with Hover Preview */}
             <CartPreviewMenu />
           </div>
           {isAuthenticated ? (
-            <div className="hidden md:flex md:flex-col items-center ">
-              <div className="text-sm">Bonjour {customer?.firstName}</div>
-              <button className="hover:text-amber-500" onClick={logout}>
-                Se déconnecter
-              </button>
-            </div>
+            <ProfileMenu />
           ) : (
             <button
-              className="hidden md:flex hover:text-amber-500"
+              className="flex items-center hover:text-amber-500 transition duration-300"
               onClick={login}
             >
-              Se connecter
+              <LogIn className="h-4 w-4 mr-2" />
+              <span>Se connecter</span>
             </button>
           )}
-          {/* Mobile Menu Toggle */}
           <div className="md:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -80,7 +73,6 @@ const Menu = () => {
           </div>
         </div>
       </div>
-      {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden bg-stone-900">
           {isAuthenticated ? (

@@ -44,7 +44,10 @@ const Home = () => {
   return (
     <div className="bg-stone-100 text-stone-900">
       {/* Hero Section */}
-      <div className="relative bg-[url('/api/placeholder/1920/1080')] bg-cover bg-center h-[80vh] flex items-center">
+      <div
+        className="relative bg-cover bg-center h-[80vh] flex items-center"
+        style={{ backgroundImage: "url('/homePage.jpg')" }}
+      >
         <div className="absolute inset-0 bg-black opacity-50"></div>
         <div className="relative z-10 container mx-auto text-center text-white px-4">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 text-amber-300">

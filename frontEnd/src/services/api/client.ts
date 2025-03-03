@@ -58,7 +58,6 @@ export const apiClient = {
               const errorData: ApiResponse<any> = await newResponse.json();
               throw new Error(errorData.message || "API Error");
             }
-
             const newData: ApiResponse<T> = await newResponse.json();
             return newData.data as T;
           } else {

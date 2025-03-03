@@ -3,7 +3,7 @@ import { GoogleCallBack } from "./components/GoogleCallBack";
 import ProductForm from "./forms/product/ProductForm";
 import LayoutAdmin from "./layouts/LayoutAdmin";
 import LayoutClient from "./layouts/LayoutClient";
-import Checkout from "./pages/Checkout";
+import Checkout from "./pages/client/Checkout";
 import CustomerList from "./pages/admin/CustomerList";
 import Dashboard from "./pages/admin/Dashboard";
 import OrdersList from "./pages/admin/OrdersList";
@@ -15,6 +15,10 @@ import Contact from "./pages/client/Contact";
 import Home from "./pages/client/Home";
 import ProductPage from "./pages/client/Product";
 import DashBoardProduct from "./wrapper/DashboardProduct";
+import OrderConfirmation from "./pages/client/OrderConfirmation";
+import OrderHistory from "./pages/client/OrderHistory";
+import OrderDetails from "./pages/client/OrderDetails";
+import Profile from "./forms/profile/ProfileForm";
 
 function App() {
   return (
@@ -34,6 +38,38 @@ function App() {
           element={
             <LayoutClient>
               <Home />
+            </LayoutClient>
+          }
+        />
+        <Route
+          path="profile"
+          element={
+            <LayoutClient>
+              <Profile />
+            </LayoutClient>
+          }
+        />
+        <Route
+          path="/order/confirmation/:orderId"
+          element={
+            <LayoutClient>
+              <OrderConfirmation />
+            </LayoutClient>
+          }
+        />
+        <Route
+          path="order/history"
+          element={
+            <LayoutClient>
+              <OrderHistory />
+            </LayoutClient>
+          }
+        />
+        <Route
+          path="order/history/:orderId"
+          element={
+            <LayoutClient>
+              <OrderDetails />
             </LayoutClient>
           }
         />

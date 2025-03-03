@@ -1,7 +1,7 @@
 import { useAuth } from "@/contexts/AuthContext";
 import ProductReviewForm, {
   ProductReview,
-} from "@/forms/productReview/ProductReviewForm";
+} from "@/forms/product-review/ProductReviewForm";
 
 import { ReviewsCustomers } from "@/pages/client/Product";
 import { productsService } from "@/services/api";

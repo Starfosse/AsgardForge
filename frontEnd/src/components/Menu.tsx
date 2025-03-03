@@ -6,6 +6,7 @@ import CartPreviewMenuMobile from "./CartPreviewMenuMobile";
 import { collectionsService } from "@/services/api/collection/collections.service";
 import Collection from "@/services/api/collection/types";
 import ProfileMenu from "@/modals/ProfileMenu";
+import { LogIn } from "lucide-react";
 
 const Menu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -55,10 +56,11 @@ const Menu = () => {
             <ProfileMenu />
           ) : (
             <button
-              className="hidden md:flex hover:text-amber-500"
+              className="flex items-center hover:text-amber-500 transition duration-300"
               onClick={login}
             >
-              Se connecter
+              <LogIn className="h-4 w-4 mr-2" />
+              <span>Se connecter</span>
             </button>
           )}
           <div className="md:hidden">

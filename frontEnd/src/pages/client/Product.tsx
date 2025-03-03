@@ -1,6 +1,6 @@
 import CustomerReviews from "@/components/CustomerReviews";
 import { useCart } from "@/contexts/CartContext";
-import { productsService } from "@/services/api";
+import { productsService, wishlistService } from "@/services/api";
 import Product from "@/services/api/products/types";
 import { Axe, Shield, ShoppingCart, Star } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -21,11 +21,22 @@ const ProductPage = () => {
   const { productId } = useParams<{ productId: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [reviews, setReviews] = useState<ReviewsCustomers[]>([]);
+  const [isWishlisted, setIsWishlisted] = useState(false);
   const { addToCart } = useCart();
+
+  const handleClick = async () => {
+    if (!productId) return;
+    console.log("productId10", productId);
+    await wishlistService.addToWishlist(productId);
+    // let res;
+    // isWishlisted
+    //   ? (res = await wishlistService.removeFromWishlist(productId))
+    //   : (res = await wishlistService.addToWishlist(productId));
+  };
 
   const getAverageRating = () => {
     if (reviews.length === 0) {
-      return 0; // ou autre valeur par défaut
+      return 0;
     }
     const res =
       reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
@@ -42,9 +53,15 @@ const ProductPage = () => {
     const reviews = await productsService.getReviews(parseInt(productId));
     setReviews(reviews);
   };
+  const fetchWishlist = async () => {
+    if (!productId) return;
+    const res = await wishlistService.isWishlisted(productId);
+    if (res) setIsWishlisted(true);
+  };
   useEffect(() => {
     fetchProduct();
     fetchReviews();
+    fetchWishlist();
   }, [productId]);
 
   const details = [
@@ -61,10 +78,16 @@ const ProductPage = () => {
       text: "Authentique reproduction historique",
     },
   ];
+
+  const getCssByWishlist = async () => {
+    if (!productId) return;
+    const className = !isWishlisted
+      ? "h-7 w-7 pb-2 stroke-current fill-transparent transition-colors duration-300 group-hover:fill-red-500 group-hover:stroke-red-500"
+      : "h-7 w-7 pb-2 stroke-red-500 fill-red-500 transition-colors duration-300 group-hover:fill-transparent group-hover:stroke-current";
+  };
   return (
     <div className="bg-stone-100 min-h-screen py-12">
       <div className="container mx-auto px-4 grid md:grid-cols-2 gap-12">
-        {/* Galerie Images */}
         {product && product.images && (
           <div>
             <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-6">
@@ -91,12 +114,24 @@ const ProductPage = () => {
             </div>
           </div>
         )}
-        {/* Détails Produit */}
         <div>
-          <h1 className="text-4xl font-bold mb-4 text-stone-800">
-            {product?.name}
-          </h1>
-
+          <div className="flex gap-2 items-center">
+            <h1 className="text-4xl font-bold mb-4 text-stone-800">
+              {product?.name}
+            </h1>
+            <div className="group cursor-pointer" onClick={handleClick}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className={
+                  "h-7 w-7 pb-2 stroke-current fill-transparent transition-colors duration-300 group-hover:fill-red-500 group-hover:stroke-red-500"
+                }
+                viewBox="0 0 24 24"
+                strokeWidth="2"
+              >
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+              </svg>
+            </div>
+          </div>
           <div className="flex items-center mb-6">
             <span className="text-3xl font-bold text-amber-700 mr-6">
               {product?.price} €
@@ -110,10 +145,7 @@ const ProductPage = () => {
               </span>
             </div>
           </div>
-
           <p className="text-stone-600 mb-6">{product?.description}</p>
-
-          {/* Points Clés */}
           <div className="mb-6 space-y-3">
             {details.map((detail, index) => (
               <div key={index} className="flex items-center space-x-3">
@@ -122,8 +154,6 @@ const ProductPage = () => {
               </div>
             ))}
           </div>
-
-          {/* Quantité et Panier */}
           <div className="flex items-center space-x-6 mb-8">
             <div className="flex items-center space-x-4">
               <button
@@ -148,8 +178,6 @@ const ProductPage = () => {
               Ajouter au Panier
             </button>
           </div>
-
-          {/* Spécifications */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <h3 className="text-2xl font-semibold mb-4 text-stone-800">
               Spécifications

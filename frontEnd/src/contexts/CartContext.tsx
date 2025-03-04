@@ -1,4 +1,5 @@
 import Product from "@/services/api/products/types";
+import { WishlistProduct } from "@/services/api/wishlist/types";
 import { createContext, useContext, useState } from "react";
 
 export interface CartItem {
@@ -13,6 +14,7 @@ export interface CartItem {
 type CartContextType = {
   cart: CartItem[];
   addToCart: (item: Product, quantity: number) => void;
+  addToCartFromWishlist: (item: WishlistProduct) => void;
   substractFromCart: (id: number, quantity: number) => void;
   removeFromCart: (id: number) => void;
   clearCart: () => void;
@@ -43,6 +45,33 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
             : undefined,
           quantity: quantity,
           image: item.images?.[0]?.image_path || "",
+        },
+      ]);
+    }
+  };
+
+  const addToCartFromWishlist = (item: WishlistProduct) => {
+    const existingItem = cart.find((i) => i.id === item.id);
+    if (existingItem) {
+      setCart(
+        cart.map((i) =>
+          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+        )
+      );
+    } else {
+      setCart([
+        ...cart,
+        {
+          id: item.id,
+          name: item.name,
+          price: item.promotionPrice
+            ? Number(item.promotionPrice)
+            : Number(item.price),
+          promotionPrice: item.promotionPrice
+            ? Number(item.promotionPrice)
+            : undefined,
+          quantity: 1,
+          image: item.imagePath,
         },
       ]);
     }
@@ -79,6 +108,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       value={{
         cart,
         addToCart,
+        addToCartFromWishlist,
         removeFromCart,
         clearCart,
         substractFromCart,

@@ -35,7 +35,6 @@ export class OrderController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    console.log('id ===', id);
     return this.orderRepository.findOne(+id);
   }
 

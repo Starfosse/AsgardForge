@@ -47,6 +47,14 @@ CREATE TABLE products (
     FOREIGN KEY (collection_id) REFERENCES collections(id)
 );
 
+CREATE TABLE wishlist_user_product(
+    customer_id INT NOT NULL,
+    product_id BIGINT NOT NULL,
+    PRIMARY KEY(customer_id, product_id),
+    FOREIGN KEY(customer_id) REFERENCES customers(id) ON DELETE CASCADE,
+    FOREIGN KEY(product_id) REFERENCES products(id) ON DELETE CASCADE
+);
+
 CREATE TABLE product_images (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     product_id BIGINT NOT NULL,

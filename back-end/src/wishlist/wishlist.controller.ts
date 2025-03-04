@@ -17,16 +17,14 @@ export class WishlistController {
   @Post(':productId')
   @UseGuards(AuthGuard('jwt'))
   create(@CurrentUser() customer, @Param('productId') productId: string) {
-    console.log('productId1', productId);
-    console.log('customer1', customer);
     return this.wishlistRepository.create(+productId, customer.id);
   }
 
   @Get()
   @UseGuards(AuthGuard('jwt'))
-  findAll(@CurrentUser() customer) {
-    console.log('customer2', customer);
-    return this.wishlistRepository.findAll(customer.id);
+  async findAll(@CurrentUser() customer) {
+    const res = await this.wishlistRepository.findAll(customer.id);
+    return res;
   }
 
   @Get(':productId')
@@ -35,16 +33,7 @@ export class WishlistController {
     @CurrentUser() customer,
     @Param('productId') productId: string,
   ) {
-    console.log('productId3', productId);
-    console.log('customer3', customer);
-    const response = await this.wishlistRepository.findOne(
-      +productId,
-      customer.id,
-    );
-    if (response) {
-      return true;
-    }
-    return false;
+    return await this.wishlistRepository.findOne(+productId, customer.id);
   }
 
   @Delete(':productId')

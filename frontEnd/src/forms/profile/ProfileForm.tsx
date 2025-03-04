@@ -25,7 +25,6 @@ export default function ProfileForm() {
     message: "",
     isSubmitting: false,
   });
-  console.log(customer);
   const [formData, setFormData] = useState<Customer>({
     id: 0,
     googleId: "",

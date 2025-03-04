@@ -2,17 +2,8 @@ import Orders from "@/components/order-history/Orders";
 import SearchCommand from "@/components/order-history/SearchCommand";
 import { useAuth } from "@/contexts/AuthContext";
 import filterOrders from "@/lib/filterOrders";
-import { formatDate } from "@/lib/formatDate";
-import GetStatusBadge from "@/lib/GetStatusBadge";
 import { OrderItem, orderService, OrderSummary } from "@/services/api";
-import {
-  Calendar,
-  ChevronRight,
-  Clock,
-  ExternalLink,
-  Package,
-  Search,
-} from "lucide-react";
+import { Package } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -29,7 +20,6 @@ export default function OrderHistory() {
       setLoading(true);
       setError(null);
       const response = await orderService.getOrdersByUserId(customer?.id!);
-      console.log("Commandes récupérées:", response);
       setOrders(response);
     } catch (err) {
       console.error("Erreur lors de la récupération des commandes:", err);
@@ -48,10 +38,6 @@ export default function OrderHistory() {
   }, [isAuthenticated]);
 
   const filteredOrders = filterOrders({ orders, searchTerm, selectedPeriod });
-
-  const getTotalItems = (items: OrderItem[]) => {
-    return items.reduce((sum, item) => sum + item.quantity, 0);
-  };
 
   if (!isAuthenticated) {
     return (

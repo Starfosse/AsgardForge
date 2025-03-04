@@ -26,12 +26,13 @@ const ProductPage = () => {
 
   const handleClick = async () => {
     if (!productId) return;
-    console.log("productId10", productId);
-    await wishlistService.addToWishlist(productId);
-    // let res;
-    // isWishlisted
-    //   ? (res = await wishlistService.removeFromWishlist(productId))
-    //   : (res = await wishlistService.addToWishlist(productId));
+    if (isWishlisted) {
+      await wishlistService.removeFromWishlist(productId);
+      setIsWishlisted(false);
+    } else {
+      await wishlistService.addToWishlist(productId);
+      setIsWishlisted(true);
+    }
   };
 
   const getAverageRating = () => {
@@ -56,7 +57,8 @@ const ProductPage = () => {
   const fetchWishlist = async () => {
     if (!productId) return;
     const res = await wishlistService.isWishlisted(productId);
-    if (res) setIsWishlisted(true);
+    if (res === true) setIsWishlisted(true);
+    else setIsWishlisted(false);
   };
   useEffect(() => {
     fetchProduct();
@@ -79,11 +81,11 @@ const ProductPage = () => {
     },
   ];
 
-  const getCssByWishlist = async () => {
+  const getCssByWishlist = () => {
     if (!productId) return;
-    const className = !isWishlisted
-      ? "h-7 w-7 pb-2 stroke-current fill-transparent transition-colors duration-300 group-hover:fill-red-500 group-hover:stroke-red-500"
-      : "h-7 w-7 pb-2 stroke-red-500 fill-red-500 transition-colors duration-300 group-hover:fill-transparent group-hover:stroke-current";
+    return !isWishlisted
+      ? "h-7 w-7 pb-2 stroke-black fill-transparent transition-colors duration-300 group-hover:fill-red-500 group-hover:stroke-red-500"
+      : "h-7 w-7 pb-2 stroke-red-500 fill-red-500 transition-colors duration-300 group-hover:fill-transparent group-hover:stroke-black";
   };
   return (
     <div className="bg-stone-100 min-h-screen py-12">
@@ -122,9 +124,7 @@ const ProductPage = () => {
             <div className="group cursor-pointer" onClick={handleClick}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className={
-                  "h-7 w-7 pb-2 stroke-current fill-transparent transition-colors duration-300 group-hover:fill-red-500 group-hover:stroke-red-500"
-                }
+                className={getCssByWishlist()}
                 viewBox="0 0 24 24"
                 strokeWidth="2"
               >

@@ -75,7 +75,7 @@ export default function ProfileMenu() {
             </Link>
             <Link
               className="flex items-center px-4 py-2 text-amber-300 hover:bg-stone-700 transition duration-300"
-              to="/wishlist"
+              to="/profile/wishlist"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

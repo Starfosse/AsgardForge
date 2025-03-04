@@ -76,7 +76,6 @@ export default function Checkout() {
     try {
       setStatus((prev) => ({ ...prev, isSubmitting: true }));
       const orderId = await orderService.createOrder(paymentForm, cart);
-      console.log("orderId ===", orderId);
       navigate(`/order/confirmation/${orderId}`);
       setStatus((prev) => ({
         ...prev,

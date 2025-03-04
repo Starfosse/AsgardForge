@@ -19,6 +19,7 @@ import OrderConfirmation from "./pages/client/OrderConfirmation";
 import OrderHistory from "./pages/client/OrderHistory";
 import OrderDetails from "./pages/client/OrderDetails";
 import Profile from "./forms/profile/ProfileForm";
+import Wishlist from "./pages/client/Wishlist";
 
 function App() {
   return (
@@ -70,6 +71,15 @@ function App() {
           element={
             <LayoutClient>
               <OrderDetails />
+            </LayoutClient>
+          }
+        />
+        <Route
+          path="profile/wishlist"
+          element={
+            <LayoutClient>
+              {" "}
+              <Wishlist />
             </LayoutClient>
           }
         />

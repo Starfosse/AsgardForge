@@ -1,8 +1,8 @@
 import { apiClient } from "../client";
+import { WishlistProduct } from "./types";
 
 export const wishlistService = {
   addToWishlist: async (productId: string) => {
-    console.log("productId2", productId);
     await apiClient.fetch(`/api/wishlists/${productId}`, { method: "POST" });
   },
   removeFromWishlist: async (productId: string) => {
@@ -14,6 +14,15 @@ export const wishlistService = {
     const response = await apiClient.fetch(`/api/wishlists/${productId}`, {
       method: "GET",
     });
+    return response;
+  },
+  getWishlistProducts: async () => {
+    const response = await apiClient.fetch<WishlistProduct[]>(
+      "/api/wishlists",
+      {
+        method: "GET",
+      }
+    );
     return response;
   },
 };

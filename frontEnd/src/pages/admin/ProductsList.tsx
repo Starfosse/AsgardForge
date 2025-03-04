@@ -16,36 +16,29 @@ export default function ProductsList() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
-
   useEffect(() => {
     fetchProducts();
     fetchCategories();
   }, []);
-
   const fetchProducts = async () => {
     const response = await productsService.getProducts();
     setProducts(response);
   };
-
   const fetchCategories = async () => {
     const response = await collectionsService.getCollections();
     setCollections(response);
   };
-
   const handleDelete = async (id: number) => {
     productsService.deleteProduct(id).then(() => {
       setProducts((prev) => prev.filter((product) => product.id !== id));
     });
   };
-
   const handleEdit = (id: number) => {
     navigate(`/dashboard/products/${id}`);
   };
-
   const handleCreateProduct = () => {
     navigate("/dashboard/products/new");
   };
-
   const handleSubmitCategory = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -67,7 +60,6 @@ export default function ProductsList() {
       setIsSubmitting(false);
     }
   };
-
   const openEditModal = (collection: Collection) => {
     setCollectionForm({
       name: collection.name,
@@ -76,13 +68,11 @@ export default function ProductsList() {
     setIsEditMode(true);
     setIsModalOpen(true);
   };
-
   const openCreateModal = () => {
     setCollectionForm({ name: "", description: "" });
     setIsEditMode(false);
     setIsModalOpen(true);
   };
-
   const handleDeleteCollection = async (collectionId: number) => {
     if (
       window.confirm("Êtes-vous sûr de vouloir supprimer cette catégorie ?")
@@ -95,7 +85,6 @@ export default function ProductsList() {
       }
     }
   };
-
   return (
     <div className="p-4 relative">
       <div className="flex justify-between items-center mb-6">

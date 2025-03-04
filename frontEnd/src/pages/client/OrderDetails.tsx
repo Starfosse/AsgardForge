@@ -19,18 +19,14 @@ export default function OrderDetails() {
   const [error, setError] = useState<string | null>(null);
   const { isAuthenticated, customer } = useAuth();
   const navigate = useNavigate();
-
   useEffect(() => {
     if (!isAuthenticated) {
       return;
     }
-
     fetchOrderDetails();
   }, [orderId, isAuthenticated]);
-
   const fetchOrderDetails = async () => {
     if (!orderId) return;
-
     try {
       setLoading(true);
       setError(null);
@@ -39,7 +35,6 @@ export default function OrderDetails() {
         setError("Vous n'êtes pas autorisé à consulter cette commande");
         return;
       }
-
       setOrder(data);
     } catch (err) {
       console.error(
@@ -53,7 +48,6 @@ export default function OrderDetails() {
       setLoading(false);
     }
   };
-
   if (!isAuthenticated) {
     return (
       <div className="bg-stone-100 min-h-screen py-12">
@@ -112,7 +106,6 @@ export default function OrderDetails() {
             </button>
           </div>
         )}
-
         {!loading && !error && order && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-8">

@@ -44,7 +44,6 @@ export default function OrdersList() {
       status: "expédié",
     },
   ];
-
   const getBackground = (status: OrderStatus) => {
     switch (status) {
       case "en attente":
@@ -57,7 +56,6 @@ export default function OrdersList() {
         return "bg-blue-500";
     }
   };
-
   return (
     <div className="relative rounded-lg border border-gray-200 overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200">

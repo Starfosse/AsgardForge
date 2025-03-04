@@ -28,7 +28,6 @@ export default function SearchCommand({
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-
         <div className="flex items-center space-x-2">
           <Calendar className="h-5 w-5 text-stone-500" />
           <select

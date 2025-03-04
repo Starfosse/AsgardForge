@@ -45,11 +45,9 @@ const items = [
 export function AppSidebar() {
   const { setOpen } = useSidebar();
   const isActiveRef = useRef(true);
-
   function handleOpen() {
     isActiveRef.current = !isActiveRef.current;
   }
-
   return (
     <Sidebar
       collapsible="icon"

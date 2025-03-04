@@ -24,7 +24,6 @@ export default function DeliveryAdress({
           disabled={!isEditing || isSubmitting}
         />
       </div>
-
       <div className="grid md:grid-cols-2 gap-6 mb-6">
         <div>
           <label className="block text-stone-700 mb-2">Ville</label>
@@ -37,7 +36,6 @@ export default function DeliveryAdress({
             disabled={!isEditing || isSubmitting}
           />
         </div>
-
         <div>
           <label className="block text-stone-700 mb-2">Code postal</label>
           <input

@@ -8,27 +8,22 @@ interface OrderCostProps {
 export default function OrderCost({ order }: OrderCostProps) {
   const calculateSavings = () => {
     if (!order) return { regularTotal: "0.00", savings: "0.00" };
-
     let regularTotal = 0;
     let promotionalTotal = 0;
-
     order.items.forEach((item) => {
       const regularPrice = item.price * item.quantity;
       regularTotal += regularPrice;
-
       const promoPrice =
         item.promotionPrice > 0
           ? item.promotionPrice * item.quantity
           : regularPrice;
       promotionalTotal += promoPrice;
     });
-
     return {
       regularTotal: regularTotal.toFixed(2),
       savings: (regularTotal - promotionalTotal).toFixed(2),
     };
   };
-
   const { regularTotal, savings } = calculateSavings();
   const hasSavings = parseFloat(savings) > 0;
   return (
@@ -42,7 +37,6 @@ export default function OrderCost({ order }: OrderCostProps) {
             <Calendar className="h-4 w-4 mr-2" />
             <span>Commandé le {formatDate(order.createdAt)}</span>
           </div>
-
           <div className="flex justify-between">
             <span className="text-stone-600">Sous-total</span>
             <span className="text-stone-800 font-medium">{regularTotal} €</span>
@@ -57,7 +51,6 @@ export default function OrderCost({ order }: OrderCostProps) {
             <span className="text-stone-600">Livraison</span>
             <span className="text-stone-800 font-medium">Gratuite</span>
           </div>
-
           {order.paymentMethod && (
             <div className="pt-4 mt-4 border-t border-stone-100">
               <div className="flex items-center">

@@ -68,7 +68,6 @@ export default function LastReviews() {
                   ))}
                 </div>
               </div>
-
               <span className="text-white">{comment.date}</span>
             </div>
             <div className="flex justify-between"></div>

@@ -1,4 +1,4 @@
-import { OrderCommand } from "@/pages/client/Checkout";
+import { OrderCommand } from "@/services/api";
 
 interface DeliveryAdressProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -9,7 +9,6 @@ interface DeliveryAdressProps {
 export default function DeliveryAdress({
   handleChange,
   paymentForm,
-  isSubmitting,
 }: DeliveryAdressProps) {
   return (
     <div className="bg-white rounded-lg shadow-md p-6">

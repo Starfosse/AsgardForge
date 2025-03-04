@@ -21,11 +21,9 @@ export default function InformationsSection({
   setFormData,
 }: InformationsSectionProps) {
   const [categories, setCategories] = useState<Collection[]>([]);
-
   useEffect(() => {
     handleGetCategories();
   }, []);
-
   const handleGetCategories = async () => {
     try {
       const response = await collectionsService.getCollections();

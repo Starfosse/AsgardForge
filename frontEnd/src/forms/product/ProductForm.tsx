@@ -45,7 +45,6 @@ export default function ProductForm() {
   });
   const [previews, setPreviews] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
-
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -54,7 +53,6 @@ export default function ProductForm() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const files = Array.from(e.target.files);
@@ -84,7 +82,6 @@ export default function ProductForm() {
       imagesFiles: [...prev.imagesFiles!, ...files],
     }));
   };
-
   const removeImage = (index: number) => {
     URL.revokeObjectURL(previews[index]);
     setPreviews((prev) => prev.filter((_, i) => i !== index));
@@ -196,7 +193,6 @@ export default function ProductForm() {
             {status.message}
           </div>
         )}
-
         {status.submitted && !status.error && (
           <div className="p-4 bg-green-50 border-l-4 border-green-500 text-green-700">
             {status.message}

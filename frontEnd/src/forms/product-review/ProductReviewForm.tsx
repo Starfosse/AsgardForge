@@ -42,7 +42,6 @@ export default function ProductReviewForm({
               <label htmlFor="rating" className="text-gray-800 -mt-4">
                 Note :
               </label>
-
               <div
                 className="flex space-x-1 "
                 onMouseLeave={() => setReviewStars(formData.rating)}

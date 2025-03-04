@@ -11,7 +11,6 @@ export default function OrderConfirmation() {
   const { customer } = useAuth();
   const [order, setOrder] = useState<OrderSummaryConfirmation | null>(null);
   const [loading, setLoading] = useState(true);
-
   const fetchOrder = async () => {
     try {
       setLoading(true);
@@ -23,13 +22,11 @@ export default function OrderConfirmation() {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     if (orderId) {
       fetchOrder();
     }
   }, [orderId]);
-
   if (loading) {
     return (
       <div className="bg-stone-100 min-h-screen flex items-center justify-center">
@@ -39,7 +36,6 @@ export default function OrderConfirmation() {
       </div>
     );
   }
-
   if (!order) {
     return (
       <div className="bg-stone-100 min-h-screen py-12">
@@ -60,8 +56,6 @@ export default function OrderConfirmation() {
       </div>
     );
   }
-
-  // Calculer le total sans promotion pour afficher le montant économisé si applicable
   const calculateSavings = () => {
     let regularTotal = 0;
     let promotionalTotal = 0;
@@ -76,20 +70,16 @@ export default function OrderConfirmation() {
           : regularPrice;
       promotionalTotal += promoPrice;
     });
-
     return {
       regularTotal: regularTotal.toFixed(2),
       savings: (regularTotal - promotionalTotal).toFixed(2),
     };
   };
-
   const { regularTotal, savings } = calculateSavings();
   const hasSavings = parseFloat(savings) > 0;
-
   return (
     <div className="bg-stone-100 min-h-screen py-12">
       <div className="container mx-auto px-4">
-        {/* En-tête de confirmation */}
         <div className="bg-white rounded-lg shadow-lg p-8 mb-8 text-center">
           <div className="inline-flex items-center justify-center bg-green-100 p-3 rounded-full mb-6">
             <Check className="w-8 h-8 text-green-600" />
@@ -112,10 +102,7 @@ export default function OrderConfirmation() {
             </span>
           </div>
         </div>
-
-        {/* Résumé de la commande */}
         <div className="grid md:grid-cols-3 gap-8">
-          {/* Détails de la commande */}
           <div className="md:col-span-2">
             <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
               <div className="bg-amber-700 px-6 py-4">
@@ -123,7 +110,6 @@ export default function OrderConfirmation() {
                   Détails de la Commande
                 </h2>
               </div>
-
               <div className="p-6">
                 <div className="border-b border-stone-200 pb-6 mb-6">
                   <h3 className="text-xl font-semibold mb-4 text-stone-800">
@@ -171,8 +157,6 @@ export default function OrderConfirmation() {
                     </div>
                   ))}
                 </div>
-
-                {/* Informations de livraison */}
                 <div>
                   <h3 className="text-xl font-semibold mb-4 text-stone-800">
                     Informations de Livraison
@@ -221,8 +205,6 @@ export default function OrderConfirmation() {
               </div>
             </div>
           </div>
-
-          {/* Récapitulatif */}
           <div>
             <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
               <div className="bg-stone-800 px-6 py-4">
@@ -257,8 +239,6 @@ export default function OrderConfirmation() {
                 </div>
               </div>
             </div>
-
-            {/* Statut de la commande */}
             <div className="bg-white rounded-lg shadow-lg overflow-hidden">
               <div className="p-6">
                 <h3 className="text-xl font-semibold mb-4 text-stone-800">
@@ -303,8 +283,6 @@ export default function OrderConfirmation() {
                 </div>
               </div>
             </div>
-
-            {/* Boutons d'action */}
             <div className="mt-8 space-y-4">
               <Link
                 to="/"

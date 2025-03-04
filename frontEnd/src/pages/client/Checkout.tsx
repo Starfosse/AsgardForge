@@ -57,12 +57,10 @@ export default function Checkout() {
     message: "",
     isSubmitting: false,
   });
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setPaymentForm((prev: OrderCommandForm) => ({ ...prev, [name]: value }));
   };
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!paymentForm.customerId) {
@@ -92,14 +90,12 @@ export default function Checkout() {
       setStatus((prev) => ({ ...prev, isSubmitting: false }));
     }
   };
-
   return (
     <div className="bg-stone-100 min-h-screen py-12">
       <div className="container mx-auto px-4">
         <h1 className="text-4xl font-bold mb-8 text-center text-stone-800 flex items-center justify-center">
           <CreditCard className="mr-4 text-amber-700" /> Finaliser la Commande
         </h1>
-
         <div className="grid md:grid-cols-3 gap-8">
           <CheckoutForm
             handleChange={handleChange}

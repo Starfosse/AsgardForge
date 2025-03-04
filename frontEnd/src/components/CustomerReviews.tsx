@@ -31,7 +31,6 @@ export default function CustomerReviews({
     message: "",
     submitted: false,
   });
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const listIdCustomer = reviewsCustomers.map((review) => review.customerId);
@@ -59,7 +58,6 @@ export default function CustomerReviews({
       });
       return;
     }
-
     try {
       setStatus({ error: false, message: "", submitted: false });
       const reviewData = {
@@ -69,7 +67,6 @@ export default function CustomerReviews({
         review: formData.review,
       };
       productsService.addReview(reviewData);
-
       setStatus({
         error: false,
         message: "Commentaire envoyé avec succès",

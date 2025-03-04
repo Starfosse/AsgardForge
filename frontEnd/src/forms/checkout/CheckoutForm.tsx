@@ -1,7 +1,7 @@
-import { OrderCommand } from "@/pages/client/Checkout";
 import DeliveryAdress from "./DeliveryAdress";
 import PersonnalInformation from "./PersonnalInformation";
 import PaymentInformation from "./PaymentInformation";
+import { OrderCommand } from "@/services/api";
 
 interface CheckoutFormProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;

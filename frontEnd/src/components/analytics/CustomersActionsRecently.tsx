@@ -61,7 +61,6 @@ const CustomersActionsRecently = () => {
       point: 10,
     },
   ];
-
   return (
     <DashBoardAnalytics className="h-[300px] col-span-1 flex flex-col space-y-4 overflow-x-auto whitespace-nowrap">
       <h2 className="font-semibold text-white">

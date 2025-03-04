@@ -39,11 +39,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [customer, setCustomer] = useState<Customer | null>(null);
-
   useEffect(() => {
     checkAuthStatus();
   }, []);
-
   const checkAuthStatus = async () => {
     try {
       const token = localStorage.getItem("access_token");
@@ -70,15 +68,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setIsLoading(false);
     }
   };
-
   const updateCustomerData = (data: Customer) => {
     setCustomer(data);
   };
-
   const login = () => {
     window.location.href = "/api/auth/google";
   };
-
   const logout = async () => {
     try {
       await authService.logout();
@@ -90,7 +85,6 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       setIsAuthenticated(false);
     }
   };
-
   return (
     <AuthContext.Provider
       value={{

@@ -1,15 +1,13 @@
-import { OrderCommand } from "./CheckoutForm";
+import { OrderCommandForm } from "@/pages/client/Checkout";
 
 interface PaymentInformationProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  paymentForm: OrderCommand;
-  isSubmitting: boolean;
+  paymentForm: OrderCommandForm;
 }
 
 export default function PaymentInformation({
   handleChange,
   paymentForm,
-  isSubmitting,
 }: PaymentInformationProps) {
   return (
     <div className="bg-white rounded-lg shadow-md p-6">

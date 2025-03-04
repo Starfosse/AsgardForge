@@ -25,23 +25,19 @@ export default function Support() {
   const [selectedConversation, setSelectedConversation] =
     useState<Conversation | null>(null);
   const [newMessage, setNewMessage] = useState("");
-
   const handleSendMessage = () => {
     if (!newMessage.trim() || !selectedConversation) return;
-
     const newMessageObj: Message = {
       id: `m${Date.now()}`,
       content: newMessage,
       sender: "support",
       timestamp: new Date(),
     };
-
     const updatedConversation = {
       ...selectedConversation,
       messages: [...selectedConversation.messages, newMessageObj],
       updatedAt: new Date(),
     };
-
     setConversations(
       conversations.map((conv) =>
         conv.id === selectedConversation.id ? updatedConversation : conv
@@ -50,7 +46,6 @@ export default function Support() {
     setSelectedConversation(updatedConversation);
     setNewMessage("");
   };
-
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat("fr-FR", {
       hour: "2-digit",
@@ -60,7 +55,6 @@ export default function Support() {
       year: "2-digit",
     }).format(date);
   };
-
   const fetchAllConversations = async () => {
     const res = await contactService.getAllConversations();
     setConversations(
@@ -80,10 +74,8 @@ export default function Support() {
   useEffect(() => {
     fetchAllConversations();
   }, []);
-
   return (
     <div className="flex h-screen max-h-[850px] bg-white rounded-lg shadow-lg overflow-hidden">
-      {/* Liste des conversations */}
       <div className="w-80 h-full border-r border-gray-200 flex flex-col">
         <div className="p-4 border-b border-gray-200">
           <h2 className="text-lg font-semibold">Conversations</h2>
@@ -117,8 +109,6 @@ export default function Support() {
           ))}
         </div>
       </div>
-
-      {/* Zone de messages */}
       <div className="flex-1 h-full flex flex-col bg-gray-50">
         {selectedConversation ? (
           <>

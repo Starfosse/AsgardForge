@@ -19,7 +19,6 @@ export default function OrderSummary({
           <ShoppingBag className="mr-2 text-amber-700" />
           Récapitulatif
         </h2>
-
         <div className="space-y-4 mb-6">
           {cart.map((item) => (
             <div key={item.id} className="flex justify-between items-center">
@@ -41,9 +40,7 @@ export default function OrderSummary({
               </span>
             </div>
           ))}
-
           <hr className="border-stone-300" />
-
           <div className="flex justify-between">
             <span>Sous-total</span>
             <span>{total} €</span>
@@ -58,7 +55,6 @@ export default function OrderSummary({
             <span>{total} €</span>
           </div>
         </div>
-
         <button
           type="submit"
           form="checkoutForm"

@@ -10,21 +10,17 @@ import { LogIn } from "lucide-react";
 
 const Menu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const { isAuthenticated, customer, login, logout } = useAuth();
   const [categories, setCategories] = useState<Collection[]>([]);
   const navigate = useNavigate();
-
   useEffect(() => {
     fetchCategories();
   }, []);
-
   const fetchCategories = async () => {
     const response = await collectionsService.getCollections();
     setCategories(response);
   };
-
   return (
     <nav className="bg-stone-900 text-amber-300 shadow-lg border-b-4 border-amber-700">
       <div className="mx-auto px-4 sm:px-6 lg:px-12">
@@ -102,7 +98,6 @@ const Menu = () => {
                 }
               >
                 <div className="flex items-center space-x-2">
-                  {/* {category.icon} */}
                   <span>{category.name}</span>
                 </div>
                 <span>{activeCategory === category.name ? "▲" : "▼"}</span>

@@ -28,7 +28,6 @@ export function getRandomFakeData(range: number) {
 
 export default function SalesByMonth() {
   const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"];
-
   const fakeData: SalesDataByCategory[] = months.map((month) => ({
     month: month,
     weapons: getRandomFakeData(800),
@@ -36,11 +35,9 @@ export default function SalesByMonth() {
     clothing: getRandomFakeData(800),
     books: getRandomFakeData(800),
   }));
-
   const getTotalSalesByCategory = (category: string) => {
     return fakeData.reduce((acc, curr) => acc + curr[category], 0);
   };
-
   const getGrowthRate = (category: string) => {
     return (
       ((fakeData[fakeData.length - 1][category] - fakeData[0][category]) /
@@ -48,13 +45,11 @@ export default function SalesByMonth() {
       100
     ).toFixed(2);
   };
-
   const getTotalSales = () => {
     return fakeData.reduce((acc, curr) => {
       return acc + curr.weapons + curr.electronics + curr.clothing + curr.books;
     }, 0);
   };
-
   const getTotalSalesGrowthRate = () => {
     return (
       ((getTotalSales() -

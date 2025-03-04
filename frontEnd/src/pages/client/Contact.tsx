@@ -43,7 +43,6 @@ export default function Contact() {
     orderId: "",
     initialMessage: "",
   });
-
   const handleCreateConversation = () => {
     if (!customer) return;
     const tmpId = nanoid();
@@ -97,12 +96,10 @@ export default function Contact() {
         }
       }
     );
-
     setSelectedConversation(conversation);
     setIsCreateModalOpen(false);
     setNewConversation({ subject: "", orderId: "", initialMessage: "" });
   };
-
   const handleSendMessage = () => {
     if (!newMessage.trim() || !selectedConversation) return;
     const tmpId = nanoid();
@@ -117,7 +114,6 @@ export default function Contact() {
       messages: [...selectedConversation.messages, newMessageObj],
       lastUpdate: new Date(),
     };
-
     setConversations(
       conversations.map((conv) =>
         conv.id === selectedConversation.id ? updatedConversation : conv
@@ -149,7 +145,6 @@ export default function Contact() {
     );
     setNewMessage("");
   };
-
   const fetchConversations = async () => {
     if (!customer) return;
     const res = await contactService.getConversations(customer.id);
@@ -163,11 +158,9 @@ export default function Contact() {
       }))
     );
   };
-
   useEffect(() => {
     fetchConversations();
   }, [customer]);
-
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat("fr-FR", {
       hour: "2-digit",
@@ -177,7 +170,6 @@ export default function Contact() {
       year: "2-digit",
     }).format(date);
   };
-
   return (
     <div className="bg-stone-100 min-h-screen">
       <div className="container mx-auto px-4 py-8">
@@ -190,7 +182,6 @@ export default function Contact() {
             questions.
           </p>
         </div>
-
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="flex h-[600px]">
             <div className="w-80 border-r border-stone-200">
@@ -246,8 +237,6 @@ export default function Contact() {
                 ))}
               </div>
             </div>
-
-            {/* Zone de messages */}
             <div className="flex-1 flex flex-col">
               {selectedConversation ? (
                 <>

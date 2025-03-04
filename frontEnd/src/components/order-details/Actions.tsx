@@ -18,7 +18,6 @@ export default function Actions({ order }: ActionsProps) {
           <FileText className="h-4 w-4 mr-2" />
           Imprimer la facture
         </button>
-
         <Link
           to="/"
           className="flex items-center w-full justify-center bg-amber-700 hover:bg-amber-600 text-white font-medium py-2 px-4 rounded-lg transition duration-300"

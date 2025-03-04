@@ -1,4 +1,4 @@
-import { OrderCommand } from "./CheckoutForm";
+import { OrderCommand } from "@/services/api";
 
 interface PersonnalInformationProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;

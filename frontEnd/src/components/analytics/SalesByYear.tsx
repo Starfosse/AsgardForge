@@ -21,7 +21,6 @@ interface SalesByYearsByMonth {
 
 export default function SalesByYear() {
   const months = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin"];
-
   const fakeSalesByYearsByMonth: SalesByYearsByMonth[] = months.map(
     (month) => ({
       month: month,

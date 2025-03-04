@@ -2,10 +2,6 @@ import { AlertTriangle, Check, Clock, Package, Truck } from "lucide-react";
 
 type status = "pending" | "processing" | "shipped" | "completed" | "cancelled";
 
-// interface GetStatusBadgeProps {
-//   status: "pending" | "processing" | "shipped" | "completed" | "cancelled";
-// }
-
 export default function GetOrderStatusInfo(status: status) {
   switch (status) {
     case "pending":

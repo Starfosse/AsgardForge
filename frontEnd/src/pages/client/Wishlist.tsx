@@ -14,7 +14,6 @@ const Wishlist = () => {
   const [removedItems, setRemovedItems] = useState<number[]>([]);
   const { isAuthenticated, login } = useAuth();
   const { addToCartFromWishlist } = useCart();
-
   const fetchWishlistProducts = async () => {
     try {
       setLoading(true);
@@ -29,7 +28,6 @@ const Wishlist = () => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     if (isAuthenticated) {
       fetchWishlistProducts();
@@ -49,16 +47,13 @@ const Wishlist = () => {
       console.error("Erreur lors de la modification de la wishlist:", error);
     }
   };
-
   const handleAddToCart = (product: WishlistProduct) => {
     addToCartFromWishlist(product);
   };
-
   const calculateDiscount = (price: number, promoPrice: number | null) => {
     if (!promoPrice || promoPrice >= price) return null;
     return Math.round(((price - promoPrice) / price) * 100);
   };
-
   if (!isAuthenticated) {
     return (
       <div className="bg-stone-100 min-h-screen py-12">
@@ -83,7 +78,6 @@ const Wishlist = () => {
       </div>
     );
   }
-
   if (loading) {
     return (
       <div className="bg-stone-100 min-h-screen flex items-center justify-center">
@@ -93,7 +87,6 @@ const Wishlist = () => {
       </div>
     );
   }
-
   return (
     <div className="bg-stone-100 min-h-screen py-12">
       <div className="container mx-auto px-4">

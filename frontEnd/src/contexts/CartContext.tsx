@@ -49,7 +49,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       ]);
     }
   };
-
   const addToCartFromWishlist = (item: WishlistProduct) => {
     const existingItem = cart.find((i) => i.id === item.id);
     if (existingItem) {
@@ -76,11 +75,9 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       ]);
     }
   };
-
   const removeFromCart = (id: number) => {
     setCart(cart.filter((item) => item.id !== id));
   };
-
   const substractFromCart = (id: number, quantity: number) => {
     if (cart.find((i) => i.id === id)!.quantity - quantity === 0) {
       removeFromCart(id);
@@ -97,7 +94,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const clearCart = () => {
     setCart([]);
   };
-
   const calculateTotal = () => {
     return cart
       .reduce((total, item) => total + item.price * item.quantity, 0)

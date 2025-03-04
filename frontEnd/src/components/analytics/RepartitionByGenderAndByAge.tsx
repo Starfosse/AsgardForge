@@ -92,7 +92,6 @@ export default function CustomersDistribution() {
       percentage: (198 / 200) * 100,
     },
   ];
-
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       return (
@@ -105,11 +104,9 @@ export default function CustomersDistribution() {
     }
     return null;
   };
-
   const renderColorfulLegendText = (value: string) => {
     return <span className="text-gray-300">{value}</span>;
   };
-
   return (
     <DashBoardAnalytics className="h-[350px] whitespace-nowrap overflow-x-auto">
       <h2 className="text-white font-semibold">

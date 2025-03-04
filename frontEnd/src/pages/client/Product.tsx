@@ -23,7 +23,6 @@ const ProductPage = () => {
   const [reviews, setReviews] = useState<ReviewsCustomers[]>([]);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const { addToCart } = useCart();
-
   const handleClick = async () => {
     if (!productId) return;
     if (isWishlisted) {
@@ -34,7 +33,6 @@ const ProductPage = () => {
       setIsWishlisted(true);
     }
   };
-
   const getAverageRating = () => {
     if (reviews.length === 0) {
       return 0;
@@ -43,7 +41,6 @@ const ProductPage = () => {
       reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length;
     return res;
   };
-
   const fetchProduct = async () => {
     if (!productId) return;
     const response = await productsService.getProduct(parseInt(productId));
@@ -65,7 +62,6 @@ const ProductPage = () => {
     fetchReviews();
     fetchWishlist();
   }, [productId]);
-
   const details = [
     {
       icon: <Axe className="w-6 h-6 text-amber-700" />,
@@ -80,7 +76,6 @@ const ProductPage = () => {
       text: "Authentique reproduction historique",
     },
   ];
-
   const getCssByWishlist = () => {
     if (!productId) return;
     return !isWishlisted
@@ -211,7 +206,6 @@ const ProductPage = () => {
               </div>
             }
           </div>
-
           <CustomerReviews
             productId={productId}
             reviewsCustomers={reviews}

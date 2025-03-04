@@ -17,11 +17,9 @@ export default function CollectionPage() {
     );
     setProductsCollection(products);
   };
-
   useEffect(() => {
     fetchCategory();
   }, [id]);
-
   const filteredProducts = productsCollection.filter(
     (product) =>
       Number(product.price) >= priceRange[0] &&
@@ -33,9 +31,7 @@ export default function CollectionPage() {
         <h1 className="text-4xl font-bold mb-8 text-center text-stone-800">
           {collection ? collection.name : "Tous les produits"}
         </h1>
-
         <div className="mb-8 flex flex-wrap justify-center gap-4">
-          {/* Filtre par prix */}
           <div className="flex items-center gap-4">
             <span>Prix:</span>
             <input
@@ -49,8 +45,6 @@ export default function CollectionPage() {
             <span>{priceRange[1]} €</span>
           </div>
         </div>
-
-        {/* Grille de Produits */}
         <div className="grid md:grid-cols-3 gap-8">
           {filteredProducts.map((product) => (
             <div
@@ -80,7 +74,6 @@ export default function CollectionPage() {
             </div>
           ))}
         </div>
-
         {filteredProducts.length === 0 && (
           <div className="text-center text-stone-600 py-12">
             Aucun produit ne correspond à vos critères.

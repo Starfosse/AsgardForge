@@ -48,7 +48,6 @@ const WeekDayRushHour = () => {
     }
     return null;
   };
-
   return (
     <DashBoardAnalytics className="h-[665px] col-span-5 flex flex-col space-y-4">
       <h2 className="font-semibold text-white">Heures d'affluence :</h2>

@@ -2,7 +2,7 @@ import Orders from "@/components/order-history/Orders";
 import SearchCommand from "@/components/order-history/SearchCommand";
 import { useAuth } from "@/contexts/AuthContext";
 import filterOrders from "@/lib/filterOrders";
-import { OrderItem, orderService, OrderSummary } from "@/services/api";
+import { orderService, OrderSummary } from "@/services/api";
 import { Package } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -14,7 +14,6 @@ export default function OrderHistory() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedPeriod, setSelectedPeriod] = useState("all");
   const { customer, isAuthenticated } = useAuth();
-
   const fetchOrders = async () => {
     try {
       setLoading(true);
@@ -30,15 +29,12 @@ export default function OrderHistory() {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     if (isAuthenticated) {
       fetchOrders();
     }
   }, [isAuthenticated]);
-
   const filteredOrders = filterOrders({ orders, searchTerm, selectedPeriod });
-
   if (!isAuthenticated) {
     return (
       <div className="bg-stone-100 min-h-screen py-12">
@@ -62,7 +58,6 @@ export default function OrderHistory() {
       </div>
     );
   }
-
   return (
     <div className="bg-stone-100 min-h-screen py-12">
       <div className="container mx-auto px-4">
@@ -86,7 +81,6 @@ export default function OrderHistory() {
             <p className="text-stone-600">Chargement de vos commandes...</p>
           </div>
         )}
-
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-800 rounded-lg p-4 mb-6">
             <p>{error}</p>
@@ -98,7 +92,6 @@ export default function OrderHistory() {
             </button>
           </div>
         )}
-
         {!loading && !error && filteredOrders.length === 0 && (
           <div className="bg-white rounded-lg shadow-md p-8 text-center">
             <Package className="w-16 h-16 text-stone-400 mx-auto mb-4" />

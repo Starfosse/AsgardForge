@@ -1,4 +1,4 @@
-interface Images {
+export interface Images {
   id: number;
   product_id: number;
   image_order: number;

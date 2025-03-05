@@ -1,3 +1,4 @@
+import { Customer } from "@/contexts/AuthContext";
 import { Star } from "lucide-react";
 import { useState } from "react";
 
@@ -19,7 +20,7 @@ interface ProductReviewFormProps {
     message: string;
     submitted: boolean;
   };
-  customer: any;
+  customer: Customer | null;
 }
 
 export default function ProductReviewForm({

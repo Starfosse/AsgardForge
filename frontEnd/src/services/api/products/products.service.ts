@@ -9,7 +9,6 @@ export const productsService = {
   getProducts: () => {
     return apiClient.fetch<Product[]>("/api/products", { method: "GET" });
   },
-
   deleteProduct: (id: number) => {
     return apiClient.fetch(`/api/products/${id}`, { method: "DELETE" });
   },
@@ -29,7 +28,6 @@ export const productsService = {
       method: "GET",
     });
   },
-
   addReview: (formData: any) => {
     return apiClient.fetch("/api/reviews", {
       method: "POST",

@@ -12,7 +12,7 @@ export default function ErrorAuthentificaiton({
 }: ErrorAuthentificationProps) {
   const { login } = useAuth();
   return (
-    <div className="bg-stone-100 min-h-screen py-12">
+    <div className="bg-stone-100 flex-grow py-12">
       <div className="container mx-auto px-4 text-center">
         <div className="bg-white rounded-lg shadow-lg p-8 max-w-lg mx-auto">
           <AlertCircle className="w-16 h-16 text-amber-600 mx-auto mb-6" />

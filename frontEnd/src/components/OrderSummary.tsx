@@ -1,4 +1,5 @@
 import { CartItem } from "@/contexts/CartContext";
+import Card from "@/wrapper/Card";
 import { ShoppingBag } from "lucide-react";
 
 interface OrderSummaryProps {
@@ -14,7 +15,7 @@ export default function OrderSummary({
 }: OrderSummaryProps) {
   return (
     <div>
-      <div className="bg-white rounded-lg shadow-md p-6 sticky top-12">
+      <Card variant="primary" className="p-6 sticky top-12">
         <h2 className="text-2xl font-bold mb-6 text-stone-800 flex items-center">
           <ShoppingBag className="mr-2 text-amber-700" />
           Récapitulatif
@@ -62,7 +63,7 @@ export default function OrderSummary({
         >
           Confirmer la Commande
         </button>
-      </div>
+      </Card>
       {status.error && (
         <div className="p-4 bg-red-50 border-l-4 border-red-500 text-red-700">
           {status.message}

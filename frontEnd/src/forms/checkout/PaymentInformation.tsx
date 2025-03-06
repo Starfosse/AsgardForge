@@ -1,16 +1,19 @@
 import { OrderCommandForm } from "@/pages/client/Checkout";
+import Card from "@/wrapper/Card";
 
 interface PaymentInformationProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   paymentForm: OrderCommandForm;
+  isSubmitting: boolean;
 }
 
 export default function PaymentInformation({
   handleChange,
   paymentForm,
+  isSubmitting,
 }: PaymentInformationProps) {
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <Card variant="primary" className="p-6">
       <h2 className="text-2xl font-bold mb-6 text-stone-800">Paiement</h2>
       <div className="space-y-4">
         <div>
@@ -24,6 +27,7 @@ export default function PaymentInformation({
             onChange={handleChange}
             className="w-full p-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
             required
+            disabled={isSubmitting}
           />
         </div>
         <div>
@@ -38,6 +42,7 @@ export default function PaymentInformation({
             className="w-full p-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
             required
             maxLength={16}
+            disabled={isSubmitting}
           />
         </div>
         <div className="grid grid-cols-2 gap-4">
@@ -53,6 +58,7 @@ export default function PaymentInformation({
               placeholder="MM/AA"
               className="w-full p-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
               required
+              disabled={isSubmitting}
             />
           </div>
           <div>
@@ -67,10 +73,11 @@ export default function PaymentInformation({
               className="w-full p-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
               required
               maxLength={3}
+              disabled={isSubmitting}
             />
           </div>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

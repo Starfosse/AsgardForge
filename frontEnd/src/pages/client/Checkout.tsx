@@ -42,6 +42,12 @@ export default function Checkout() {
     cvv: "",
     total: calculateTotal(),
   });
+  const [status, setStatus] = useState({
+    error: false,
+    message: "",
+    isSubmitting: false,
+  });
+
   useEffect(() => {
     setPaymentForm((prev) => ({
       ...prev,
@@ -49,18 +55,15 @@ export default function Checkout() {
       firstName: customer?.firstName || "",
       lastName: customer?.lastName || "",
       email: customer?.email || "",
-      // phone: customer?.phone || "",
+      phone: customer?.phone || "",
     }));
   }, [customer]);
-  const [status, setStatus] = useState({
-    error: false,
-    message: "",
-    isSubmitting: false,
-  });
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setPaymentForm((prev: OrderCommandForm) => ({ ...prev, [name]: value }));
   };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!paymentForm.customerId) {
@@ -90,6 +93,7 @@ export default function Checkout() {
       setStatus((prev) => ({ ...prev, isSubmitting: false }));
     }
   };
+
   return (
     <div className="bg-stone-100 min-h-screen py-12">
       <div className="container mx-auto px-4">

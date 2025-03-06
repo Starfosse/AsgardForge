@@ -1,15 +1,19 @@
 import { collectionsService } from "@/services/api/collection/collections.service";
-import Collection from "@/services/api/collection/types";
 import Product from "@/services/api/products/types";
+import Card from "@/wrapper/Card";
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
 export default function CollectionPage() {
-  const [collection, setCollection] = useState<Collection | null>(null);
   const [productsCollection, setProductsCollection] = useState<Product[]>([]);
   const [priceRange, setPriceRange] = useState([0, 500]);
   const { id } = useParams<{ id: string }>();
   const { categoryName } = useParams<{ categoryName: string }>();
+
+  useEffect(() => {
+    fetchCategory();
+  }, [id]);
+
   const fetchCategory = async () => {
     if (!id) return;
     const products = await collectionsService.getProductsByCollection(
@@ -17,19 +21,18 @@ export default function CollectionPage() {
     );
     setProductsCollection(products);
   };
-  useEffect(() => {
-    fetchCategory();
-  }, [id]);
+
   const filteredProducts = productsCollection.filter(
     (product) =>
       Number(product.price) >= priceRange[0] &&
       Number(product.price) <= priceRange[1]
   );
+
   return (
     <div className="bg-stone-100 min-h-screen">
       <div className="container mx-auto px-4 py-12">
         <h1 className="text-4xl font-bold mb-8 text-center text-stone-800">
-          {collection ? collection.name : "Tous les produits"}
+          {categoryName}
         </h1>
         <div className="mb-8 flex flex-wrap justify-center gap-4">
           <div className="flex items-center gap-4">
@@ -47,12 +50,13 @@ export default function CollectionPage() {
         </div>
         <div className="grid md:grid-cols-3 gap-8">
           {filteredProducts.map((product) => (
-            <div
+            <Card
+              variant="secondaryHidden"
               key={product.id}
-              className="bg-white rounded-lg shadow-lg overflow-hidden hover:scale-105 transition duration-300"
+              className="hover:scale-105 transition duration-300"
             >
               <img
-                // src={product.images[0].image_path} //rattacher les images aux products
+                src={product.images![0].image_path}
                 alt={product.name}
                 className="w-full h-64 object-cover"
               />
@@ -71,7 +75,7 @@ export default function CollectionPage() {
                   </Link>
                 </div>
               </div>
-            </div>
+            </Card>
           ))}
         </div>
         {filteredProducts.length === 0 && (

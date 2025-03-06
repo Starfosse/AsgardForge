@@ -10,12 +10,14 @@ export default function Card({
   variant = "primary",
 }: CardProps) {
   const variantClasses = {
-    primary: "bg-white rounded-lg shadow-md",
+    primary: "rounded-lg shadow-md",
     primaryHidden: "bg-amber-700 overflow-hidden",
-    secondary: "bg-white rounded-lg shadow-lg ",
-    secondaryHidden: "bg-white rounded-lg shadow-lg overflow-hidden",
+    secondary: "rounded-lg shadow-lg ",
+    secondaryHidden: "rounded-lg shadow-lg overflow-hidden",
   };
   return (
-    <div className={`${variantClasses[variant]} ${className}`}>{children}</div>
+    <div className={`bg-white ${variantClasses[variant]} ${className}`}>
+      {children}
+    </div>
   );
 }

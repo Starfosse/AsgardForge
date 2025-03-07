@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   UploadedFiles,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
@@ -15,6 +16,9 @@ import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { ProductService } from './product.service';
 import { ProductRepository } from './product.repository';
+import { AuthGuard } from '@nestjs/passport';
+import { CurrentUser } from 'src/customer/decorators/current-customer.decorator';
+import { Customer } from 'src/customer/entities/customer.entity';
 
 @Controller('products')
 export class ProductController {
@@ -37,10 +41,15 @@ export class ProductController {
       }),
     }),
   )
+  @UseGuards(AuthGuard('jwt'))
   async create(
+    @CurrentUser() user: Customer,
     @Body() createProductDto: CreateProductDto,
     @UploadedFiles() images: Array<Express.Multer.File>,
   ) {
+    if (user.email !== process.env.ADMIN_USER_EMAIL) {
+      throw new Error('You are not authorized to create a collection');
+    }
     try {
       const productData = {
         ...createProductDto,
@@ -124,12 +133,17 @@ export class ProductController {
     }
   }
 
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
-  async remove(@Param('id') name: number) {
+  async remove(@CurrentUser() user: Customer, @Param('id') name: number) {
+    if (user.email !== process.env.ADMIN_USER_EMAIL) {
+      throw new Error('You are not authorized to create a collection');
+    }
     return this.productRepository.deleteProduct(name);
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(
     FilesInterceptor('images', 10, {
       storage: diskStorage({
@@ -143,10 +157,14 @@ export class ProductController {
     }),
   )
   async update(
+    @CurrentUser() user: Customer,
     @Param('id') id: string,
     @Body() updateProductDto: CreateProductDto,
     @UploadedFiles() images: Array<Express.Multer.File>,
   ) {
+    if (user.email !== process.env.ADMIN_USER_EMAIL) {
+      throw new Error('You are not authorized to create a collection');
+    }
     try {
       const productData = {
         ...updateProductDto,

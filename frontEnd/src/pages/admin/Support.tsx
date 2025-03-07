@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/formatDate";
 import { contactService } from "@/services/api";
 import { MessageSquare, Send, User } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -25,6 +26,11 @@ export default function Support() {
   const [selectedConversation, setSelectedConversation] =
     useState<Conversation | null>(null);
   const [newMessage, setNewMessage] = useState("");
+
+  useEffect(() => {
+    fetchAllConversations();
+  }, []);
+
   const handleSendMessage = () => {
     if (!newMessage.trim() || !selectedConversation) return;
     const newMessageObj: Message = {
@@ -46,15 +52,7 @@ export default function Support() {
     setSelectedConversation(updatedConversation);
     setNewMessage("");
   };
-  const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat("fr-FR", {
-      hour: "2-digit",
-      minute: "2-digit",
-      day: "2-digit",
-      month: "2-digit",
-      year: "2-digit",
-    }).format(date);
-  };
+
   const fetchAllConversations = async () => {
     const res = await contactService.getAllConversations();
     setConversations(
@@ -71,9 +69,7 @@ export default function Support() {
       }))
     );
   };
-  useEffect(() => {
-    fetchAllConversations();
-  }, []);
+
   return (
     <div className="flex h-screen max-h-[850px] bg-white rounded-lg shadow-lg overflow-hidden">
       <div className="w-80 h-full border-r border-gray-200 flex flex-col">
@@ -103,7 +99,7 @@ export default function Support() {
                 {conversation.subject}
               </p>
               <p className="text-xs text-gray-400 mt-1">
-                {formatDate(conversation.createdAt)}
+                {formatDate(conversation.createdAt.toString())}
               </p>
             </div>
           ))}
@@ -151,7 +147,7 @@ export default function Support() {
                             : "text-gray-400"
                         }`}
                       >
-                        {formatDate(message.timestamp)}
+                        {formatDate(message.timestamp.toString())}
                       </p>
                     </div>
                   </div>

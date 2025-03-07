@@ -7,10 +7,14 @@ import {
   Patch,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { CollectionService } from './collection.service';
 import { CollectionRepository } from './collection.repository';
 import { CreateCollectionDto } from './dto/create-collection-dto';
+import { AuthGuard } from '@nestjs/passport';
+import { Customer } from 'src/customer/entities/customer.entity';
+import { CurrentUser } from 'src/customer/decorators/current-customer.decorator';
 
 @Controller('collections')
 export class CollectionController {
@@ -20,7 +24,14 @@ export class CollectionController {
   ) {}
 
   @Post()
-  async create(@Body() createCollectionDto: CreateCollectionDto) {
+  @UseGuards(AuthGuard('jwt'))
+  async create(
+    @CurrentUser() user: Customer,
+    @Body() createCollectionDto: CreateCollectionDto,
+  ) {
+    if (user.email !== process.env.ADMIN_USER_EMAIL) {
+      throw new Error('You are not authorized to create a collection');
+    }
     try {
       return await this.collectionService.createCollection(
         createCollectionDto.name,
@@ -53,10 +64,15 @@ export class CollectionController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard('jwt'))
   async update(
     @Param('id') id: string,
+    @CurrentUser() user: Customer,
     @Body() createCollectionDto: CreateCollectionDto,
   ) {
+    if (user.email !== process.env.ADMIN_USER_EMAIL) {
+      throw new Error('You are not authorized to create a collection');
+    }
     try {
       console.log('id', id);
       return await this.collectionService.updateCollection(
@@ -71,7 +87,11 @@ export class CollectionController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: number) {
+  @UseGuards(AuthGuard('jwt'))
+  async remove(@CurrentUser() user: Customer, @Param('id') id: number) {
+    if (user.email !== process.env.ADMIN_USER_EMAIL) {
+      throw new Error('You are not authorized to create a collection');
+    }
     try {
       return await this.collectionRepository.delete(id);
     } catch (error) {

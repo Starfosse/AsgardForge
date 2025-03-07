@@ -33,26 +33,40 @@ const ProductPage = () => {
   }, [productId]);
 
   const fetchProduct = async () => {
-    setLoading(true);
     if (!productId) return;
-    const response = await productsService.getProduct(parseInt(productId));
-    setProduct(response);
+    try {
+      setLoading(true);
+      const response = await productsService.getProduct(parseInt(productId));
+      setProduct(response);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   const fetchWishlist = async () => {
     if (!productId) return;
-    const res = await wishlistService.isWishlisted(productId);
-    if (res === true) setIsWishlisted(true);
-    else setIsWishlisted(false);
-    setLoading(false);
+    try {
+      const res = await wishlistService.isWishlisted(productId);
+      if (res === true) setIsWishlisted(true);
+      else setIsWishlisted(false);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fetchReviews = async () => {
     if (!productId) return;
-    setLoadingReviews(true);
-    const reviews = await productsService.getReviews(parseInt(productId));
-    setReviews(reviews);
-    setLoadingReviews(false);
+    try {
+      setLoadingReviews(true);
+      const reviews = await productsService.getReviews(parseInt(productId));
+      setReviews(reviews);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoadingReviews(false);
+    }
   };
 
   if (loading) {

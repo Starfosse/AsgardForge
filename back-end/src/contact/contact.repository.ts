@@ -55,7 +55,7 @@ export class ContactRepository {
 
   async findAllConversationsAndMessages() {
     const [results]: any = await this.connection.query(
-      "SELECT JSON_OBJECT('id', c.id, 'subject', c.subject, 'customerId', u.id, 'firstName', u.first_name, 'lastName', u.last_name, 'status', c.status, 'created_at', c.created_at, 'messages', (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', m.id, 'sender', m.sender, 'content', m.content, 'created_at', m.created_at)) FROM messages_support m WHERE m.conversation_id = c.id)) as conversation FROM conversations_support c INNER JOIN customer u ON c.customer_id = u.id",
+      "SELECT JSON_OBJECT('id', c.id, 'subject', c.subject, 'customerId', u.id, 'firstName', u.first_name, 'lastName', u.last_name, 'status', c.status, 'created_at', c.created_at, 'messages', (SELECT JSON_ARRAYAGG(JSON_OBJECT('id', m.id, 'sender', m.sender, 'content', m.content, 'created_at', m.created_at)) FROM messages_support m WHERE m.conversation_id = c.id)) as conversation FROM conversations_support c INNER JOIN customers u ON c.customer_id = u.id",
     );
     return results.map((row) =>
       typeof row.conversation === 'string'

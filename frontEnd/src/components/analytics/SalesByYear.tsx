@@ -30,6 +30,7 @@ export default function SalesByYear() {
       "2024": getRandomFakeData(1000),
     })
   );
+
   return (
     <DashBoardAnalytics className="col-span-1 space-y-4 overflow-x-auto">
       <ResponsiveContainer width="100%" height="100%">

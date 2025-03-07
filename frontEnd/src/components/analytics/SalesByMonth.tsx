@@ -20,6 +20,7 @@ interface SalesDataByCategory {
   electronics: number;
   clothing: number;
   books: number;
+  [key: string]: string | number;
 }
 
 export function getRandomFakeData(range: number) {
@@ -35,21 +36,26 @@ export default function SalesByMonth() {
     clothing: getRandomFakeData(800),
     books: getRandomFakeData(800),
   }));
-  const getTotalSalesByCategory = (category: string) => {
-    return fakeData.reduce((acc, curr) => acc + curr[category], 0);
+
+  const getTotalSalesByCategory = (category: keyof SalesDataByCategory) => {
+    return fakeData.reduce((acc, curr) => acc + (curr[category] as number), 0);
   };
-  const getGrowthRate = (category: string) => {
+
+  const getGrowthRate = (category: keyof SalesDataByCategory) => {
     return (
-      ((fakeData[fakeData.length - 1][category] - fakeData[0][category]) /
-        fakeData[0][category]) *
+      (((fakeData[fakeData.length - 1][category] as number) -
+        (fakeData[0][category] as number)) /
+        (fakeData[0][category] as number)) *
       100
     ).toFixed(2);
   };
+
   const getTotalSales = () => {
     return fakeData.reduce((acc, curr) => {
       return acc + curr.weapons + curr.electronics + curr.clothing + curr.books;
     }, 0);
   };
+
   const getTotalSalesGrowthRate = () => {
     return (
       ((getTotalSales() -
@@ -64,6 +70,7 @@ export default function SalesByMonth() {
       100
     ).toFixed(2);
   };
+
   return (
     <DashBoardAnalytics
       className={

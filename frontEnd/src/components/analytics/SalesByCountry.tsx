@@ -36,6 +36,7 @@ export default function SalesByCountry() {
       sales: getRandomFakeData(10000),
     },
   ];
+
   return (
     <DashBoardAnalytics className="h-[300px] flex flex-col space-y-4 whitespace-nowrap overflow-x-auto">
       <h2 className="font-semibold text-white">Ventes par pays :</h2>

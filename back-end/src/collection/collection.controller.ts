@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
 } from '@nestjs/common';
 import { CollectionService } from './collection.service';
 import { CollectionRepository } from './collection.repository';
@@ -21,7 +22,7 @@ export class CollectionController {
   @Post()
   async create(@Body() createCollectionDto: CreateCollectionDto) {
     try {
-      return await this.collectionRepository.create(
+      return await this.collectionService.createCollection(
         createCollectionDto.name,
         createCollectionDto.description,
       );
@@ -51,14 +52,15 @@ export class CollectionController {
     }
   }
 
-  @Patch(':name')
+  @Patch(':id')
   async update(
-    @Param('name') name: string,
+    @Param('id') id: string,
     @Body() createCollectionDto: CreateCollectionDto,
   ) {
     try {
-      return await this.collectionRepository.update(
-        name,
+      console.log('id', id);
+      return await this.collectionService.updateCollection(
+        +id,
         createCollectionDto.name,
         createCollectionDto.description,
       );

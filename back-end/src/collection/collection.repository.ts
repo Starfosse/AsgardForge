@@ -45,13 +45,13 @@ export class CollectionRepository {
     }
   }
 
-  async update(collection: string, newCollection: string, description: string) {
+  async update(id: number, newCollection: string, description: string) {
     try {
       const [result]: any = await this.connection.query(
-        'UPDATE collections SET name = ?, description = ? WHERE name = ?',
-        [newCollection, description, collection],
+        'UPDATE collections SET name = ?, description = ? WHERE id = ?',
+        [newCollection, description, id],
       );
-      return result.insertId;
+      return id;
     } catch (error) {
       console.error(error);
       throw new Error('Could not update collection');

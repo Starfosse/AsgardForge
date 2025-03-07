@@ -1,3 +1,4 @@
+import LoadingScreen from "@/components/LoadingScreen";
 import { collectionsService } from "@/services/api/collection/collections.service";
 import Product from "@/services/api/products/types";
 import Card from "@/wrapper/Card";
@@ -7,6 +8,7 @@ import { Link, useParams } from "react-router-dom";
 export default function CollectionPage() {
   const [productsCollection, setProductsCollection] = useState<Product[]>([]);
   const [priceRange, setPriceRange] = useState([0, 500]);
+  const [loading, setLoading] = useState(true);
   const { id } = useParams<{ id: string }>();
   const { categoryName } = useParams<{ categoryName: string }>();
 
@@ -16,10 +18,17 @@ export default function CollectionPage() {
 
   const fetchCategory = async () => {
     if (!id) return;
-    const products = await collectionsService.getProductsByCollection(
-      parseInt(id)
-    );
-    setProductsCollection(products);
+    try {
+      setLoading(true);
+      const products = await collectionsService.getProductsByCollection(
+        parseInt(id)
+      );
+      setProductsCollection(products);
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const filteredProducts = productsCollection.filter(
@@ -27,6 +36,10 @@ export default function CollectionPage() {
       Number(product.price) >= priceRange[0] &&
       Number(product.price) <= priceRange[1]
   );
+
+  if (loading) {
+    return <LoadingScreen title="collection" />;
+  }
 
   return (
     <div className="bg-stone-100 min-h-screen">

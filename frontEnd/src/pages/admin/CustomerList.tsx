@@ -35,6 +35,7 @@ export default function CustomerList() {
       country: "France",
     },
   ];
+
   return (
     <div className="p-4 relative rounded-lg border border-gray-200 overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-200">

@@ -47,6 +47,7 @@ export default function LastReviews() {
       date: "2021-09-24",
     },
   ];
+
   return (
     <DashBoardAnalytics className="h-[300px] col-span-1 flex flex-col justify-center space-y-4 text-gray-400 overflow-x-auto whitespace-nowrap">
       <h2 className="font-semibold text-white pt-20">Derniers avis : </h2>

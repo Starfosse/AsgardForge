@@ -3,11 +3,15 @@ import { useEffect, useState } from "react";
 import LoadingScreen from "./LoadingScreen";
 import { useNavigate } from "react-router-dom";
 import { productsService } from "@/services/api";
+import { useAuth } from "@/contexts/AuthContext";
+import JustAdmin from "./JustAdmin";
 
 export default function ProductsListAdmin() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [allowed, setAllowed] = useState(false);
+  const { customer } = useAuth();
 
   useEffect(() => {
     fetchProducts();
@@ -30,6 +34,10 @@ export default function ProductsListAdmin() {
   };
 
   const handleDelete = async (id: number) => {
+    if (customer?.email !== import.meta.env.VITE_ADMIN_EMAIL) {
+      setAllowed(true);
+      return;
+    }
     productsService.deleteProduct(id).then(() => {
       setProducts((prev) => prev.filter((product) => product.id !== id));
     });
@@ -38,6 +46,11 @@ export default function ProductsListAdmin() {
   if (loading) {
     return <LoadingScreen title="liste de produits" />;
   }
+
+  if (allowed) {
+    return <JustAdmin allowed={allowed} setAllowed={setAllowed} />;
+  }
+
   return (
     <div className="overflow-x-auto shadow-sm rounded-lg border border-gray-200 mb-8">
       <table className="min-w-full divide-y divide-gray-200">

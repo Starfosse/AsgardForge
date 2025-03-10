@@ -2,6 +2,8 @@ import { collectionsService } from "@/services/api/collection/collections.servic
 import LoadingScreen from "./LoadingScreen";
 import { useEffect, useState } from "react";
 import Collection from "@/services/api/collection/types";
+import JustAdmin from "./JustAdmin";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface CollectionsListProps {
   openEditModal: (collection: any) => void;
@@ -15,6 +17,8 @@ export default function CollectionsList({
   setCollections,
 }: CollectionsListProps) {
   const [loading, setLoading] = useState(false);
+  const [allowed, setAllowed] = useState(false);
+  const { customer } = useAuth();
 
   useEffect(() => {
     fetchCategories();
@@ -35,6 +39,10 @@ export default function CollectionsList({
     if (
       window.confirm("Êtes-vous sûr de vouloir supprimer cette catégorie ?")
     ) {
+      if (customer?.email !== import.meta.env.VITE_ADMIN_EMAIL) {
+        setAllowed(true);
+        return;
+      }
       try {
         await collectionsService.deleteCollection(collectionId);
         fetchCategories();
@@ -46,6 +54,10 @@ export default function CollectionsList({
 
   if (loading) {
     return <LoadingScreen title="liste de produits" />;
+  }
+
+  if (allowed) {
+    return <JustAdmin allowed={allowed} setAllowed={setAllowed} />;
   }
 
   return (

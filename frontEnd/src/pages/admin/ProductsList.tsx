@@ -1,5 +1,7 @@
 import CollectionsList from "@/components/CollectionsList";
+import JustAdmin from "@/components/JustAdmin";
 import ProductsListAdmin from "@/components/ProductsListAdmin";
+import { useAuth } from "@/contexts/AuthContext";
 import CollectionForm from "@/forms/collection/CollectionForm";
 import { collectionsService } from "@/services/api/collection/collections.service";
 import Collection from "@/services/api/collection/types";
@@ -17,6 +19,8 @@ export default function ProductsList() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [collections, setCollections] = useState<Collection[]>([]);
   const navigate = useNavigate();
+  const [allowed, setAllowed] = useState(false);
+  const { customer } = useAuth();
 
   const handleCreateProduct = () => {
     navigate("/dashboard/products/new");
@@ -24,6 +28,10 @@ export default function ProductsList() {
 
   const handleSubmitCategory = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (customer?.email !== import.meta.env.VITE_ADMIN_EMAIL) {
+      setAllowed(true);
+      return;
+    }
     setIsSubmitting(true);
     try {
       if (isEditMode) {
@@ -68,6 +76,10 @@ export default function ProductsList() {
     setIsEditMode(false);
     setIsModalOpen(true);
   };
+
+  if (allowed) {
+    return <JustAdmin allowed={allowed} setAllowed={setAllowed} />;
+  }
 
   return (
     <div className="p-4 relative">

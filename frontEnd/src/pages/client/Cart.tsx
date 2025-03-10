@@ -1,17 +1,34 @@
+import JustAdmin from "@/components/JustAdmin";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
 import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
   const { cart, addToCart, substractFromCart } = useCart();
-  const { isAuthenticated, login } = useAuth();
+  const { isAuthenticated, login, customer } = useAuth();
   const navigate = useNavigate();
+  const [allowed, setAllowed] = useState(false);
+
+  const navigateTo = (url: string) => {
+    if (customer?.email !== import.meta.env.VITE_ADMIN_EMAIL) {
+      setAllowed(true);
+      return;
+    }
+    navigate(url);
+  };
+
   const calculateTotal = () => {
     return cart
       .reduce((total, item) => total + item.price * item.quantity, 0)
       .toFixed(2);
   };
+
+  if (allowed) {
+    return <JustAdmin allowed={allowed} setAllowed={setAllowed} />;
+  }
+
   return (
     <div className="bg-stone-100 min-h-screen py-12">
       <div className="container mx-auto px-4">
@@ -105,7 +122,7 @@ const Cart = () => {
                 </div>
                 {isAuthenticated ? (
                   <button
-                    onClick={() => navigate("/checkout")}
+                    onClick={() => navigateTo("/checkout")}
                     className="w-full bg-amber-700 text-white py-3 rounded-lg hover:bg-amber-600 transition"
                   >
                     Passer la Commande

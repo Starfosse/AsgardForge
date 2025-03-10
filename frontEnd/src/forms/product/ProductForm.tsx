@@ -7,6 +7,8 @@ import ImageSection from "./ImageSection";
 import { productsService } from "@/services/api";
 import Product from "@/services/api/products/types";
 import { useParams } from "react-router-dom";
+import JustAdmin from "@/components/JustAdmin";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Status {
   submitted: boolean;
@@ -31,13 +33,6 @@ export default function ProductForm() {
     weight: 0,
     material: "",
   });
-  useEffect(() => {
-    if (id) {
-      productsService.getProduct(parseInt(id)).then((product) => {
-        setFormData(product);
-      });
-    }
-  }, [id]);
   const [status, setStatus] = useState<Status>({
     submitted: false,
     error: false,
@@ -45,6 +40,17 @@ export default function ProductForm() {
   });
   const [previews, setPreviews] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [allowed, setAllowed] = useState(false);
+  const { customer } = useAuth();
+
+  useEffect(() => {
+    if (id) {
+      productsService.getProduct(parseInt(id)).then((product) => {
+        setFormData(product);
+      });
+    }
+  }, [id]);
+
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -53,6 +59,7 @@ export default function ProductForm() {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
+
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const files = Array.from(e.target.files);
@@ -82,6 +89,7 @@ export default function ProductForm() {
       imagesFiles: [...prev.imagesFiles!, ...files],
     }));
   };
+
   const removeImage = (index: number) => {
     URL.revokeObjectURL(previews[index]);
     setPreviews((prev) => prev.filter((_, i) => i !== index));
@@ -90,8 +98,13 @@ export default function ProductForm() {
       imagesFiles: prev.imagesFiles!.filter((_, i) => i !== index),
     }));
   };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (customer?.email !== import.meta.env.VITE_ADMIN_EMAIL) {
+      setAllowed(true);
+      return;
+    }
     setIsUploading(true);
     try {
       setStatus((prev) => ({ ...prev, error: false, message: "" }));
@@ -143,6 +156,11 @@ export default function ProductForm() {
       setIsUploading(false);
     }
   };
+
+  if (allowed) {
+    return <JustAdmin allowed={allowed} setAllowed={setAllowed} />;
+  }
+
   return (
     <>
       <div>

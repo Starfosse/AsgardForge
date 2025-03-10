@@ -48,17 +48,25 @@ const Menu = () => {
             ))}
             <CartPreviewMenu />
           </div>
-          {isAuthenticated ? (
-            <ProfileMenu />
-          ) : (
-            <button
-              className="flex items-center hover:text-amber-500 transition duration-300"
-              onClick={login}
+          <div className="flex gap-3">
+            <Link
+              to="/dashboard"
+              className="bg-amber-700 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 inline-block"
             >
-              <LogIn className="h-4 w-4 mr-2" />
-              <span>Se connecter</span>
-            </button>
-          )}
+              Dashboard
+            </Link>
+            {isAuthenticated ? (
+              <ProfileMenu />
+            ) : (
+              <button
+                className="flex items-center hover:text-amber-500 transition duration-300"
+                onClick={login}
+              >
+                <LogIn className="h-4 w-4 mr-2" />
+                <span>Se connecter</span>
+              </button>
+            )}
+          </div>
           <div className="md:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}

@@ -10,7 +10,7 @@ export default function CollectionPage() {
   const [priceRange, setPriceRange] = useState([0, 500]);
   const [loading, setLoading] = useState(true);
   const { id } = useParams<{ id: string }>();
-  const { categoryName } = useParams<{ categoryName: string }>();
+  const { collectionName } = useParams<{ collectionName: string }>();
 
   useEffect(() => {
     fetchCategory();
@@ -45,7 +45,7 @@ export default function CollectionPage() {
     <div className="bg-stone-100 min-h-screen">
       <div className="container mx-auto px-4 py-12">
         <h1 className="text-4xl font-bold mb-8 text-center text-stone-800">
-          {categoryName}
+          {collectionName}
         </h1>
         <div className="mb-8 flex flex-wrap justify-center gap-4">
           <div className="flex items-center gap-4">
@@ -81,7 +81,7 @@ export default function CollectionPage() {
                     {product.price} €
                   </span>
                   <Link
-                    to={`/${categoryName}/${id}/${product.name}/${product.id}`}
+                    to={`/${collectionName}/${id}/${product.name}/${product.id}`}
                     className="bg-stone-800 text-white px-4 py-2 rounded hover:bg-stone-700"
                   >
                     Détails

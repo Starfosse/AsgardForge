@@ -48,6 +48,13 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         },
       ]);
     }
+    if (localStorage.getItem("cart") === null) {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    } else {
+      const existingCart = JSON.parse(localStorage.getItem("cart") || "[]");
+      existingCart.push(cart);
+      localStorage.setItem("cart", JSON.stringify(existingCart));
+    }
   };
   const addToCartFromWishlist = (item: WishlistProduct) => {
     const existingItem = cart.find((i) => i.id === item.id);
@@ -74,9 +81,21 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         },
       ]);
     }
+    if (localStorage.getItem("cart") === null) {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    } else {
+      const existingCart = JSON.parse(localStorage.getItem("cart") || "[]");
+      existingCart.push(cart);
+      localStorage.setItem("cart", JSON.stringify(existingCart));
+    }
   };
   const removeFromCart = (id: number) => {
     setCart(cart.filter((item) => item.id !== id));
+    if (!cart) {
+      localStorage.removeItem("cart");
+    } else {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
   };
   const substractFromCart = (id: number, quantity: number) => {
     if (cart.find((i) => i.id === id)!.quantity - quantity === 0) {
@@ -90,9 +109,15 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         )
       );
     }
+    if (!cart) {
+      localStorage.removeItem("cart");
+    } else {
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
   };
   const clearCart = () => {
     setCart([]);
+    localStorage.removeItem("cart");
   };
   const calculateTotal = () => {
     return cart

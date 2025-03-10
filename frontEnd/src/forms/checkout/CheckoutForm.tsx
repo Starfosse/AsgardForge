@@ -29,11 +29,7 @@ export default function CheckoutForm({
           paymentForm={paymentForm}
           isSubmitting={isSubmitting}
         />
-        <PaymentInformation
-          handleChange={handleChange}
-          paymentForm={paymentForm}
-          isSubmitting={isSubmitting}
-        />
+        <PaymentInformation />
       </form>
     </div>
   );

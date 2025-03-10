@@ -16,10 +16,6 @@ export interface OrderCommandForm {
   address: string;
   city: string;
   zipCode: string;
-  cardHolder: string;
-  cardNumber: string;
-  expirationDate: string;
-  cvv: string;
   total: string;
 }
 
@@ -36,10 +32,6 @@ export default function Checkout() {
     address: "",
     city: "",
     zipCode: "",
-    cardHolder: "",
-    cardNumber: "",
-    expirationDate: "",
-    cvv: "",
     total: calculateTotal(),
   });
   const [status, setStatus] = useState({

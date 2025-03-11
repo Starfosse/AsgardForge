@@ -6,9 +6,8 @@ import {
   Param,
   Patch,
   Post,
-  UseGuards,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { ProductRepository } from 'src/product/product.repository';
 import { CollectionRepository } from './collection.repository';
 import { CollectionService } from './collection.service';
 import { CreateCollectionDto } from './dto/create-collection-dto';
@@ -18,6 +17,7 @@ export class CollectionController {
   constructor(
     private readonly collectionService: CollectionService,
     private readonly collectionRepository: CollectionRepository,
+    private readonly productRepository: ProductRepository,
   ) {}
 
   @Post()
@@ -46,7 +46,7 @@ export class CollectionController {
   @Get(':id/products')
   async findProducts(@Param('id') id: number) {
     try {
-      return await this.collectionService.findProductsByCollection(id);
+      return await this.productRepository.findProductsByCollection(id);
     } catch (error) {
       console.error(error);
       throw new Error('Could not find products');

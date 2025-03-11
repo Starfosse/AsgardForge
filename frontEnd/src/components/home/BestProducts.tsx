@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 
 export default function FeaturedProducts() {
   const [productsFeatured, setProductsFeatured] = useState<Product[]>([]);
+  console.log(productsFeatured);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
@@ -41,11 +42,11 @@ export default function FeaturedProducts() {
               variant="secondaryHidden"
               className="hover:scale-105 transition duration-300"
             >
-              {/* <img
-                src={product.main_image || product.image}
+              <img
+                src={product.main_image}
                 alt={product.name}
                 className="w-full h-64 object-cover"
-              /> */}
+              />
               <div className="p-6">
                 <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
                 <div className="flex justify-between items-center">

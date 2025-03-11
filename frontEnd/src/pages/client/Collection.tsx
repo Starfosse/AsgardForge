@@ -68,11 +68,11 @@ export default function CollectionPage() {
               key={product.id}
               className="hover:scale-105 transition duration-300"
             >
-              {/* <img
-                src={product.images![0].image_path}
+              <img
+                src={product.main_image}
                 alt={product.name}
                 className="w-full h-64 object-cover"
-              /> */}
+              />
               <div className="p-6">
                 <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
                 <p className="text-stone-600 mb-4">{product.description}</p>

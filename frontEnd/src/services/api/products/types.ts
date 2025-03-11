@@ -15,6 +15,7 @@ export default interface Product {
   collection: string;
   alertStock: number;
   images?: Images[];
+  main_image?: string;
   imagesFiles?: File[];
   specifications: string;
   dimensions: string;

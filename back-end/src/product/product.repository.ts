@@ -120,7 +120,7 @@ export class ProductRepository {
   async findProductsByCollection(id: number) {
     try {
       const [rows] = await this.connection.query(
-        'SELECT * FROM products WHERE collection_id = ?',
+        `SELECT p.*, (SELECT pi.image_path FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.image_order ASC LIMIT 1) AS main_image FROM products p WHERE p.collection_id = ?ORDER BY p.created_at DESC`,
         [id],
       );
       return rows;

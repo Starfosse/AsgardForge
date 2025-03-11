@@ -8,21 +8,6 @@ export class CollectionService {
     private readonly productRepository: ProductRepository,
     private collectionRepository: CollectionRepository,
   ) {}
-  async findProductsByCollection(id: number) {
-    const productsWithImage = [];
-    const products = await this.productRepository.findProductsByCollection(id);
-    for (const values of Object.values(products)) {
-      const product = values;
-      const images = await this.productRepository.findFirstImageFromProduct(
-        values.id,
-      );
-      productsWithImage.push({
-        ...product,
-        images,
-      });
-    }
-    return productsWithImage;
-  }
 
   async createCollection(name: string, description: string) {
     const collectionId = await this.collectionRepository.create(

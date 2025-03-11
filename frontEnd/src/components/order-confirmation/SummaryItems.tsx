@@ -1,10 +1,11 @@
-import { OrderItem, OrderSummaryConfirmation } from "@/services/api";
+import { OrderItem } from "@/services/api";
 
 interface SummaryItemsProps {
   items: OrderItem[] | undefined;
 }
 
 export default function SummaryItems({ items }: SummaryItemsProps) {
+  console.log(items);
   return (
     <div className="border-b border-stone-200 pb-6 mb-6">
       <h3 className="text-xl font-semibold mb-4 text-stone-800">Articles</h3>
@@ -25,19 +26,19 @@ export default function SummaryItems({ items }: SummaryItemsProps) {
             <p className="text-stone-600">Quantité: {item.quantity}</p>
           </div>
           <div className="text-right">
-            {item.promotionPrice && item.promotionPrice < item.price ? (
-              <>
-                <p className="text-amber-700 font-bold">
-                  {item.promotionPrice * item.quantity} €
-                </p>
-                <p className="text-stone-500 line-through text-sm">
-                  {item.price * item.quantity} €
-                </p>
-              </>
+            {item.promotionPrice ? (
+              <div className="flex flex-col items-end">
+                <span className="text-sm line-through text-gray-500">
+                  {(item.price * item.quantity).toFixed(2)} €
+                </span>
+                <span className="font-bold text-red-600">
+                  {(item.promotionPrice * item.quantity).toFixed(2)} €
+                </span>
+              </div>
             ) : (
-              <p className="text-stone-800 font-bold">
-                {item.price * item.quantity} €
-              </p>
+              <span className="font-bold text-amber-700">
+                {(item.price * item.quantity).toFixed(2)} €
+              </span>
             )}
           </div>
         </div>

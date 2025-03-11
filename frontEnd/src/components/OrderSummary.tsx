@@ -13,6 +13,27 @@ export default function OrderSummary({
   cart,
   total,
 }: OrderSummaryProps) {
+  const calculateSubtotalWithoutPromotions = (): string => {
+    return cart
+      .reduce((total, item) => {
+        return total + item.price * item.quantity;
+      }, 0)
+      .toFixed(2);
+  };
+
+  const calculateSavings = (): string => {
+    const subtotalWithoutPromotions = parseFloat(
+      calculateSubtotalWithoutPromotions()
+    );
+    const subtotalWithPromotions = parseFloat(total);
+    const savings = subtotalWithoutPromotions - subtotalWithPromotions;
+    return savings > 0 ? savings.toFixed(2) : "0.00";
+  };
+
+  const hasSavings = (): boolean => {
+    return parseFloat(calculateSavings()) > 0;
+  };
+
   return (
     <div>
       <Card variant="primary" className="p-6 sticky top-12">
@@ -36,15 +57,42 @@ export default function OrderSummary({
                   </p>
                 </div>
               </div>
-              <span className="font-semibold">
-                {(item.price * item.quantity).toFixed(2)} €
-              </span>
+              {item.promotion_price ? (
+                <div className="text-right">
+                  <span className="text-sm line-through text-gray-500 block">
+                    {(item.price * item.quantity).toFixed(2)} €
+                  </span>
+                  <span className="font-semibold text-red-600">
+                    {(item.promotion_price * item.quantity).toFixed(2)} €
+                  </span>
+                </div>
+              ) : (
+                <span className="font-semibold">
+                  {(item.price * item.quantity).toFixed(2)} €
+                </span>
+              )}
             </div>
           ))}
           <hr className="border-stone-300" />
+          {hasSavings() && (
+            <div className="flex justify-between">
+              <span>Sous-total sans promotions</span>
+              <span className="line-through text-gray-500">
+                {calculateSubtotalWithoutPromotions()} €
+              </span>
+            </div>
+          )}
+          {hasSavings() && (
+            <div className="flex justify-between text-red-600">
+              <span>Économies</span>
+              <span>-{calculateSavings()} €</span>
+            </div>
+          )}
           <div className="flex justify-between">
             <span>Sous-total</span>
-            <span>{total} €</span>
+            <span className={hasSavings() ? "font-semibold text-red-600" : ""}>
+              {total} €
+            </span>
           </div>
           <div className="flex justify-between">
             <span>Livraison</span>
@@ -53,7 +101,9 @@ export default function OrderSummary({
           <hr className="border-stone-300" />
           <div className="flex justify-between font-bold text-xl">
             <span>Total</span>
-            <span>{total} €</span>
+            <span className={hasSavings() ? "text-red-600" : ""}>
+              {total} €
+            </span>
           </div>
         </div>
         <button

@@ -1,6 +1,6 @@
 export class CreateOrderItemDto {
   id: number;
   price: number;
-  promotionPrice: number;
+  promotion_price: number;
   quantity: number;
 }

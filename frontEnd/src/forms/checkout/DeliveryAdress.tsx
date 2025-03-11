@@ -58,6 +58,7 @@ export default function DeliveryAdress({
               onChange={handleChange}
               className="w-full p-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
               required
+              maxLength={5}
               disabled={isSubmitting}
             />
           </div>

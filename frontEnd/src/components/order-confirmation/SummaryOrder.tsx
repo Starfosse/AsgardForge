@@ -20,6 +20,7 @@ export default function SummaryOrder({ order }: SummaryProps) {
           : regularPrice;
       promotionalTotal += promoPrice;
     });
+
     return {
       regularTotal: regularTotal.toFixed(2),
       savings: (regularTotal - promotionalTotal).toFixed(2),
@@ -36,16 +37,32 @@ export default function SummaryOrder({ order }: SummaryProps) {
       </div>
       <div className="p-6">
         <div className="space-y-3 border-b border-stone-200 pb-6 mb-6">
-          <div className="flex justify-between">
-            <span className="text-stone-600">Sous-total</span>
-            <span className="text-stone-800 font-medium">{regularTotal} €</span>
-          </div>
           {hasSavings && (
-            <div className="flex justify-between text-green-600">
+            <div className="flex justify-between">
+              <span className="text-stone-600">Sous-total sans promotions</span>
+              <span className="text-gray-500 line-through">
+                {regularTotal} €
+              </span>
+            </div>
+          )}
+          {hasSavings && (
+            <div className="flex justify-between text-red-600">
               <span>Économies</span>
               <span>-{savings} €</span>
             </div>
           )}
+          <div className="flex justify-between">
+            <span className="text-stone-600">Sous-total</span>
+            <span
+              className={
+                hasSavings
+                  ? "text-red-600 font-medium"
+                  : "text-stone-800 font-medium"
+              }
+            >
+              {order?.total.toFixed(2)} €
+            </span>
+          </div>
           <div className="flex justify-between">
             <span className="text-stone-600">Livraison</span>
             <span className="text-stone-800 font-medium">Gratuite</span>
@@ -53,7 +70,9 @@ export default function SummaryOrder({ order }: SummaryProps) {
         </div>
         <div className="flex justify-between items-center text-xl font-bold">
           <span className="text-stone-800">Total</span>
-          <span className="text-amber-700">{order?.total.toFixed(2)} €</span>
+          <span className={hasSavings ? "text-red-600" : "text-amber-700"}>
+            {order?.total.toFixed(2)} €
+          </span>
         </div>
       </div>
     </Card>

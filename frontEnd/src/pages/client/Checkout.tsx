@@ -48,6 +48,9 @@ export default function Checkout() {
       lastName: customer?.lastName || "",
       email: customer?.email || "",
       phone: customer?.phone || "",
+      address: customer?.address || "",
+      city: customer?.city || "",
+      zipCode: customer?.postalCode || "",
     }));
   }, [customer]);
 

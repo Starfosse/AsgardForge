@@ -21,8 +21,32 @@ const Cart = () => {
 
   const calculateTotal = () => {
     return cart
-      .reduce((total, item) => total + item.price * item.quantity, 0)
+      .reduce((total, item) => {
+        const effectivePrice = item.promotion_price || item.price;
+        return total + effectivePrice * item.quantity;
+      }, 0)
       .toFixed(2);
+  };
+
+  const calculateSubtotalWithoutPromotions = () => {
+    return cart
+      .reduce((total, item) => {
+        return total + item.price * item.quantity;
+      }, 0)
+      .toFixed(2);
+  };
+
+  const calculateSavings = (): string => {
+    const subtotalWithoutPromotions = parseFloat(
+      calculateSubtotalWithoutPromotions()
+    );
+    const subtotalWithPromotions = parseFloat(calculateTotal());
+    const savings = subtotalWithoutPromotions - subtotalWithPromotions;
+    return savings > 0 ? savings.toFixed(2) : "0.00";
+  };
+
+  const hasSavings = (): boolean => {
+    return parseFloat(calculateSavings()) > 0;
   };
 
   if (allowed) {
@@ -62,9 +86,20 @@ const Cart = () => {
                   />
                   <div className="flex-grow p-6">
                     <h3 className="text-xl font-semibold mb-2">{item.name}</h3>
-                    <p className="text-amber-700 font-bold mb-4">
-                      {item.price} € / unité
-                    </p>
+                    {item.promotion_price ? (
+                      <div className="flex flex-col mb-4">
+                        <span className="text-gray-500 line-through">
+                          {item.price.toFixed(2)} € / unité
+                        </span>
+                        <span className="text-red-600 font-bold">
+                          {item.promotion_price.toFixed(2)} € / unité
+                        </span>
+                      </div>
+                    ) : (
+                      <p className="text-amber-700 font-bold mb-4">
+                        {item.price.toFixed(2)} € / unité
+                      </p>
+                    )}
 
                     <div className="flex items-center space-x-4">
                       <div className="flex items-center border rounded-lg">
@@ -93,9 +128,20 @@ const Cart = () => {
                     </div>
                   </div>
                   <div className="p-6 text-right">
-                    <span className="font-bold text-xl text-stone-800">
-                      {(item.price * item.quantity).toFixed(2)} €
-                    </span>
+                    {item.promotion_price ? (
+                      <div className="flex flex-col items-end">
+                        <span className="text-gray-500 line-through">
+                          {(item.price * item.quantity).toFixed(2)} €
+                        </span>
+                        <span className="font-bold text-xl text-red-600">
+                          {(item.promotion_price * item.quantity).toFixed(2)} €
+                        </span>
+                      </div>
+                    ) : (
+                      <span className="font-bold text-xl text-stone-800">
+                        {(item.price * item.quantity).toFixed(2)} €
+                      </span>
+                    )}
                   </div>
                 </div>
               ))}
@@ -106,9 +152,29 @@ const Cart = () => {
                   Récapitulatif
                 </h3>
                 <div className="space-y-4 mb-6">
+                  {hasSavings() && (
+                    <div className="flex justify-between">
+                      <span>Sous-total sans promotions</span>
+                      <span className="line-through text-gray-500">
+                        {calculateSubtotalWithoutPromotions()} €
+                      </span>
+                    </div>
+                  )}
+                  {hasSavings() && (
+                    <div className="flex justify-between text-red-600">
+                      <span>Économies</span>
+                      <span>-{calculateSavings()} €</span>
+                    </div>
+                  )}
                   <div className="flex justify-between">
                     <span>Sous-total</span>
-                    <span>{calculateTotal()} €</span>
+                    <span
+                      className={
+                        hasSavings() ? "font-semibold text-red-600" : ""
+                      }
+                    >
+                      {calculateTotal()} €
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span>Livraison</span>
@@ -117,7 +183,9 @@ const Cart = () => {
                   <hr className="border-stone-300" />
                   <div className="flex justify-between font-bold text-xl">
                     <span>Total</span>
-                    <span>{calculateTotal()} €</span>
+                    <span className={hasSavings() ? "text-red-600" : ""}>
+                      {calculateTotal()} €
+                    </span>
                   </div>
                 </div>
                 {isAuthenticated ? (

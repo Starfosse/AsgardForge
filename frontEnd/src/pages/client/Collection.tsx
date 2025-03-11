@@ -31,11 +31,10 @@ export default function CollectionPage() {
     }
   };
 
-  const filteredProducts = productsCollection.filter(
-    (product) =>
-      Number(product.price) >= priceRange[0] &&
-      Number(product.price) <= priceRange[1]
-  );
+  const filteredProducts = productsCollection.filter((product) => {
+    const effectivePrice = product.promotion_price || Number(product.price);
+    return effectivePrice >= priceRange[0] && effectivePrice <= priceRange[1];
+  });
 
   if (loading) {
     return <LoadingScreen title="collection" />;
@@ -77,9 +76,20 @@ export default function CollectionPage() {
                 <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
                 <p className="text-stone-600 mb-4">{product.description}</p>
                 <div className="flex justify-between items-center">
-                  <span className="text-2xl font-bold text-amber-700">
-                    {product.price} €
-                  </span>
+                  {product.promotion_price ? (
+                    <div className="flex flex-col">
+                      <span className="text-lg line-through text-gray-500">
+                        {product.price} €
+                      </span>
+                      <span className="text-2xl font-bold text-red-600">
+                        {product.promotion_price} €
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="text-2xl font-bold text-amber-700">
+                      {product.price} €
+                    </span>
+                  )}
                   <Link
                     to={`/${collectionName}/${id}/${product.name}/${product.id}`}
                     className="bg-stone-800 text-white px-4 py-2 rounded hover:bg-stone-700"

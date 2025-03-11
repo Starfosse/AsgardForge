@@ -37,11 +37,9 @@ export class OrderRepository {
         orderId,
         item.id,
         item.price,
-        item.promotionPrice || item.price,
+        item.promotion_price || item.price,
         item.quantity,
       ]);
-
-      // Exécution de la requête SQL avec des paramètres préparés
       const [result]: any = await this.connection.execute(
         `
     INSERT INTO order_items (order_id, product_id, price, promotion_price, quantity) 

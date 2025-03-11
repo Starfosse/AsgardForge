@@ -5,7 +5,6 @@ interface SummaryItemsProps {
 }
 
 export default function SummaryItems({ items }: SummaryItemsProps) {
-  console.log(items);
   return (
     <div className="border-b border-stone-200 pb-6 mb-6">
       <h3 className="text-xl font-semibold mb-4 text-stone-800">Articles</h3>

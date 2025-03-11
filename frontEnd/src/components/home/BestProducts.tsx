@@ -1,5 +1,5 @@
 import { productsService } from "@/services/api";
-import Product, { ProductsFeatured } from "@/services/api/products/types";
+import { ProductsFeatured } from "@/services/api/products/types";
 import Card from "@/wrapper/Card";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -13,7 +13,7 @@ export default function FeaturedProducts() {
   useEffect(() => {
     fetchProductsFeatured();
   }, []);
-  console.log(productsFeatured);
+
   const fetchProductsFeatured = async () => {
     try {
       setIsLoading(true);

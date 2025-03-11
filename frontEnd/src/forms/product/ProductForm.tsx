@@ -109,8 +109,6 @@ export default function ProductForm() {
     try {
       setStatus((prev) => ({ ...prev, error: false, message: "" }));
       const formDataToSend = new FormData();
-      console.log("formDataToSend", formDataToSend);
-      console.log("formData", formData);
       for (const [key, value] of Object.entries(formData)) {
         if (key === "imagesFiles") {
           formData.imagesFiles!.forEach((image) => {

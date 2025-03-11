@@ -20,7 +20,7 @@ export default function OrderConfirmation() {
       fetchOrder();
     }
   }, [orderId]);
-  console.log("order", order);
+
   const fetchOrder = async () => {
     try {
       setLoading(true);

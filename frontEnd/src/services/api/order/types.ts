@@ -34,7 +34,7 @@ export interface OrderHistoryDetails {
   shippingPostalCode: string;
   total: number;
   items: OrderItem[];
-  createdAt: string; // Format ISO "2024-02-27T14:30:00Z"
+  createdAt: string;
   status: "pending" | "processing" | "shipped" | "completed" | "cancelled";
   trackingNumber?: string;
   paymentMethod?: string;
@@ -52,7 +52,7 @@ export interface OrderSummary {
   shippingPostalCode: string;
   total: number;
   items: OrderItem[];
-  createdAt: string; // Format ISO "2024-02-27T14:30:00Z"
+  createdAt: string;
   status: "pending" | "processing" | "shipped" | "completed" | "cancelled";
 }
 

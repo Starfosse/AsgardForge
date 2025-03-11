@@ -6,7 +6,7 @@ export interface CartItem {
   id: number;
   name: string;
   price: number;
-  promotionPrice?: number;
+  promotion_price?: number;
   quantity: number;
   image: string;
 }
@@ -57,8 +57,8 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
             id: item.id!,
             name: item.name,
             price: Number(item.price),
-            promotionPrice: item.promotionPrice
-              ? Number(item.promotionPrice)
+            promotion_price: item.promotion_price
+              ? Number(item.promotion_price)
               : undefined,
             quantity: quantity,
             image: item.images?.[0]?.image_path || "",
@@ -82,7 +82,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
             id: item.id,
             name: item.name,
             price: Number(item.price),
-            promotionPrice: item.promotionPrice
+            promotion_price: item.promotionPrice
               ? Number(item.promotionPrice)
               : undefined,
             quantity: 1,
@@ -119,7 +119,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const calculateTotal = () => {
     return cart
       .reduce((total, item) => {
-        const price = item.promotionPrice ?? item.price;
+        const price = item.promotion_price ?? item.price;
         return total + price * item.quantity;
       }, 0)
       .toFixed(2);

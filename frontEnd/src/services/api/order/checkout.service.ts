@@ -1,12 +1,7 @@
 import { CartItem } from "@/contexts/CartContext";
-import { apiClient } from "../client";
-import {
-  OrderCommand,
-  OrderHistoryDetails,
-  OrderSummary,
-  OrderSummaryConfirmation,
-} from "./types";
 import { OrderCommandForm } from "@/pages/client/Checkout";
+import { apiClient } from "../client";
+import { OrderCommand, OrderHistoryDetails, OrderSummary } from "./types";
 
 export const orderService = {
   createOrder: (orderForm: OrderCommandForm, cart: CartItem[]) => {

@@ -6,7 +6,7 @@ import DetailsSection from "./DetailsSection";
 import ImageSection from "./ImageSection";
 import { productsService } from "@/services/api";
 import Product from "@/services/api/products/types";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import JustAdmin from "@/components/JustAdmin";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -22,16 +22,16 @@ export default function ProductForm() {
     name: "",
     description: "",
     price: 0,
-    promotionPrice: 0,
+    promotion_price: 0,
     stock: 0,
     collection: "",
     alertStock: 0,
     imagesFiles: [],
-    details: "",
     specifications: "",
     dimensions: "",
     weight: 0,
     material: "",
+    featured: false,
   });
   const [status, setStatus] = useState<Status>({
     submitted: false,
@@ -108,6 +108,7 @@ export default function ProductForm() {
     setIsUploading(true);
     try {
       setStatus((prev) => ({ ...prev, error: false, message: "" }));
+      console.log("formData", formData);
       const formDataToSend = new FormData();
       for (const [key, value] of Object.entries(formData)) {
         if (key === "imagesFiles") {
@@ -120,6 +121,7 @@ export default function ProductForm() {
           formDataToSend.append(key, value);
         }
       }
+      console.log("formDataToSend", formDataToSend);
       id
         ? productsService.editProduct(parseInt(id), formDataToSend)
         : productsService.addProduct(formDataToSend);
@@ -142,16 +144,16 @@ export default function ProductForm() {
             name: "",
             description: "",
             price: 0,
-            promotionPrice: 0,
+            promotion_price: 0,
             stock: 0,
             collection: "",
             alertStock: 0,
             images: [],
-            details: "",
             specifications: "",
             dimensions: "",
             weight: 0,
             material: "",
+            featured: false,
           });
       setIsUploading(false);
     }
@@ -164,12 +166,12 @@ export default function ProductForm() {
   return (
     <>
       <div>
-        <button
+        <Link
+          to="/dashboard/products"
           className="text-gray-400 hover:underline"
-          onClick={() => history.back()}
         >
           ← Revenir en arrière
-        </button>
+        </Link>
       </div>
       <h1 className="text-2xl text-gray-400 mb-6 text-center">
         {id ? (
@@ -222,7 +224,7 @@ export default function ProductForm() {
           className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 
                    disabled:bg-blue-300 disabled:cursor-not-allowed"
         >
-          {isUploading ? "Création en cours..." : "Créer le produit"}
+          {id ? "Modifier le produit" : "Créer le produit"}
         </button>
       </form>
     </>

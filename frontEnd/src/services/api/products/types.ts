@@ -10,16 +10,15 @@ export default interface Product {
   name: string;
   description: string;
   price: number;
-  promotionPrice: number;
+  promotion_price: number;
   stock: number;
   collection: string;
   alertStock: number;
   images?: Images[];
   imagesFiles?: File[];
-  details: string;
   specifications: string;
   dimensions: string;
   weight: number;
   material: string;
+  featured: boolean;
 }
-//product

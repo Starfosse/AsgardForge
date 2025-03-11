@@ -13,7 +13,6 @@ export class OrderController {
   ) {}
 
   @Post()
-  @UseGuards(AuthGuard('jwt'))
   create(
     @Body()
     requestData: {
@@ -25,30 +24,13 @@ export class OrderController {
     return this.orderService.create(orderData, cart);
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.orderService.findAll();
-  // }
-
   @Get('user/:userId')
-  @UseGuards(AuthGuard('jwt'))
   findAllByUserId(@Param('userId') userId: string) {
     return this.orderRepository.findAllByUserId(+userId);
   }
 
   @Get(':id')
-  @UseGuards(AuthGuard('jwt'))
   findOne(@Param('id') id: string) {
     return this.orderRepository.findOne(+id);
   }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
-  //   return this.orderService.update(+id, updateOrderDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.orderService.remove(+id);
-  // }
 }

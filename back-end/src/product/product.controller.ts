@@ -7,18 +7,14 @@ import {
   Patch,
   Post,
   UploadedFiles,
-  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { CreateProductDto } from './dto/create-product.dto';
-import { ProductService } from './product.service';
 import { ProductRepository } from './product.repository';
-import { AuthGuard } from '@nestjs/passport';
-import { CurrentUser } from 'src/customer/decorators/current-customer.decorator';
-import { Customer } from 'src/customer/entities/customer.entity';
+import { ProductService } from './product.service';
 
 @Controller('products')
 export class ProductController {
@@ -41,27 +37,23 @@ export class ProductController {
       }),
     }),
   )
-  @UseGuards(AuthGuard('jwt'))
   async create(
-    @CurrentUser() user: Customer,
     @Body() createProductDto: CreateProductDto,
     @UploadedFiles() images: Array<Express.Multer.File>,
   ) {
-    if (user.email !== process.env.ADMIN_USER_EMAIL) {
-      throw new Error('You are not authorized to create a collection');
-    }
     try {
       const productData = {
         ...createProductDto,
         price: createProductDto.price ? createProductDto.price : 0,
-        promotionPrice: createProductDto.promotionPrice
-          ? createProductDto.promotionPrice
+        promotionPrice: createProductDto.promotion_price
+          ? createProductDto.promotion_price
           : 0,
         stock: createProductDto.stock ? createProductDto.stock : 0,
         alertStock: createProductDto.alertStock
           ? createProductDto.alertStock
           : 0,
         weight: createProductDto.weight ? createProductDto.weight : 0,
+        featured: createProductDto.featured ? createProductDto.featured : false,
       };
       const imageUrls = images ? images.map((image) => image.path) : [];
       const imageUploaded =
@@ -133,17 +125,12 @@ export class ProductController {
     }
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
-  async remove(@CurrentUser() user: Customer, @Param('id') name: number) {
-    if (user.email !== process.env.ADMIN_USER_EMAIL) {
-      throw new Error('You are not authorized to create a collection');
-    }
+  async remove(@Param('id') name: number) {
     return this.productRepository.deleteProduct(name);
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(
     FilesInterceptor('images', 10, {
       storage: diskStorage({
@@ -157,20 +144,16 @@ export class ProductController {
     }),
   )
   async update(
-    @CurrentUser() user: Customer,
     @Param('id') id: string,
     @Body() updateProductDto: CreateProductDto,
     @UploadedFiles() images: Array<Express.Multer.File>,
   ) {
-    if (user.email !== process.env.ADMIN_USER_EMAIL) {
-      throw new Error('You are not authorized to create a collection');
-    }
     try {
       const productData = {
         ...updateProductDto,
         price: updateProductDto.price ? updateProductDto.price : 0,
-        promotionPrice: updateProductDto.promotionPrice
-          ? updateProductDto.promotionPrice
+        promotionPrice: updateProductDto.promotion_price
+          ? updateProductDto.promotion_price
           : 0,
         stock: updateProductDto.stock ? updateProductDto.stock : 0,
         alertStock: updateProductDto.alertStock
@@ -189,6 +172,17 @@ export class ProductController {
     } catch (error) {
       console.error(error);
       throw new Error('Could not update product');
+    }
+  }
+
+  @Get('featured/all')
+  async findFeaturedProducts() {
+    try {
+      const products = await this.productRepository.findFeaturedProducts();
+      return products;
+    } catch (error) {
+      console.error(error);
+      throw new Error('Could not find featured products');
     }
   }
 }

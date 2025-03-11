@@ -21,9 +21,11 @@ export default function InformationsSection({
   setFormData,
 }: InformationsSectionProps) {
   const [categories, setCategories] = useState<Collection[]>([]);
+
   useEffect(() => {
     handleGetCategories();
   }, []);
+
   const handleGetCategories = async () => {
     try {
       const response = await collectionsService.getCollections();
@@ -33,6 +35,7 @@ export default function InformationsSection({
       console.error(error);
     }
   };
+
   return (
     <div>
       <div className="mb-4 flex flex-col">
@@ -77,12 +80,6 @@ export default function InformationsSection({
           onChange={handleChange}
           disabled={isUploading}
         >
-          {/* <option value="Armes" >
-            Armes
-          </option>
-          <option value="Armures">Armures</option>
-          <option value="Outils">Outils</option>
-          <option value="Rituels">Rituels</option> */}
           {categories.map((category) => (
             <option key={category.id} value={category.name}>
               {category.name}

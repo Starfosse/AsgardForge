@@ -20,7 +20,7 @@ export interface OrderCommandForm {
 }
 
 export default function Checkout() {
-  const { cart, calculateTotal } = useCart();
+  const { cart, calculateTotal, clearCart } = useCart();
   const navigate = useNavigate();
   const { customer } = useAuth();
   const [paymentForm, setPaymentForm] = useState<OrderCommandForm>({
@@ -69,6 +69,7 @@ export default function Checkout() {
     try {
       setStatus((prev) => ({ ...prev, isSubmitting: true }));
       const orderId = await orderService.createOrder(paymentForm, cart);
+      clearCart();
       navigate(`/order/confirmation/${orderId}`);
       setStatus((prev) => ({
         ...prev,

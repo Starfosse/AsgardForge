@@ -79,9 +79,24 @@ export default function Presentation({
         </div>
       </div>
       <div className="flex items-center mb-6">
-        <span className="text-3xl font-bold text-amber-700 mr-6">
-          {product.price} €
-        </span>
+        {product.promotion_price ? (
+          <div className="flex items-center mr-6">
+            <span className="text-lg font-medium text-gray-500 line-through mr-2">
+              {product.price} €
+            </span>
+            <span className="text-3xl font-bold text-red-600">
+              {product.promotion_price} €
+            </span>
+            <span className="ml-2 px-2 py-1 bg-red-100 text-red-700 text-sm rounded-md">
+              -{Math.round((1 - product.promotion_price / product.price) * 100)}
+              %
+            </span>
+          </div>
+        ) : (
+          <span className="text-3xl font-bold text-amber-700 mr-6">
+            {product.price} €
+          </span>
+        )}
         <div className="flex text-yellow-500">
           {[...Array(Math.floor(getAverageRating()))].map((_, i) => (
             <Star key={i} className="w-5 h-5 fill-current" />

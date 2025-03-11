@@ -13,7 +13,7 @@ export const productsService = {
     return apiClient.fetch(`/api/products/${id}`, { method: "DELETE" });
   },
   editProduct: (id: number, formData: FormData) => {
-    return apiClient.upload(`/api/products/${id}`, formData, "PUT");
+    return apiClient.upload(`/api/products/${id}`, formData, "PATCH");
   },
   getProduct: (id: number) => {
     return apiClient.fetch<Product>(`/api/products/${id}`, {
@@ -36,6 +36,11 @@ export const productsService = {
   },
   getReviews: (id: number) => {
     return apiClient.fetch<ReviewsCustomers[]>(`/api/reviews/${id}`, {
+      method: "GET",
+    });
+  },
+  getFeaturedProducts: () => {
+    return apiClient.fetch<Product[]>("/api/products/featured/all", {
       method: "GET",
     });
   },

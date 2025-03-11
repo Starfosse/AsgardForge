@@ -6,7 +6,7 @@ interface ApiResponse<T> {
   message: string;
 }
 
-type MethodUpload = "POST" | "PUT";
+type MethodUpload = "POST" | "PUT" | "PATCH";
 
 export const apiClient = {
   fetch: async <T>(url: string, options: RequestInit = {}): Promise<T> => {

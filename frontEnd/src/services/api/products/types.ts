@@ -23,3 +23,13 @@ export default interface Product {
   material: string;
   featured: boolean;
 }
+
+export interface ProductsFeatured {
+  id: number;
+  name: string;
+  collectionId: number;
+  collectionName: string;
+  price: number;
+  promotion_price: number;
+  main_image: string;
+}

@@ -1,6 +1,6 @@
 import { ReviewsCustomers } from "@/pages/client/Product";
 import { apiClient } from "../client";
-import Product from "./types";
+import Product, { ProductsFeatured } from "./types";
 
 export const productsService = {
   addProduct: (formData: FormData) => {
@@ -40,7 +40,7 @@ export const productsService = {
     });
   },
   getFeaturedProducts: () => {
-    return apiClient.fetch<Product[]>("/api/products/featured/all", {
+    return apiClient.fetch<ProductsFeatured[]>("/api/products/featured/all", {
       method: "GET",
     });
   },

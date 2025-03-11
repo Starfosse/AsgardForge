@@ -23,34 +23,6 @@ export default defineConfig({
         target: "http://localhost:3000",
         changeOrigin: true,
       },
-      "/api/auth": {
-        target: "http://localhost:3000",
-        changeOrigin: true,
-      },
-      "/api/customers": {
-        target: "http://localhost:3000",
-        changeOrigin: true,
-      },
-      "/api/products": {
-        target: "http://localhost:3000",
-        changeOrigin: true,
-      },
-      "/api/category": {
-        target: "http://localhost:3000",
-        changeOrigin: true,
-      },
-      "/api/reviews": {
-        target: "http://localhost:3000",
-        changeOrigin: true,
-      },
-      "/api/contact": {
-        target: "http://localhost:3000",
-        changeOrigin: true,
-      },
-      "/api/wishlists": {
-        target: "http://localhost:3000",
-        changeOrigin: true,
-      },
     },
   },
 });

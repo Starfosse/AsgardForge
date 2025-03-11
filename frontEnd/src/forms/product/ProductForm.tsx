@@ -108,7 +108,6 @@ export default function ProductForm() {
     setIsUploading(true);
     try {
       setStatus((prev) => ({ ...prev, error: false, message: "" }));
-      console.log("formData", formData);
       const formDataToSend = new FormData();
       for (const [key, value] of Object.entries(formData)) {
         if (key === "imagesFiles") {
@@ -121,7 +120,6 @@ export default function ProductForm() {
           formDataToSend.append(key, value);
         }
       }
-      console.log("formDataToSend", formDataToSend);
       id
         ? productsService.editProduct(parseInt(id), formDataToSend)
         : productsService.addProduct(formDataToSend);

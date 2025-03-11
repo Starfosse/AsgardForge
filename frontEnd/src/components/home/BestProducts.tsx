@@ -1,18 +1,19 @@
 import { productsService } from "@/services/api";
-import Product from "@/services/api/products/types";
+import Product, { ProductsFeatured } from "@/services/api/products/types";
 import Card from "@/wrapper/Card";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function FeaturedProducts() {
-  const [productsFeatured, setProductsFeatured] = useState<Product[]>([]);
-  console.log(productsFeatured);
+  const [productsFeatured, setProductsFeatured] = useState<ProductsFeatured[]>(
+    []
+  );
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     fetchProductsFeatured();
   }, []);
-
+  console.log(productsFeatured);
   const fetchProductsFeatured = async () => {
     try {
       setIsLoading(true);
@@ -65,7 +66,7 @@ export default function FeaturedProducts() {
                     </span>
                   )}
                   <Link
-                    to={`/produits/${product.id}`}
+                    to={`/${product.collectionName}/${product.collectionId}/${product.name}/${product.id}`}
                     className="bg-stone-800 text-white px-4 py-2 rounded hover:bg-stone-700"
                   >
                     Voir le Produit

@@ -4,15 +4,14 @@ import { TransformResponseInterceptor } from './interceptors/transform.intercept
 import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
+  const isProd = process.env.NODE_ENV === 'production';
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
   app.use(cookieParser());
   app.enableCors({
-    origin: [
-      'http://localhost:5173',
-      'https://accounts.google.com',
-      'http://localhost:5173/api/auth/google/callback',
-    ],
+    origin: isProd
+      ? ['https://front-prod', 'https://accounts.google.com']
+      : ['http://localhost:5173', 'https://accounts.google.com'],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   });

@@ -162,7 +162,7 @@ export class ProductRepository {
       );
 
       const [result]: any = await this.connection.query(
-        'UPDATE products SET name = ?, description = ?, price = ?, promotion_price = ?, stock = ?, collection_id = ?, alert_stock = ?, specifications = ?, dimensions = ?, weight = ?, material = ?, featured = ?, WHERE id = ?',
+        'UPDATE products SET name = ?, description = ?, price = ?, promotion_price = ?, stock = ?, collection_id = ?, alert_stock = ?, specifications = ?, dimensions = ?, weight = ?, material = ?, featured = ? WHERE id = ?',
         [
           product.name,
           product.description,
@@ -201,8 +201,7 @@ export class ProductRepository {
   async findFeaturedProducts() {
     try {
       const [rows] = await this.connection.query(`
-        SELECT p.*, (SELECT pi.image_path FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.image_order ASC LIMIT 1) AS main_image FROM products p  WHERE p.featured = 1 ORDER BY p.created_at DESC
-      `);
+        SELECT p.id, p.name, p.collection_id AS collectionId, c.name AS collectionName, p.price, p.promotion_price, (SELECT pi.image_path FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.image_order ASC LIMIT 1) AS main_image FROM products p JOIN collections c ON p.collection_id = c.id WHERE p.featured = 1 ORDER BY p.created_at DESC`);
       return rows;
     } catch (error) {
       console.error(error);

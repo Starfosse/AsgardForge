@@ -27,47 +27,44 @@ const ProductPage = () => {
   const { productId } = useParams<{ productId: string }>();
 
   useEffect(() => {
+    const fetchProduct = async () => {
+      if (!productId) return;
+      try {
+        setLoading(true);
+        const response = await productsService.getProduct(parseInt(productId));
+        setProduct(response);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    const fetchWishlist = async () => {
+      if (!productId) return;
+      try {
+        const res = await wishlistService.isWishlisted(productId);
+        if (res === true) setIsWishlisted(true);
+        else setIsWishlisted(false);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    const fetchReviews = async () => {
+      if (!productId) return;
+      try {
+        setLoadingReviews(true);
+        const reviews = await productsService.getReviews(parseInt(productId));
+        setReviews(reviews);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoadingReviews(false);
+      }
+    };
     fetchProduct();
     fetchWishlist();
     fetchReviews();
   }, [productId]);
-
-  const fetchProduct = async () => {
-    if (!productId) return;
-    try {
-      setLoading(true);
-      const response = await productsService.getProduct(parseInt(productId));
-      setProduct(response);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  const fetchWishlist = async () => {
-    if (!productId) return;
-    try {
-      const res = await wishlistService.isWishlisted(productId);
-      if (res === true) setIsWishlisted(true);
-      else setIsWishlisted(false);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchReviews = async () => {
-    if (!productId) return;
-    try {
-      setLoadingReviews(true);
-      const reviews = await productsService.getReviews(parseInt(productId));
-      setReviews(reviews);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoadingReviews(false);
-    }
-  };
 
   if (loading) {
     return <LoadingScreen title="produit" />;

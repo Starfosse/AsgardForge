@@ -18,22 +18,21 @@ export default function OrderHistory() {
   const filteredOrders = filterOrders({ orders, searchTerm, selectedPeriod });
 
   useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        setLoading(true);
+        const response = await orderService.getOrdersByUserId(customer!.id);
+        setOrders(response);
+      } catch (err) {
+        console.error("Erreur lors de la récupération des commandes:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
     if (isAuthenticated) {
       fetchOrders();
     }
-  }, [isAuthenticated]);
-
-  const fetchOrders = async () => {
-    try {
-      setLoading(true);
-      const response = await orderService.getOrdersByUserId(customer!.id);
-      setOrders(response);
-    } catch (err) {
-      console.error("Erreur lors de la récupération des commandes:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [isAuthenticated, customer]);
 
   if (!isAuthenticated) {
     return (

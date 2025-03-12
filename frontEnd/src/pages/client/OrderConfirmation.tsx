@@ -16,22 +16,21 @@ export default function OrderConfirmation() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const fetchOrder = async () => {
+      try {
+        setLoading(true);
+        const data = await orderService.getOrder(Number(orderId));
+        setOrder(data);
+      } catch (error) {
+        console.error("Erreur lors de la récupération de la commande:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
     if (orderId) {
       fetchOrder();
     }
   }, [orderId]);
-
-  const fetchOrder = async () => {
-    try {
-      setLoading(true);
-      const data = await orderService.getOrder(Number(orderId));
-      setOrder(data);
-    } catch (error) {
-      console.error("Erreur lors de la récupération de la commande:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (loading) {
     return <LoadingScreen title="commande" />;

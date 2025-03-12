@@ -23,24 +23,23 @@ export default function OrderDetails() {
     if (!isAuthenticated) {
       return;
     }
+    const fetchOrderDetails = async () => {
+      if (!orderId) return;
+      try {
+        setLoading(true);
+        const data = await orderService.getOrder(Number(orderId));
+        setOrder(data);
+      } catch (err) {
+        console.error(
+          "Erreur lors de la récupération des détails de la commande:",
+          err
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchOrderDetails();
   }, [orderId, isAuthenticated]);
-
-  const fetchOrderDetails = async () => {
-    if (!orderId) return;
-    try {
-      setLoading(true);
-      const data = await orderService.getOrder(Number(orderId));
-      setOrder(data);
-    } catch (err) {
-      console.error(
-        "Erreur lors de la récupération des détails de la commande:",
-        err
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
 
   if (!isAuthenticated) {
     return (

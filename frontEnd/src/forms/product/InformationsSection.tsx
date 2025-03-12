@@ -23,18 +23,17 @@ export default function InformationsSection({
   const [categories, setCategories] = useState<Collection[]>([]);
 
   useEffect(() => {
+    const handleGetCategories = async () => {
+      try {
+        const response = await collectionsService.getCollections();
+        setCategories(response);
+        setFormData((prev) => ({ ...prev, collection: response[0].name }));
+      } catch (error) {
+        console.error(error);
+      }
+    };
     handleGetCategories();
   }, []);
-
-  const handleGetCategories = async () => {
-    try {
-      const response = await collectionsService.getCollections();
-      setCategories(response);
-      setFormData((prev) => ({ ...prev, collection: response[0].name }));
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   return (
     <div>

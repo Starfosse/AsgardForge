@@ -17,6 +17,11 @@ interface WeekDayRushHourData {
   }[];
 }
 
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: any;
+}
+
 const WeekDayRushHour = () => {
   const days = [
     "Lundi",
@@ -36,7 +41,7 @@ const WeekDayRushHour = () => {
     })),
   }));
 
-  const CustomTooltip = ({ active, payload }: any) => {
+  const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-gray-800 p-2 rounded-lg border border-gray-700 overflow-x-auto whitespace-nowrap">

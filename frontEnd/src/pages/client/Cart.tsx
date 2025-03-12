@@ -1,6 +1,7 @@
 import JustAdmin from "@/components/JustAdmin";
 import { useAuth } from "@/contexts/AuthContext";
 import { useCart } from "@/contexts/CartContext";
+import Product from "@/services/api/products/types";
 import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -111,7 +112,7 @@ const Cart = () => {
                         </button>
                         <span className="px-4">{item.quantity}</span>
                         <button
-                          onClick={() => addToCart(item as any, 1)}
+                          onClick={() => addToCart(item as any as Product, 1)}
                           className="p-2 hover:bg-stone-100"
                         >
                           <Plus className="w-5 h-5" />

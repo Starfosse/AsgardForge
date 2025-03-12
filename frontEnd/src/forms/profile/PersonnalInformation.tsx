@@ -1,6 +1,8 @@
+import { Customer } from "@/contexts/AuthContext";
+
 interface PersonnalInformationProps {
-  formData: any;
-  handleChange: any;
+  formData: Customer;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isEditing: boolean;
   isSubmitting: boolean;
 }

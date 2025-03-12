@@ -26,7 +26,7 @@ export default function OrderHistory() {
   const fetchOrders = async () => {
     try {
       setLoading(true);
-      const response = await orderService.getOrdersByUserId(customer?.id!);
+      const response = await orderService.getOrdersByUserId(customer!.id);
       setOrders(response);
     } catch (err) {
       console.error("Erreur lors de la récupération des commandes:", err);

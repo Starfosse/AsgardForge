@@ -120,9 +120,11 @@ export default function ProductForm() {
           formDataToSend.append(key, value);
         }
       }
-      id
-        ? productsService.editProduct(parseInt(id), formDataToSend)
-        : productsService.addProduct(formDataToSend);
+      if (id) {
+        productsService.editProduct(parseInt(id), formDataToSend);
+      } else {
+        productsService.addProduct(formDataToSend);
+      }
 
       setStatus({
         submitted: true,
@@ -130,29 +132,30 @@ export default function ProductForm() {
         message: "Produit ajouté avec succès !",
       });
     } catch (error) {
+      console.error("Error adding product:", error);
       setStatus((prev) => ({
         ...prev,
         error: true,
         message: "Une erreur est survenue lors de l'ajout du produit",
       }));
     } finally {
-      id
-        ? null
-        : setFormData({
-            name: "",
-            description: "",
-            price: 0,
-            promotion_price: 0,
-            stock: 0,
-            collection: "",
-            alertStock: 0,
-            images: [],
-            specifications: "",
-            dimensions: "",
-            weight: 0,
-            material: "",
-            featured: false,
-          });
+      if (!id) {
+        setFormData({
+          name: "",
+          description: "",
+          price: 0,
+          promotion_price: 0,
+          stock: 0,
+          collection: "",
+          alertStock: 0,
+          images: [],
+          specifications: "",
+          dimensions: "",
+          weight: 0,
+          material: "",
+          featured: false,
+        });
+      }
       setIsUploading(false);
     }
   };

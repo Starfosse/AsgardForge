@@ -61,6 +61,7 @@ export default function ProfileForm() {
         setStatus((prev) => ({ ...prev, success: false, message: "" }));
       }, 3000);
     } catch (error) {
+      console.error("Error updating profile:", error);
       setStatus({
         error: true,
         success: false,

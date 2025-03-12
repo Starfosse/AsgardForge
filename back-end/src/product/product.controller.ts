@@ -73,7 +73,7 @@ export class ProductController {
   async findAll() {
     try {
       const products = await this.productRepository.findAll();
-      let productsWithImages = [];
+      const productsWithImages = [];
       for (const product of products as any) {
         const productImages =
           await this.productRepository.findAllImagesFromProduct(product.id);

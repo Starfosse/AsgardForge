@@ -161,7 +161,7 @@ export class ProductRepository {
         [id],
       );
 
-      const [result]: any = await this.connection.query(
+      await this.connection.query(
         'UPDATE products SET name = ?, description = ?, price = ?, promotion_price = ?, stock = ?, collection_id = ?, alert_stock = ?, specifications = ?, dimensions = ?, weight = ?, material = ?, featured = ? WHERE id = ?',
         [
           product.name,
@@ -179,6 +179,7 @@ export class ProductRepository {
           rows[0].id,
         ],
       );
+
       return { message: 'Product updated' };
     } catch (error) {
       console.error(error);

@@ -40,7 +40,7 @@ export class OrderRepository {
         item.promotion_price || item.price,
         item.quantity,
       ]);
-      const [result]: any = await this.connection.execute(
+      await this.connection.execute(
         `
     INSERT INTO order_items (order_id, product_id, price, promotion_price, quantity) 
     VALUES ${placeholders}

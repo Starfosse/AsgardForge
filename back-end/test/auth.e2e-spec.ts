@@ -72,9 +72,7 @@ describe('AuthController (e2e)', () => {
     expect(response.header['set-cookie'][0]).toContain('HttpOnly');
     expect(response.header['set-cookie'][0]).toContain('Secure');
 
-    const cutomerInfo = await request(app.getHttpServer())
-      .get('/api/customers/me')
-      .expect(200);
+    await request(app.getHttpServer()).get('/api/customers/me').expect(200);
 
     const responseRefresh = await request(app.getHttpServer())
       .post('/api/auth/refresh')

@@ -1,7 +1,5 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CreateReviewDto } from './dto/create-review.dto';
-import { ReviewRepository } from './review.repository';
 import { ReviewService } from './review.service';
 
 @Controller('reviews')

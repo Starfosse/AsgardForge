@@ -4,11 +4,11 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
-import { CreateContactDto } from './dto/create-conversation.dto';
-import { ContactService } from './contact.service';
-import { CreateMessageDto } from './dto/create-message.dto';
+import { Server } from 'socket.io';
 import { ContactRepository } from './contact.repository';
+import { ContactService } from './contact.service';
+import { CreateContactDto } from './dto/create-conversation.dto';
+import { CreateMessageDto } from './dto/create-message.dto';
 
 @WebSocketGateway({
   cors: {
@@ -39,17 +39,5 @@ export class ContactGateway {
       conversationId: res.conversationId,
       messageId: res.messageId,
     };
-  }
-
-  afterInit(server: Server) {
-    console.log('WebSocket Gateway initialized');
-  }
-
-  handleConnection(client: Socket) {
-    // console.log(`Client connected: ${client.id}`);
-  }
-
-  handleDisconnect(client: Socket) {
-    // console.log(`Client disconnected: ${client.id}`);
   }
 }

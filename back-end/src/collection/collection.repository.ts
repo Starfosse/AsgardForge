@@ -47,7 +47,7 @@ export class CollectionRepository {
 
   async update(id: number, newCollection: string, description: string) {
     try {
-      const [result]: any = await this.connection.query(
+      await this.connection.query(
         'UPDATE collections SET name = ?, description = ? WHERE id = ?',
         [newCollection, description, id],
       );

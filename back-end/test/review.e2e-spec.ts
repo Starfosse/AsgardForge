@@ -1,13 +1,12 @@
 import { INestApplication } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { Test } from '@nestjs/testing';
-import { AppModule } from '../src/app.module';
-import * as request from 'supertest';
 import * as cookieParser from 'cookie-parser';
-import { TransformResponseInterceptor } from '../src/interceptors/transform.interceptor';
 import { CreateCollectionDto } from 'src/collection/dto/create-collection-dto';
 import { CreateReviewDto } from 'src/review/dto/create-review.dto';
-import { after } from 'node:test';
-import { AuthGuard } from '@nestjs/passport';
+import * as request from 'supertest';
+import { AppModule } from '../src/app.module';
+import { TransformResponseInterceptor } from '../src/interceptors/transform.interceptor';
 
 describe('ReviewController (e2e)', () => {
   let app: INestApplication;
@@ -55,7 +54,7 @@ describe('ReviewController (e2e)', () => {
       description: 'collectionTestDecription',
     };
 
-    const response = await request(app.getHttpServer())
+    await request(app.getHttpServer())
       .get('/api/auth/google/callback')
       .expect(302);
 
@@ -82,7 +81,7 @@ describe('ReviewController (e2e)', () => {
         ),
       );
     }
-    const collectionId = await request(app.getHttpServer())
+    await request(app.getHttpServer())
       .post('/api/collections')
       .send(collection)
       .expect(201);
@@ -117,7 +116,7 @@ describe('ReviewController (e2e)', () => {
       .send(review)
       .expect(201);
 
-    const reviewData = await request(app.getHttpServer())
+    await request(app.getHttpServer())
       .get(`/api/reviews/${productId.body.data}`)
       .expect(200)
       .expect((response) => {

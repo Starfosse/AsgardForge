@@ -1,6 +1,6 @@
 import { collectionsService } from "@/services/api/collection/collections.service";
 import LoadingScreen from "./LoadingScreen";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Collection from "@/services/api/collection/types";
 import JustAdmin from "./JustAdmin";
 import { useAuth } from "@/contexts/AuthContext";
@@ -8,7 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 interface CollectionsListProps {
   openEditModal: (collection: Collection) => void;
   collections: Collection[];
-  setCollections: (value: Collection[]) => void;
+  setCollections: React.Dispatch<React.SetStateAction<Collection[]>>;
 }
 
 export default function CollectionsList({
@@ -44,7 +44,9 @@ export default function CollectionsList({
       }
       try {
         await collectionsService.deleteCollection(collectionId);
-        fetchCategories();
+        setCollections((prev) =>
+          prev.filter((collection) => collection.id !== collectionId)
+        );
       } catch (error) {
         console.error("Error deleting category:", error);
       }

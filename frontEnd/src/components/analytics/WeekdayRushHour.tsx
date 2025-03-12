@@ -9,17 +9,22 @@ import {
   ZAxis,
 } from "recharts";
 
+interface HourData {
+  hour: number;
+  customers: number;
+}
+
 interface WeekDayRushHourData {
   day: string;
-  hours: {
-    hour: number;
-    customers: number;
-  }[];
+  hours: HourData[];
 }
 
 interface CustomTooltipProps {
   active?: boolean;
-  payload?: any;
+  payload?: Array<{
+    value: number;
+    payload: HourData;
+  }>;
 }
 
 const WeekDayRushHour = () => {
@@ -53,6 +58,7 @@ const WeekDayRushHour = () => {
     }
     return null;
   };
+
   return (
     <DashBoardAnalytics className="h-[665px] col-span-5 flex flex-col space-y-4">
       <h2 className="font-semibold text-white">Heures d'affluence :</h2>

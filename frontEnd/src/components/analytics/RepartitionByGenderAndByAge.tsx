@@ -1,16 +1,23 @@
 import DashBoardAnalytics from "@/wrapper/DashBoardAnalytics";
 import {
+  Cell,
   Legend,
   Pie,
   PieChart,
   ResponsiveContainer,
   Tooltip,
-  Cell,
 } from "recharts";
+
+interface DataItem {
+  name: string;
+  value: number;
+  color: string;
+  percentage: number;
+}
 
 export default function CustomersDistribution() {
   const totalAge = 1200;
-  const ageData = [
+  const ageData: DataItem[] = [
     {
       name: "18-27 (33%)",
       value: 400,
@@ -42,7 +49,7 @@ export default function CustomersDistribution() {
     { name: "Hommes", color: "#4A90E2" },
   ];
 
-  const genderData = [
+  const genderData: DataItem[] = [
     {
       name: "Femmes (18-27)",
       value: 100,
@@ -92,7 +99,17 @@ export default function CustomersDistribution() {
       percentage: (198 / 200) * 100,
     },
   ];
-  const CustomTooltip = ({ active, payload }: any) => {
+
+  interface CustomTooltipProps {
+    active?: boolean;
+    payload?: Array<{
+      name: string;
+      value: number;
+      payload: DataItem;
+    }>;
+  }
+
+  const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-gray-800 p-2 rounded-lg border border-gray-700">
@@ -104,9 +121,26 @@ export default function CustomersDistribution() {
     }
     return null;
   };
+
   const renderColorfulLegendText = (value: string) => {
     return <span className="text-gray-300">{value}</span>;
   };
+
+  const legendPayload = [
+    ...ageData.map((item) => ({
+      value: item.name,
+      type: "square" as const,
+      color: item.color,
+      id: item.name,
+    })),
+    ...genderLegend.map((item) => ({
+      value: item.name,
+      type: "square" as const,
+      color: item.color,
+      id: item.name,
+    })),
+  ];
+
   return (
     <DashBoardAnalytics className="h-[350px] whitespace-nowrap overflow-x-auto">
       <h2 className="text-white font-semibold">
@@ -143,18 +177,7 @@ export default function CustomersDistribution() {
             layout="vertical"
             align="right"
             verticalAlign="middle"
-            payload={[
-              ...ageData.map((item) => ({
-                value: item.name,
-                type: "square",
-                color: item.color,
-              })),
-              ...genderLegend.map((item) => ({
-                value: item.name,
-                type: "square",
-                color: item.color,
-              })),
-            ]}
+            payload={legendPayload}
           />
         </PieChart>
       </ResponsiveContainer>

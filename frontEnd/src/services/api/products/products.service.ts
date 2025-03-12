@@ -1,6 +1,6 @@
 import { ReviewsCustomers } from "@/pages/client/Product";
 import { apiClient } from "../client";
-import Product, { ProductsFeatured } from "./types";
+import Product, { ProductReview, ProductsFeatured } from "./types";
 
 export const productsService = {
   addProduct: (formData: FormData) => {
@@ -28,7 +28,7 @@ export const productsService = {
       method: "GET",
     });
   },
-  addReview: (formData: any) => {
+  addReview: (formData: ProductReview) => {
     return apiClient.fetch("/api/reviews", {
       method: "POST",
       body: JSON.stringify(formData),

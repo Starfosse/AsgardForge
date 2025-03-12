@@ -5,19 +5,8 @@ import PersonnalInformation from "./PersonnalInformation";
 import DeliveryAdress from "./DeliveryAdress";
 import { customerService } from "@/services/api";
 
-// interface CustomerData {
-//   id: number;
-//   lastName: string;
-//   firstName: string;
-//   email: string;
-//   phone: string;
-//   address: string;
-//   city: string;
-//   postalCode: string;
-// }
-
 export default function ProfileForm() {
-  const { customer, updateCustomerData } = useAuth(); //update pour maj le contexte customer
+  const { customer, updateCustomerData } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [status, setStatus] = useState({
     error: false,

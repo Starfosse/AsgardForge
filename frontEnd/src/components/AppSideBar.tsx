@@ -49,13 +49,15 @@ export function AppSidebar() {
     isActiveRef.current = !isActiveRef.current;
   }
 
+  const handleLeave = () => {
+    isActiveRef.current === true ? setOpen(true) : setOpen(false);
+  };
+
   return (
     <Sidebar
       collapsible="icon"
       onMouseEnter={() => setOpen(true)}
-      onMouseLeave={() => {
-        isActiveRef.current === true ? setOpen(true) : setOpen(false);
-      }}
+      onMouseLeave={() => handleLeave()}
       className="h-screen flex flex-col"
     >
       <SidebarContent className="flex flex-col h-full">

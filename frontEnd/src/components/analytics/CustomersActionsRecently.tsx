@@ -27,7 +27,7 @@ const CustomersActionsRecently = () => {
     },
     {
       point: 2,
-      "Ajouter au panier": getRandomFakeData(15),
+      "Ajouter au panier": Math.floor(getRandomFakeData(15)),
     },
     {
       point: 3,
@@ -39,7 +39,7 @@ const CustomersActionsRecently = () => {
     },
     {
       point: 5,
-      "Passage en caisse": getRandomFakeData(10),
+      "Passage en caisse": Math.floor(getRandomFakeData(10)),
     },
     {
       point: 6,
@@ -51,7 +51,7 @@ const CustomersActionsRecently = () => {
     },
     {
       point: 8,
-      Acheter: getRandomFakeData(5),
+      Acheter: Math.floor(getRandomFakeData(5)),
     },
     {
       point: 9,

@@ -33,3 +33,10 @@ export interface ProductsFeatured {
   promotion_price: number;
   main_image: string;
 }
+
+export interface ProductReview {
+  productId: number;
+  customerId: number;
+  rating: number;
+  review: string;
+}

@@ -80,6 +80,7 @@ export default function Checkout() {
         message: "",
       }));
     } catch (error) {
+      console.error("Erreur lors de la commande:", error);
       setStatus((prev) => ({
         ...prev,
         error: true,

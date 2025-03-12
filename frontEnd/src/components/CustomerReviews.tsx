@@ -68,6 +68,7 @@ export default function CustomerReviews({
         },
       ]);
     } catch (error) {
+      console.error("Error sending review:", error);
       setStatus({
         error: true,
         message: "Erreur lors de l'envoi du commentaire",

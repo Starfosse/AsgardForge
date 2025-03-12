@@ -6,9 +6,9 @@ import JustAdmin from "./JustAdmin";
 import { useAuth } from "@/contexts/AuthContext";
 
 interface CollectionsListProps {
-  openEditModal: (collection: any) => void;
+  openEditModal: (collection: Collection) => void;
   collections: Collection[];
-  setCollections: (value: any) => void;
+  setCollections: (value: Collection[]) => void;
 }
 
 export default function CollectionsList({

@@ -5,8 +5,8 @@ interface CollectionFormProps {
   isEditMode: boolean;
   setIsModalOpen: (value: boolean) => void;
   setCollectionForm: React.Dispatch<React.SetStateAction<Collection>>;
-  collectionForm: any;
-  handleSubmitCategory: (e: any) => void;
+  collectionForm: Collection;
+  handleSubmitCategory: (e: React.FormEvent) => void;
 }
 
 export default function CollectionForm({

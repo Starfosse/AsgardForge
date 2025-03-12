@@ -43,6 +43,24 @@ export default function Contact() {
     orderId: "",
     initialMessage: "",
   });
+
+  useEffect(() => {
+    const fetchConversations = async () => {
+      if (!customer) return;
+      const res = await contactService.getConversations(customer.id);
+      setConversations(
+        res.map((conv) => ({
+          ...conv,
+          messages: conv.messages.map((msg) => ({
+            ...msg,
+            timestamp: new Date(msg.created_at),
+          })),
+        }))
+      );
+    };
+    fetchConversations();
+  }, [customer]);
+
   const handleCreateConversation = () => {
     if (!customer) return;
     const tmpId = nanoid();
@@ -100,6 +118,7 @@ export default function Contact() {
     setIsCreateModalOpen(false);
     setNewConversation({ subject: "", orderId: "", initialMessage: "" });
   };
+
   const handleSendMessage = () => {
     if (!newMessage.trim() || !selectedConversation) return;
     const tmpId = nanoid();
@@ -145,22 +164,7 @@ export default function Contact() {
     );
     setNewMessage("");
   };
-  const fetchConversations = async () => {
-    if (!customer) return;
-    const res = await contactService.getConversations(customer.id);
-    setConversations(
-      res.map((conv) => ({
-        ...conv,
-        messages: conv.messages.map((msg) => ({
-          ...msg,
-          timestamp: new Date(msg.created_at),
-        })),
-      }))
-    );
-  };
-  useEffect(() => {
-    fetchConversations();
-  }, [customer]);
+
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat("fr-FR", {
       hour: "2-digit",
@@ -170,6 +174,7 @@ export default function Contact() {
       year: "2-digit",
     }).format(date);
   };
+
   return (
     <div className="bg-stone-100 min-h-screen">
       <div className="container mx-auto px-4 py-8">

@@ -21,19 +21,18 @@ export default function CollectionsList({
   const { customer } = useAuth();
 
   useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await collectionsService.getCollections();
+        setCollections(response);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchCategories();
-  }, []);
-
-  const fetchCategories = async () => {
-    try {
-      const response = await collectionsService.getCollections();
-      setCollections(response);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  }, [setCollections]);
 
   const handleDeleteCollection = async (collectionId: number) => {
     if (

@@ -13,23 +13,22 @@ export default function CollectionPage() {
   const { collectionName } = useParams<{ collectionName: string }>();
 
   useEffect(() => {
+    const fetchCategory = async () => {
+      if (!id) return;
+      try {
+        setLoading(true);
+        const products = await collectionsService.getProductsByCollection(
+          parseInt(id)
+        );
+        setProductsCollection(products);
+      } catch (e) {
+        console.error(e);
+      } finally {
+        setLoading(false);
+      }
+    };
     fetchCategory();
   }, [id]);
-
-  const fetchCategory = async () => {
-    if (!id) return;
-    try {
-      setLoading(true);
-      const products = await collectionsService.getProductsByCollection(
-        parseInt(id)
-      );
-      setProductsCollection(products);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const filteredProducts = productsCollection.filter((product) => {
     const effectivePrice = product.promotion_price || Number(product.price);

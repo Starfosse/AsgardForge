@@ -33,7 +33,7 @@ export default function InformationsSection({
       }
     };
     handleGetCategories();
-  }, []);
+  }, [setFormData]);
 
   return (
     <div>

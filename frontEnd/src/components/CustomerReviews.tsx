@@ -6,7 +6,7 @@ import ProductReviewForm, {
 import { formatDate } from "@/lib/formatDate";
 
 import { ReviewsCustomers } from "@/pages/client/Product";
-import { productsService } from "@/services/api";
+import { productsService } from "@/services/api/products/products.service";
 import Card from "@/wrapper/Card";
 import { Star } from "lucide-react";
 import { useState } from "react";

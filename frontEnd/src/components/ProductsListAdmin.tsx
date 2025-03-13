@@ -64,7 +64,6 @@ export default function ProductsListAdmin() {
               "Stock",
               "Categorie",
               "Alerte de Stock",
-              "Details",
               "Specifications",
               "Dimensions",
               "Poids",
@@ -99,11 +98,11 @@ export default function ProductsListAdmin() {
                 }).format(product.price)}
               </td>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-green-600">
-                {product.promotionPrice &&
+                {product.promotion_price &&
                   new Intl.NumberFormat("fr-FR", {
                     style: "currency",
                     currency: "EUR",
-                  }).format(product.promotionPrice)}
+                  }).format(product.promotion_price)}
               </td>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-400">
                 <span
@@ -121,9 +120,6 @@ export default function ProductsListAdmin() {
               </td>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-400">
                 {product.alertStock}
-              </td>
-              <td className="px-6 py-4 text-sm text-gray-400 max-w-xs truncate">
-                {product.details}
               </td>
               <td className="px-6 py-4 text-sm text-gray-400 max-w-xs truncate">
                 {product.specifications}

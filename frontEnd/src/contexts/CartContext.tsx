@@ -15,6 +15,7 @@ type CartContextType = {
   cart: CartItem[];
   addToCart: (item: Product, quantity: number) => void;
   addToCartFromWishlist: (item: WishlistProduct) => void;
+  addToCartFromCart: (item: CartItem) => void;
   substractFromCart: (id: number, quantity: number) => void;
   removeFromCart: (id: number) => void;
   clearCart: () => void;
@@ -62,6 +63,29 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
               : undefined,
             quantity: quantity,
             image: item.images?.[0]?.image_path || "",
+          },
+        ];
+      }
+    });
+  };
+
+  const addToCartFromCart = (item: CartItem) => {
+    setCart((prevCart) => {
+      const existingItem = prevCart.find((i) => i.id === item.id);
+      if (existingItem) {
+        return prevCart.map((i) =>
+          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+        );
+      } else {
+        return [
+          ...prevCart,
+          {
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            promotion_price: item.promotion_price,
+            quantity: 1,
+            image: item.image,
           },
         ];
       }
@@ -131,6 +155,7 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         cart,
         addToCart,
         addToCartFromWishlist,
+        addToCartFromCart,
         removeFromCart,
         clearCart,
         substractFromCart,

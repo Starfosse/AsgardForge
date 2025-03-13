@@ -1,4 +1,4 @@
-import { productsService } from "@/services/api";
+import { productsService } from "@/services/api/products/products.service";
 import { ProductsFeatured } from "@/services/api/products/types";
 import Card from "@/wrapper/Card";
 import { useEffect, useState } from "react";

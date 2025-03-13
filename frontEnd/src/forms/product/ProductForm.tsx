@@ -4,7 +4,7 @@ import PriceSection from "./PriceSection";
 import StockSection from "./StockSection";
 import DetailsSection from "./DetailsSection";
 import ImageSection from "./ImageSection";
-import { productsService } from "@/services/api";
+import { productsService } from "@/services/api/products/products.service";
 import Product from "@/services/api/products/types";
 import { Link, useParams } from "react-router-dom";
 import JustAdmin from "@/components/JustAdmin";

@@ -3,6 +3,7 @@ import { AppModule } from './app.module';
 import { TransformResponseInterceptor } from './interceptors/transform.interceptor';
 import * as cookieParser from 'cookie-parser';
 async function bootstrap() {
+  console.log('NODE_ENV:', process.env.NODE_ENV);
   const isProd = process.env.NODE_ENV === 'production';
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');

@@ -42,7 +42,10 @@ export class AuthController {
       maxAge: 7 * 24 * 60 * 60 * 1000,
       path: '/api/auth/refresh',
     });
-    const frontendURL = 'http://localhost:5173';
+    const frontendURL =
+      process.env.NODE_ENV === 'production'
+        ? 'https://asgard-forge.vercel.app/'
+        : 'http://localhost:5173';
     return res.redirect(`${frontendURL}/login/success?token=${access_token}`);
   }
 

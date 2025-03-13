@@ -29,5 +29,3 @@ export default function Analytics() {
     </div>
   );
 }
-//par catégorie ou par produit de catégorie
-//revenu total en barre au fur et à mesure des années

@@ -92,11 +92,6 @@ export class AuthService {
         throw new Error('Invalid refresh token');
       }
 
-      const [rows]: any = await this.connection.execute(
-        'SELECT * FROM customers WHERE id = ?',
-        [payload.sub],
-      );
-
       const customer = await this.customerRepository.findById(payload.sub);
       return await this.generateTokens(customer);
     } catch (error) {

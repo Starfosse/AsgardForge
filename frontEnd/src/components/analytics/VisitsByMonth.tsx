@@ -1,6 +1,5 @@
 import DashBoardAnalytics from "@/wrapper/DashBoardAnalytics";
 import {
-  Legend,
   Line,
   LineChart,
   ResponsiveContainer,
@@ -20,6 +19,7 @@ export default function VisitsByMonth() {
     month: month,
     visits: Math.floor(Math.random() * 10000),
   }));
+
   return (
     <DashBoardAnalytics className="h-[300px] col-span-1 overflow-x-auto whitespace-nowrap">
       <h2 className="font-semibold text-white px-4 pb-4">Visits by Month</h2>

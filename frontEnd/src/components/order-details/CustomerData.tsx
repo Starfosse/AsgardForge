@@ -43,7 +43,6 @@ export default function CustomerData({ order }: CustomerDataProps) {
             <br />
             {order.shippingPostalCode} {order.shippingCity}
           </p>
-
           {order.trackingNumber && (
             <div className="mt-4 pt-4 border-t border-stone-100">
               <div className="flex items-start">

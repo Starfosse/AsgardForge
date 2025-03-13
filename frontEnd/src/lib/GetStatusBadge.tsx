@@ -8,7 +8,6 @@ const GetStatusBadge = ({ status }: GetStatusBadgeProps) => {
   let bgColor = "";
   let textColor = "";
   let label = "";
-
   switch (status) {
     case "pending":
       bgColor = "bg-amber-100";
@@ -40,7 +39,6 @@ const GetStatusBadge = ({ status }: GetStatusBadgeProps) => {
       textColor = "text-gray-800";
       label = "Inconnue";
   }
-
   return (
     <span
       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${bgColor} ${textColor}`}

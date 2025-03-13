@@ -1,14 +1,10 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { ReviewService } from './review.service';
-import { ReviewRepository } from './review.repository';
 
 @Controller('reviews')
 export class ReviewController {
-  constructor(
-    private readonly reviewService: ReviewService,
-    private readonly reviewRepository: ReviewRepository,
-  ) {}
+  constructor(private readonly reviewService: ReviewService) {}
 
   @Post()
   async create(@Body() createReviewDto: CreateReviewDto) {

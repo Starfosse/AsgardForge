@@ -13,8 +13,8 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { CreateProductDto } from './dto/create-product.dto';
-import { ProductService } from './product.service';
 import { ProductRepository } from './product.repository';
+import { ProductService } from './product.service';
 
 @Controller('products')
 export class ProductController {
@@ -45,14 +45,15 @@ export class ProductController {
       const productData = {
         ...createProductDto,
         price: createProductDto.price ? createProductDto.price : 0,
-        promotionPrice: createProductDto.promotionPrice
-          ? createProductDto.promotionPrice
+        promotionPrice: createProductDto.promotion_price
+          ? createProductDto.promotion_price
           : 0,
         stock: createProductDto.stock ? createProductDto.stock : 0,
         alertStock: createProductDto.alertStock
           ? createProductDto.alertStock
           : 0,
         weight: createProductDto.weight ? createProductDto.weight : 0,
+        featured: createProductDto.featured ? createProductDto.featured : false,
       };
       const imageUrls = images ? images.map((image) => image.path) : [];
       const imageUploaded =
@@ -72,7 +73,7 @@ export class ProductController {
   async findAll() {
     try {
       const products = await this.productRepository.findAll();
-      let productsWithImages = [];
+      const productsWithImages = [];
       for (const product of products as any) {
         const productImages =
           await this.productRepository.findAllImagesFromProduct(product.id);
@@ -151,8 +152,8 @@ export class ProductController {
       const productData = {
         ...updateProductDto,
         price: updateProductDto.price ? updateProductDto.price : 0,
-        promotionPrice: updateProductDto.promotionPrice
-          ? updateProductDto.promotionPrice
+        promotionPrice: updateProductDto.promotion_price
+          ? updateProductDto.promotion_price
           : 0,
         stock: updateProductDto.stock ? updateProductDto.stock : 0,
         alertStock: updateProductDto.alertStock
@@ -171,6 +172,17 @@ export class ProductController {
     } catch (error) {
       console.error(error);
       throw new Error('Could not update product');
+    }
+  }
+
+  @Get('featured/all')
+  async findFeaturedProducts() {
+    try {
+      const products = await this.productRepository.findFeaturedProducts();
+      return products;
+    } catch (error) {
+      console.error(error);
+      throw new Error('Could not find featured products');
     }
   }
 }

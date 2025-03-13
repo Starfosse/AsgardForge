@@ -1,3 +1,4 @@
+import { Customer } from "@/contexts/AuthContext";
 import { Star } from "lucide-react";
 import { useState } from "react";
 
@@ -19,7 +20,7 @@ interface ProductReviewFormProps {
     message: string;
     submitted: boolean;
   };
-  customer: any;
+  customer: Customer | null;
 }
 
 export default function ProductReviewForm({
@@ -42,7 +43,6 @@ export default function ProductReviewForm({
               <label htmlFor="rating" className="text-gray-800 -mt-4">
                 Note :
               </label>
-
               <div
                 className="flex space-x-1 "
                 onMouseLeave={() => setReviewStars(formData.rating)}

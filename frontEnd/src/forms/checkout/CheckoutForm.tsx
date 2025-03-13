@@ -1,11 +1,11 @@
-import { OrderCommand } from "@/pages/client/Checkout";
+import { OrderCommandForm } from "@/pages/client/Checkout";
 import DeliveryAdress from "./DeliveryAdress";
-import PersonnalInformation from "./PersonnalInformation";
 import PaymentInformation from "./PaymentInformation";
+import PersonnalInformation from "./PersonnalInformation";
 
 interface CheckoutFormProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  paymentForm: OrderCommand;
+  paymentForm: OrderCommandForm;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   isSubmitting: boolean;
 }
@@ -29,11 +29,7 @@ export default function CheckoutForm({
           paymentForm={paymentForm}
           isSubmitting={isSubmitting}
         />
-        <PaymentInformation
-          handleChange={handleChange}
-          paymentForm={paymentForm}
-          isSubmitting={isSubmitting}
-        />
+        <PaymentInformation />
       </form>
     </div>
   );

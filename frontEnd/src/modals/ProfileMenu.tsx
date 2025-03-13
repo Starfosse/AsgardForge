@@ -7,7 +7,6 @@ export default function ProfileMenu() {
   const { customer, logout } = useAuth();
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const profileMenuTimerRef = useRef<NodeJS.Timeout | null>(null);
-
   const handleCartMouseEnter = () => {
     if (profileMenuTimerRef.current) {
       clearTimeout(profileMenuTimerRef.current);
@@ -16,7 +15,6 @@ export default function ProfileMenu() {
       setIsProfileMenuOpen(true);
     }, 200);
   };
-
   const handleCartMouseLeave = () => {
     if (profileMenuTimerRef.current) {
       clearTimeout(profileMenuTimerRef.current);
@@ -25,7 +23,6 @@ export default function ProfileMenu() {
       setIsProfileMenuOpen(false);
     }, 300);
   };
-
   useEffect(() => {
     return () => {
       if (profileMenuTimerRef.current) {
@@ -33,7 +30,6 @@ export default function ProfileMenu() {
       }
     };
   }, []);
-
   return (
     <div
       className="hidden md:inline-flex md:relative md:justify-center items-center"
@@ -44,13 +40,11 @@ export default function ProfileMenu() {
         <User className="h-5 w-5" />
         <span className="font-medium">Bonjour {customer?.firstName}</span>
       </div>
-
       {isProfileMenuOpen && (
         <div className="absolute top-full mt-1 right-0 w-48 bg-stone-800 shadow-lg rounded-md overflow-hidden z-20 border border-stone-700">
           <div className="py-2 px-4 bg-stone-900 text-amber-300 font-semibold border-b border-stone-700">
             Mon compte
           </div>
-
           <div className="py-1">
             <Link
               className="flex items-center px-4 py-2 text-amber-300 hover:bg-stone-700 transition duration-300"

@@ -23,176 +23,169 @@ import Wishlist from "./pages/client/Wishlist";
 
 function App() {
   return (
-    // <div className="flex flex-col min-h-screen ">
-    //   <Menu />
-    //   <main className="flex-grow">
-    //     <Home />
-    //     <Collections />
-    //     <Product />
-    //     <Cart />
-    //   </main>
-    // </div>
-    <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <LayoutClient>
-              <Home />
-            </LayoutClient>
-          }
-        />
-        <Route
-          path="profile"
-          element={
-            <LayoutClient>
-              <Profile />
-            </LayoutClient>
-          }
-        />
-        <Route
-          path="/order/confirmation/:orderId"
-          element={
-            <LayoutClient>
-              <OrderConfirmation />
-            </LayoutClient>
-          }
-        />
-        <Route
-          path="order/history"
-          element={
-            <LayoutClient>
-              <OrderHistory />
-            </LayoutClient>
-          }
-        />
-        <Route
-          path="order/history/:orderId"
-          element={
-            <LayoutClient>
-              <OrderDetails />
-            </LayoutClient>
-          }
-        />
-        <Route
-          path="profile/wishlist"
-          element={
-            <LayoutClient>
-              {" "}
-              <Wishlist />
-            </LayoutClient>
-          }
-        />
-        <Route path="/login/success" element={<GoogleCallBack />} />
-        <Route
-          path="/checkout"
-          element={
-            <LayoutClient>
-              <Checkout />
-            </LayoutClient>
-          }
-        />
-        <Route
-          path="/:collectionName/:id"
-          element={
-            <LayoutClient>
-              {/* <Product /> */}
-              <CollectionPage />
-            </LayoutClient>
-          }
-        />
-        <Route
-          path="/:collectionName/:id/:productName/:productId"
-          element={
-            <LayoutClient>
-              <ProductPage />
-            </LayoutClient>
-          }
-        />
-        <Route
-          path="/cart"
-          element={
-            <LayoutClient>
-              <Cart />
-            </LayoutClient>
-          }
-        />
-        <Route
-          path="/contact"
-          element={
-            <LayoutClient>
-              <Contact />
-            </LayoutClient>
-          }
-        />
-        <Route
-          path="/dashboard"
-          element={
-            <LayoutAdmin>
-              <Dashboard />
-            </LayoutAdmin>
-          }
-        />
-        <Route
-          path="/dashboard/orders"
-          element={
-            <LayoutAdmin>
-              <DashBoardProduct>
-                <OrdersList />
-              </DashBoardProduct>
-            </LayoutAdmin>
-          }
-        />
-        <Route
-          path="/dashboard/customers"
-          element={
-            <LayoutAdmin>
-              <DashBoardProduct>
-                <CustomerList />
-              </DashBoardProduct>
-            </LayoutAdmin>
-          }
-        />
-        <Route
-          path="/dashboard/products"
-          element={
-            <LayoutAdmin>
-              <DashBoardProduct>
-                <ProductsList />
-              </DashBoardProduct>
-            </LayoutAdmin>
-          }
-        />
-        <Route
-          path="/dashboard/products/:id"
-          element={
-            <LayoutAdmin>
-              <DashBoardProduct>
-                <ProductForm />
-              </DashBoardProduct>
-            </LayoutAdmin>
-          }
-        />
-        <Route
-          path="/dashboard/products/new"
-          element={
-            <LayoutAdmin>
-              <DashBoardProduct>
-                <ProductForm />
-              </DashBoardProduct>
-            </LayoutAdmin>
-          }
-        />
-        <Route
-          path="/dashboard/support/"
-          element={
-            <LayoutAdmin>
-              <Support />
-            </LayoutAdmin>
-          }
-        />
-      </Routes>
-    </Router>
+    <div>
+      <Router>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <LayoutClient>
+                <Home />
+              </LayoutClient>
+            }
+          />
+          <Route
+            path="profile"
+            element={
+              <LayoutClient>
+                <Profile />
+              </LayoutClient>
+            }
+          />
+          <Route
+            path="/order/confirmation/:orderId"
+            element={
+              <LayoutClient>
+                <OrderConfirmation />
+              </LayoutClient>
+            }
+          />
+          <Route
+            path="order/history"
+            element={
+              <LayoutClient>
+                <OrderHistory />
+              </LayoutClient>
+            }
+          />
+          <Route
+            path="order/history/:orderId"
+            element={
+              <LayoutClient>
+                <OrderDetails />
+              </LayoutClient>
+            }
+          />
+          <Route
+            path="profile/wishlist"
+            element={
+              <LayoutClient>
+                {" "}
+                <Wishlist />
+              </LayoutClient>
+            }
+          />
+          <Route path="/login/success" element={<GoogleCallBack />} />
+          <Route
+            path="/checkout"
+            element={
+              <LayoutClient>
+                <Checkout />
+              </LayoutClient>
+            }
+          />
+          <Route
+            path="/:collectionName/:id"
+            element={
+              <LayoutClient>
+                {/* <Product /> */}
+                <CollectionPage />
+              </LayoutClient>
+            }
+          />
+          <Route
+            path="/:collectionName/:id/:productName/:productId"
+            element={
+              <LayoutClient>
+                <ProductPage />
+              </LayoutClient>
+            }
+          />
+          <Route
+            path="/cart"
+            element={
+              <LayoutClient>
+                <Cart />
+              </LayoutClient>
+            }
+          />
+          <Route
+            path="/contact"
+            element={
+              <LayoutClient>
+                <Contact />
+              </LayoutClient>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <LayoutAdmin>
+                <Dashboard />
+              </LayoutAdmin>
+            }
+          />
+          <Route
+            path="/dashboard/orders"
+            element={
+              <LayoutAdmin>
+                <DashBoardProduct>
+                  <OrdersList />
+                </DashBoardProduct>
+              </LayoutAdmin>
+            }
+          />
+          <Route
+            path="/dashboard/customers"
+            element={
+              <LayoutAdmin>
+                <DashBoardProduct>
+                  <CustomerList />
+                </DashBoardProduct>
+              </LayoutAdmin>
+            }
+          />
+          <Route
+            path="/dashboard/products"
+            element={
+              <LayoutAdmin>
+                <DashBoardProduct>
+                  <ProductsList />
+                </DashBoardProduct>
+              </LayoutAdmin>
+            }
+          />
+          <Route
+            path="/dashboard/products/:id"
+            element={
+              <LayoutAdmin>
+                <DashBoardProduct>
+                  <ProductForm />
+                </DashBoardProduct>
+              </LayoutAdmin>
+            }
+          />
+          <Route
+            path="/dashboard/products/new"
+            element={
+              <LayoutAdmin>
+                <DashBoardProduct>
+                  <ProductForm />
+                </DashBoardProduct>
+              </LayoutAdmin>
+            }
+          />
+          <Route
+            path="/dashboard/support/"
+            element={
+              <LayoutAdmin>
+                <Support />
+              </LayoutAdmin>
+            }
+          />
+        </Routes>
+      </Router>
+    </div>
   );
 }
 

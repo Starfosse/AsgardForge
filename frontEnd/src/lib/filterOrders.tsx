@@ -51,6 +51,5 @@ export default function filterOrders({
           return true;
       }
     });
-
   return filteredOrders;
 }

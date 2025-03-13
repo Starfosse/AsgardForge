@@ -40,9 +40,9 @@ export default function PriceSection({
         <input
           className="rounded-sm bg-[#272E48] outline-1 outline outline-gray-500 p-1 px-3 text-gray-400 focus:outline-sky-500"
           type="number"
-          id={"promotionPrice"}
-          name={"promotionPrice"}
-          value={formData.promotionPrice}
+          id={"promotion_price"}
+          name={"promotion_price"}
+          value={formData.promotion_price}
           onChange={handleChange}
           disabled={isUploading}
         />

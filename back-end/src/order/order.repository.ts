@@ -37,12 +37,10 @@ export class OrderRepository {
         orderId,
         item.id,
         item.price,
-        item.promotionPrice || item.price,
+        item.promotion_price || item.price,
         item.quantity,
       ]);
-
-      // Exécution de la requête SQL avec des paramètres préparés
-      const [result]: any = await this.connection.execute(
+      await this.connection.execute(
         `
     INSERT INTO order_items (order_id, product_id, price, promotion_price, quantity) 
     VALUES ${placeholders}
@@ -57,7 +55,7 @@ export class OrderRepository {
   async findOne(orderId: number) {
     try {
       const [rows]: any = await this.connection.query(
-        "SELECT JSON_OBJECT('id', o.id, 'recipientFirstName', o.recipient_first_name, 'recipientLastName', o.recipient_last_name, 'recipientEmail', o.recipient_email, 'recipientPhone', o.recipient_phone, 'shippingAddress', o.shipping_address, 'shippingCity', o.shipping_city, 'shippingPostalCode', o.shipping_postal_code, 'total', o.total, 'items',(SELECT JSON_ARRAYAGG(JSON_OBJECT('product', JSON_OBJECT('id', p.id, 'name', p.name, 'imagePath', (SELECT pi.image_path FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.image_order LIMIT 1)), 'price', oi.price, 'promotionPrice', oi.promotion_price, 'quantity', oi.quantity)) FROM order_items oi JOIN products p ON oi.product_id = p.id WHERE oi.order_id = o.id)) as 'order' FROM orders o WHERE o.id = ?",
+        "SELECT JSON_OBJECT('id', o.id, 'recipientFirstName', o.recipient_first_name, 'recipientLastName', o.recipient_last_name, 'recipientEmail', o.recipient_email, 'recipientPhone', o.recipient_phone, 'shippingAddress', o.shipping_address, 'shippingCity', o.shipping_city, 'shippingPostalCode', o.shipping_postal_code, 'total', o.total, 'createdAt', o.created_at, 'status', o.status, 'items',(SELECT JSON_ARRAYAGG(JSON_OBJECT('product', JSON_OBJECT('id', p.id, 'name', p.name, 'imagePath', (SELECT pi.image_path FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.image_order LIMIT 1)), 'price', oi.price, 'promotionPrice', oi.promotion_price, 'quantity', oi.quantity)) FROM order_items oi JOIN products p ON oi.product_id = p.id WHERE oi.order_id = o.id)) as 'order' FROM orders o WHERE o.id = ?",
         [orderId],
       );
       return rows[0].order;

@@ -1,6 +1,6 @@
 import { ReviewsCustomers } from "@/pages/client/Product";
 import { apiClient } from "../client";
-import Product from "./types";
+import Product, { ProductReview, ProductsFeatured } from "./types";
 
 export const productsService = {
   addProduct: (formData: FormData) => {
@@ -9,12 +9,11 @@ export const productsService = {
   getProducts: () => {
     return apiClient.fetch<Product[]>("/api/products", { method: "GET" });
   },
-
   deleteProduct: (id: number) => {
     return apiClient.fetch(`/api/products/${id}`, { method: "DELETE" });
   },
   editProduct: (id: number, formData: FormData) => {
-    return apiClient.upload(`/api/products/${id}`, formData, "PUT");
+    return apiClient.upload(`/api/products/${id}`, formData, "PATCH");
   },
   getProduct: (id: number) => {
     return apiClient.fetch<Product>(`/api/products/${id}`, {
@@ -29,8 +28,7 @@ export const productsService = {
       method: "GET",
     });
   },
-
-  addReview: (formData: any) => {
+  addReview: (formData: ProductReview) => {
     return apiClient.fetch("/api/reviews", {
       method: "POST",
       body: JSON.stringify(formData),
@@ -38,6 +36,11 @@ export const productsService = {
   },
   getReviews: (id: number) => {
     return apiClient.fetch<ReviewsCustomers[]>(`/api/reviews/${id}`, {
+      method: "GET",
+    });
+  },
+  getFeaturedProducts: () => {
+    return apiClient.fetch<ProductsFeatured[]>("/api/products/featured/all", {
       method: "GET",
     });
   },

@@ -6,7 +6,9 @@ import DetailsSection from "./DetailsSection";
 import ImageSection from "./ImageSection";
 import { productsService } from "@/services/api";
 import Product from "@/services/api/products/types";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import JustAdmin from "@/components/JustAdmin";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Status {
   submitted: boolean;
@@ -20,24 +22,17 @@ export default function ProductForm() {
     name: "",
     description: "",
     price: 0,
-    promotionPrice: 0,
+    promotion_price: 0,
     stock: 0,
     collection: "",
     alertStock: 0,
     imagesFiles: [],
-    details: "",
     specifications: "",
     dimensions: "",
     weight: 0,
     material: "",
+    featured: false,
   });
-  useEffect(() => {
-    if (id) {
-      productsService.getProduct(parseInt(id)).then((product) => {
-        setFormData(product);
-      });
-    }
-  }, [id]);
   const [status, setStatus] = useState<Status>({
     submitted: false,
     error: false,
@@ -45,6 +40,16 @@ export default function ProductForm() {
   });
   const [previews, setPreviews] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
+  const [allowed, setAllowed] = useState(false);
+  const { customer } = useAuth();
+
+  useEffect(() => {
+    if (id) {
+      productsService.getProduct(parseInt(id)).then((product) => {
+        setFormData(product);
+      });
+    }
+  }, [id]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -93,8 +98,13 @@ export default function ProductForm() {
       imagesFiles: prev.imagesFiles!.filter((_, i) => i !== index),
     }));
   };
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (customer?.email !== import.meta.env.VITE_ADMIN_EMAIL) {
+      setAllowed(true);
+      return;
+    }
     setIsUploading(true);
     try {
       setStatus((prev) => ({ ...prev, error: false, message: "" }));
@@ -110,9 +120,11 @@ export default function ProductForm() {
           formDataToSend.append(key, value);
         }
       }
-      id
-        ? productsService.editProduct(parseInt(id), formDataToSend)
-        : productsService.addProduct(formDataToSend);
+      if (id) {
+        productsService.editProduct(parseInt(id), formDataToSend);
+      } else {
+        productsService.addProduct(formDataToSend);
+      }
 
       setStatus({
         submitted: true,
@@ -120,41 +132,47 @@ export default function ProductForm() {
         message: "Produit ajouté avec succès !",
       });
     } catch (error) {
+      console.error("Error adding product:", error);
       setStatus((prev) => ({
         ...prev,
         error: true,
         message: "Une erreur est survenue lors de l'ajout du produit",
       }));
     } finally {
-      id
-        ? null
-        : setFormData({
-            name: "",
-            description: "",
-            price: 0,
-            promotionPrice: 0,
-            stock: 0,
-            collection: "",
-            alertStock: 0,
-            images: [],
-            details: "",
-            specifications: "",
-            dimensions: "",
-            weight: 0,
-            material: "",
-          });
+      if (!id) {
+        setFormData({
+          name: "",
+          description: "",
+          price: 0,
+          promotion_price: 0,
+          stock: 0,
+          collection: "",
+          alertStock: 0,
+          images: [],
+          specifications: "",
+          dimensions: "",
+          weight: 0,
+          material: "",
+          featured: false,
+        });
+      }
       setIsUploading(false);
     }
   };
+
+  if (allowed) {
+    return <JustAdmin allowed={allowed} setAllowed={setAllowed} />;
+  }
+
   return (
     <>
       <div>
-        <button
+        <Link
+          to="/dashboard/products"
           className="text-gray-400 hover:underline"
-          onClick={() => history.back()}
         >
           ← Revenir en arrière
-        </button>
+        </Link>
       </div>
       <h1 className="text-2xl text-gray-400 mb-6 text-center">
         {id ? (
@@ -196,7 +214,6 @@ export default function ProductForm() {
             {status.message}
           </div>
         )}
-
         {status.submitted && !status.error && (
           <div className="p-4 bg-green-50 border-l-4 border-green-500 text-green-700">
             {status.message}
@@ -208,7 +225,7 @@ export default function ProductForm() {
           className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 
                    disabled:bg-blue-300 disabled:cursor-not-allowed"
         >
-          {isUploading ? "Création en cours..." : "Créer le produit"}
+          {id ? "Modifier le produit" : "Créer le produit"}
         </button>
       </form>
     </>

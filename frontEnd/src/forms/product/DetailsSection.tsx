@@ -24,13 +24,13 @@ export default function DetailsSection({
           >
             Dimension
           </label>
-          <textarea
-            className="rounded-sm bg-[#272E48] outline-1 outline outline-gray-500 p-1 px-3 text-gray-400 focus:outline-sky-500"
+          <input
+            className="rounded-sm bg-[#272E48] outline-1 outline outline-gray-500 p-1 px-3 text-gray-400  focus:outline-sky-500"
+            type="text"
             id={"dimensions"}
             name={"dimensions"}
             value={formData.dimensions}
             onChange={handleChange}
-            rows={3}
             disabled={isUploading}
           />
         </div>
@@ -80,6 +80,19 @@ export default function DetailsSection({
           onChange={handleChange}
           disabled={isUploading}
         />
+      </div>
+      <div className="flex items-center mb-4">
+        <input
+          type="checkbox"
+          id={"featured"}
+          name={"featured"}
+          checked={formData.featured}
+          onChange={handleChange}
+          disabled={isUploading}
+        />
+        <label className="ml-2 text-gray-400" htmlFor={"featured"}>
+          Produit en vedette
+        </label>
       </div>
     </div>
   );

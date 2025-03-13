@@ -22,6 +22,7 @@ export class ReviewService {
         await this.reviewRepository.findReviewById(reviewCreatedId);
       return review;
     } catch (error) {
+      console.error('Error creating review:', error);
       throw new Error('Error creating review');
     }
   }
@@ -43,6 +44,7 @@ export class ReviewService {
       }
       return reviewsWithCustomersNames;
     } catch (error) {
+      console.error('Error getting reviews:', error);
       throw new Error('Error getting reviews');
     }
   }

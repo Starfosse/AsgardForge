@@ -6,7 +6,7 @@ interface ApiResponse<T> {
   message: string;
 }
 
-type MethodUpload = "POST" | "PUT";
+type MethodUpload = "POST" | "PUT" | "PATCH";
 
 export const apiClient = {
   fetch: async <T>(url: string, options: RequestInit = {}): Promise<T> => {
@@ -55,7 +55,7 @@ export const apiClient = {
             });
 
             if (!newResponse.ok) {
-              const errorData: ApiResponse<any> = await newResponse.json();
+              const errorData: ApiResponse<T> = await newResponse.json();
               throw new Error(errorData.message || "API Error");
             }
             const newData: ApiResponse<T> = await newResponse.json();
@@ -71,7 +71,7 @@ export const apiClient = {
       }
 
       if (!response.ok) {
-        const errorData: ApiResponse<any> = await response.json();
+        const errorData: ApiResponse<T> = await response.json();
         throw new Error(errorData.message || "API Error");
       }
 

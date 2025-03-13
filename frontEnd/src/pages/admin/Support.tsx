@@ -1,3 +1,4 @@
+import { formatDate } from "@/lib/formatDate";
 import { contactService } from "@/services/api";
 import { MessageSquare, Send, User } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -26,22 +27,23 @@ export default function Support() {
     useState<Conversation | null>(null);
   const [newMessage, setNewMessage] = useState("");
 
+  useEffect(() => {
+    fetchAllConversations();
+  }, []);
+
   const handleSendMessage = () => {
     if (!newMessage.trim() || !selectedConversation) return;
-
     const newMessageObj: Message = {
       id: `m${Date.now()}`,
       content: newMessage,
       sender: "support",
       timestamp: new Date(),
     };
-
     const updatedConversation = {
       ...selectedConversation,
       messages: [...selectedConversation.messages, newMessageObj],
       updatedAt: new Date(),
     };
-
     setConversations(
       conversations.map((conv) =>
         conv.id === selectedConversation.id ? updatedConversation : conv
@@ -49,16 +51,6 @@ export default function Support() {
     );
     setSelectedConversation(updatedConversation);
     setNewMessage("");
-  };
-
-  const formatDate = (date: Date) => {
-    return new Intl.DateTimeFormat("fr-FR", {
-      hour: "2-digit",
-      minute: "2-digit",
-      day: "2-digit",
-      month: "2-digit",
-      year: "2-digit",
-    }).format(date);
   };
 
   const fetchAllConversations = async () => {
@@ -77,13 +69,9 @@ export default function Support() {
       }))
     );
   };
-  useEffect(() => {
-    fetchAllConversations();
-  }, []);
 
   return (
     <div className="flex h-screen max-h-[850px] bg-white rounded-lg shadow-lg overflow-hidden">
-      {/* Liste des conversations */}
       <div className="w-80 h-full border-r border-gray-200 flex flex-col">
         <div className="p-4 border-b border-gray-200">
           <h2 className="text-lg font-semibold">Conversations</h2>
@@ -111,14 +99,12 @@ export default function Support() {
                 {conversation.subject}
               </p>
               <p className="text-xs text-gray-400 mt-1">
-                {formatDate(conversation.createdAt)}
+                {formatDate(conversation.createdAt.toString())}
               </p>
             </div>
           ))}
         </div>
       </div>
-
-      {/* Zone de messages */}
       <div className="flex-1 h-full flex flex-col bg-gray-50">
         {selectedConversation ? (
           <>
@@ -161,7 +147,7 @@ export default function Support() {
                             : "text-gray-400"
                         }`}
                       >
-                        {formatDate(message.timestamp)}
+                        {formatDate(message.timestamp.toString())}
                       </p>
                     </div>
                   </div>

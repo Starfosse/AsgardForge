@@ -1,18 +1,8 @@
-import { OrderCommand } from "./CheckoutForm";
+import Card from "@/wrapper/Card";
 
-interface PaymentInformationProps {
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  paymentForm: OrderCommand;
-  isSubmitting: boolean;
-}
-
-export default function PaymentInformation({
-  handleChange,
-  paymentForm,
-  isSubmitting,
-}: PaymentInformationProps) {
+export default function PaymentInformation() {
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <Card variant="primary" className="p-6">
       <h2 className="text-2xl font-bold mb-6 text-stone-800">Paiement</h2>
       <div className="space-y-4">
         <div>
@@ -22,10 +12,9 @@ export default function PaymentInformation({
           <input
             type="text"
             name="cardHolder"
-            value={paymentForm.cardHolder}
-            onChange={handleChange}
+            value="John Doe"
             className="w-full p-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-            required
+            disabled={true}
           />
         </div>
         <div>
@@ -35,11 +24,10 @@ export default function PaymentInformation({
           <input
             type="text"
             name="cardNumber"
-            value={paymentForm.cardNumber}
-            onChange={handleChange}
+            value="1234 5678 1234 5678"
             className="w-full p-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-            required
             maxLength={16}
+            disabled={true}
           />
         </div>
         <div className="grid grid-cols-2 gap-4">
@@ -50,11 +38,10 @@ export default function PaymentInformation({
             <input
               type="text"
               name="expirationDate"
-              value={paymentForm.expirationDate}
-              onChange={handleChange}
+              value="12/23"
               placeholder="MM/AA"
               className="w-full p-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-              required
+              disabled={true}
             />
           </div>
           <div>
@@ -64,15 +51,14 @@ export default function PaymentInformation({
             <input
               type="text"
               name="cvv"
-              value={paymentForm.cvv}
-              onChange={handleChange}
+              value="123"
               className="w-full p-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-              required
               maxLength={3}
+              disabled={true}
             />
           </div>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

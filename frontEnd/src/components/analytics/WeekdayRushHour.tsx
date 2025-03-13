@@ -9,12 +9,22 @@ import {
   ZAxis,
 } from "recharts";
 
+interface HourData {
+  hour: number;
+  customers: number;
+}
+
 interface WeekDayRushHourData {
   day: string;
-  hours: {
-    hour: number;
-    customers: number;
-  }[];
+  hours: HourData[];
+}
+
+interface CustomTooltipProps {
+  active?: boolean;
+  payload?: Array<{
+    value: number;
+    payload: HourData;
+  }>;
 }
 
 const WeekDayRushHour = () => {
@@ -36,7 +46,7 @@ const WeekDayRushHour = () => {
     })),
   }));
 
-  const CustomTooltip = ({ active, payload }: any) => {
+  const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-gray-800 p-2 rounded-lg border border-gray-700 overflow-x-auto whitespace-nowrap">

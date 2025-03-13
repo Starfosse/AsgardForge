@@ -49,13 +49,11 @@ export default function Orders({ filteredOrders }: OrdersProps) {
               </Link>
             </div>
           </div>
-
           <div className="p-4">
             <div className="text-sm text-stone-500 mb-3">
               {getTotalItems(order.items)} article
               {getTotalItems(order.items) > 1 ? "s" : ""}
             </div>
-
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {order.items.slice(0, 3).map((item, idx) => (
                 <div key={idx} className="flex items-center space-x-3">
@@ -76,7 +74,6 @@ export default function Orders({ filteredOrders }: OrdersProps) {
                   </div>
                 </div>
               ))}
-
               {order.items.length > 3 && (
                 <div className="flex items-center justify-center">
                   <Link
@@ -90,7 +87,6 @@ export default function Orders({ filteredOrders }: OrdersProps) {
               )}
             </div>
           </div>
-
           {order.createdAt === "delivered" && (
             <div className="bg-stone-50 p-4 border-t border-stone-200">
               <button className="text-amber-700 hover:text-amber-600 text-sm font-medium">

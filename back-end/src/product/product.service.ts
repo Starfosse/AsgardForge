@@ -1,28 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
 import { ProductRepository } from './product.repository';
-import { UploadApiResponse } from 'cloudinary';
 
 export interface productData {
   images: string[];
   price: number;
-  promotionPrice: number;
+  promotion_price: number;
   stock: number;
   alertStock: number;
   weight: number;
   name: string;
   description: string;
   collection: string;
-  details: string;
   specifications: string;
   dimensions: string;
   material: string;
+  featured: boolean;
 }
 
 @Injectable()
 export class ProductService {
   constructor(private readonly productRepository: ProductRepository) {}
+
   async create(product: productData) {
     try {
       const productCreatedId =

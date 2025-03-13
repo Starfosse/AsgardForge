@@ -1,8 +1,9 @@
-import { OrderCommand } from "./CheckoutForm";
+import { OrderCommandForm } from "@/pages/client/Checkout";
+import Card from "@/wrapper/Card";
 
 interface PersonnalInformationProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  paymentForm: OrderCommand;
+  paymentForm: OrderCommandForm;
   isSubmitting: boolean;
 }
 
@@ -12,7 +13,7 @@ export default function PersonnalInformation({
   isSubmitting,
 }: PersonnalInformationProps) {
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <Card variant="primary" className="p-6">
       <h2 className="text-2xl font-bold mb-6 text-stone-800">
         Informations Personnelles
       </h2>
@@ -74,6 +75,6 @@ export default function PersonnalInformation({
           />
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

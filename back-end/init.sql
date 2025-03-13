@@ -37,11 +37,11 @@ CREATE TABLE products (
     stock INT NOT NULL DEFAULT 0,
     collection_id BIGINT NOT NULL,
     alert_stock INT NOT NULL DEFAULT 0,
-    details TEXT,
     specifications TEXT,
     dimensions VARCHAR(255),
     weight DECIMAL(10, 2),
     material VARCHAR(255),
+    featured boolean NOT NULL DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (collection_id) REFERENCES collections(id)

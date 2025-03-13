@@ -13,14 +13,11 @@ export default function OrderStatus({ order }: OrderStatusProps) {
     { key: "shipped", label: "Expédiée" },
     { key: "delivered", label: "Livrée" },
   ];
-
   const getCurrentStep = () => {
     if (!order) return -1;
     if (order.status === "cancelled") return -1;
-
     return orderSteps.findIndex((step) => step.key === order.status);
   };
-
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       {order.status === "cancelled" ? (

@@ -1,8 +1,9 @@
-import { OrderCommand } from "@/pages/client/Checkout";
+import { OrderCommandForm } from "@/pages/client/Checkout";
+import Card from "@/wrapper/Card";
 
 interface DeliveryAdressProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  paymentForm: OrderCommand;
+  paymentForm: OrderCommandForm;
   isSubmitting: boolean;
 }
 
@@ -12,7 +13,7 @@ export default function DeliveryAdress({
   isSubmitting,
 }: DeliveryAdressProps) {
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
+    <Card variant="primary" className="p-6">
       <h2 className="text-2xl font-bold mb-6 text-stone-800">
         Adresse de Livraison
       </h2>
@@ -28,6 +29,7 @@ export default function DeliveryAdress({
             onChange={handleChange}
             className="w-full p-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
             required
+            disabled={isSubmitting}
           />
         </div>
         <div className="grid md:grid-cols-2 gap-4">
@@ -42,6 +44,7 @@ export default function DeliveryAdress({
               onChange={handleChange}
               className="w-full p-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
               required
+              disabled={isSubmitting}
             />
           </div>
           <div>
@@ -55,10 +58,12 @@ export default function DeliveryAdress({
               onChange={handleChange}
               className="w-full p-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
               required
+              maxLength={5}
+              disabled={isSubmitting}
             />
           </div>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

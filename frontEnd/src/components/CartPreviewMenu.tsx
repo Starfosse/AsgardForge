@@ -8,7 +8,6 @@ export default function CartPreviewMenu() {
   const [isCartPreviewVisible, setIsCartPreviewVisible] = useState(false);
   const cartPreviewTimerRef = useRef<NodeJS.Timeout | null>(null);
   const { cart } = useCart();
-
   const handleCartMouseEnter = () => {
     if (cartPreviewTimerRef.current) {
       clearTimeout(cartPreviewTimerRef.current);
@@ -17,7 +16,6 @@ export default function CartPreviewMenu() {
       setIsCartPreviewVisible(true);
     }, 200);
   };
-
   const handleCartMouseLeave = () => {
     if (cartPreviewTimerRef.current) {
       clearTimeout(cartPreviewTimerRef.current);
@@ -26,7 +24,6 @@ export default function CartPreviewMenu() {
       setIsCartPreviewVisible(false);
     }, 300);
   };
-
   useEffect(() => {
     return () => {
       if (cartPreviewTimerRef.current) {
@@ -34,7 +31,6 @@ export default function CartPreviewMenu() {
       }
     };
   }, []);
-
   return (
     <div
       className="relative"
@@ -51,7 +47,6 @@ export default function CartPreviewMenu() {
           {cart.reduce((total, item) => total + item.quantity, 0)}
         </span>
       </Link>
-
       {isCartPreviewVisible && <CartPreview cart={cart} />}
     </div>
   );

@@ -20,6 +20,6 @@ export const GoogleCallBack = () => {
       }
     };
     handleAuth();
-  }, []);
+  }, [checkAuthStatus, navigate]);
   return <div>Authentification en cours...</div>;
 };

@@ -17,23 +17,22 @@ export class ProductRepository {
         [product.collection],
       );
       const [result]: any = await this.connection.query(
-        'INSERT INTO products (name, description, price, promotion_price, stock, collection_id, alert_stock, details, specifications, dimensions, weight, material) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+        'INSERT INTO products (name, description, price, promotion_price, stock, collection_id, alert_stock, specifications, dimensions, weight, material, featured) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         [
           product.name,
           product.description,
           product.price,
-          product.promotionPrice,
+          product.promotion_price,
           product.stock,
           rows[0].id,
           product.alertStock,
-          product.details,
           product.specifications,
           product.dimensions,
           product.weight,
           product.material,
+          product.featured ? 1 : 0,
         ],
       );
-
       return result.insertId;
     } catch (error) {
       console.error(error);
@@ -121,7 +120,7 @@ export class ProductRepository {
   async findProductsByCollection(id: number) {
     try {
       const [rows] = await this.connection.query(
-        'SELECT * FROM products WHERE collection_id = ?',
+        `SELECT p.*, (SELECT pi.image_path FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.image_order ASC LIMIT 1) AS main_image FROM products p WHERE p.collection_id = ?ORDER BY p.created_at DESC`,
         [id],
       );
       return rows;
@@ -162,24 +161,25 @@ export class ProductRepository {
         [id],
       );
 
-      const [result]: any = await this.connection.query(
-        'UPDATE products SET name = ?, description = ?, price = ?, promotion_price = ?, stock = ?, collection_id = ?, alert_stock = ?, details = ?, specifications = ?, dimensions = ?, weight = ?, material = ? WHERE id = ?',
+      await this.connection.query(
+        'UPDATE products SET name = ?, description = ?, price = ?, promotion_price = ?, stock = ?, collection_id = ?, alert_stock = ?, specifications = ?, dimensions = ?, weight = ?, material = ?, featured = ? WHERE id = ?',
         [
           product.name,
           product.description,
           product.price,
-          product.promotionPrice,
+          product.promotion_price,
           product.stock,
           rows[0].collection_id,
           product.alertStock,
-          product.details,
           product.specifications,
           product.dimensions,
           product.weight,
           product.material,
+          product.featured,
           rows[0].id,
         ],
       );
+
       return { message: 'Product updated' };
     } catch (error) {
       console.error(error);
@@ -196,6 +196,17 @@ export class ProductRepository {
     } catch (error) {
       console.error(error);
       throw new Error('Could not update product image');
+    }
+  }
+
+  async findFeaturedProducts() {
+    try {
+      const [rows] = await this.connection.query(`
+        SELECT p.id, p.name, p.collection_id AS collectionId, c.name AS collectionName, p.price, p.promotion_price, (SELECT pi.image_path FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.image_order ASC LIMIT 1) AS main_image FROM products p JOIN collections c ON p.collection_id = c.id WHERE p.featured = 1 ORDER BY p.created_at DESC`);
+      return rows;
+    } catch (error) {
+      console.error(error);
+      throw new Error('Could not find products');
     }
   }
 }

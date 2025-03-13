@@ -16,15 +16,11 @@ export interface OrderCommandForm {
   address: string;
   city: string;
   zipCode: string;
-  cardHolder: string;
-  cardNumber: string;
-  expirationDate: string;
-  cvv: string;
   total: string;
 }
 
 export default function Checkout() {
-  const { cart, calculateTotal } = useCart();
+  const { cart, calculateTotal, clearCart } = useCart();
   const navigate = useNavigate();
   const { customer } = useAuth();
   const [paymentForm, setPaymentForm] = useState<OrderCommandForm>({
@@ -36,12 +32,14 @@ export default function Checkout() {
     address: "",
     city: "",
     zipCode: "",
-    cardHolder: "",
-    cardNumber: "",
-    expirationDate: "",
-    cvv: "",
     total: calculateTotal(),
   });
+  const [status, setStatus] = useState({
+    error: false,
+    message: "",
+    isSubmitting: false,
+  });
+
   useEffect(() => {
     setPaymentForm((prev) => ({
       ...prev,
@@ -49,14 +47,12 @@ export default function Checkout() {
       firstName: customer?.firstName || "",
       lastName: customer?.lastName || "",
       email: customer?.email || "",
-      // phone: customer?.phone || "",
+      phone: customer?.phone || "",
+      address: customer?.address || "",
+      city: customer?.city || "",
+      zipCode: customer?.postalCode || "",
     }));
   }, [customer]);
-  const [status, setStatus] = useState({
-    error: false,
-    message: "",
-    isSubmitting: false,
-  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -76,6 +72,7 @@ export default function Checkout() {
     try {
       setStatus((prev) => ({ ...prev, isSubmitting: true }));
       const orderId = await orderService.createOrder(paymentForm, cart);
+      clearCart();
       navigate(`/order/confirmation/${orderId}`);
       setStatus((prev) => ({
         ...prev,
@@ -83,6 +80,7 @@ export default function Checkout() {
         message: "",
       }));
     } catch (error) {
+      console.error("Erreur lors de la commande:", error);
       setStatus((prev) => ({
         ...prev,
         error: true,
@@ -99,7 +97,6 @@ export default function Checkout() {
         <h1 className="text-4xl font-bold mb-8 text-center text-stone-800 flex items-center justify-center">
           <CreditCard className="mr-4 text-amber-700" /> Finaliser la Commande
         </h1>
-
         <div className="grid md:grid-cols-3 gap-8">
           <CheckoutForm
             handleChange={handleChange}

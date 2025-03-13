@@ -17,14 +17,14 @@ export const collectionsService = {
     });
   },
   createCollection: (collection: Collection) => {
-    return apiClient.fetch("/api/collections", {
+    return apiClient.fetch<Collection>("/api/collections", {
       method: "POST",
       body: JSON.stringify(collection),
     });
   },
   updateCollection: (id: number, collection: Collection) => {
-    return apiClient.fetch(`/api/collections/${id}`, {
-      method: "PUT",
+    return apiClient.fetch<Collection>(`/api/collections/${id}`, {
+      method: "PATCH",
       body: JSON.stringify(collection),
     });
   },

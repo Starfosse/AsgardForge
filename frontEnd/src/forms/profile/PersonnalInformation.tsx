@@ -1,6 +1,8 @@
+import { Customer } from "@/contexts/AuthContext";
+
 interface PersonnalInformationProps {
-  formData: any;
-  handleChange: any;
+  formData: Customer;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isEditing: boolean;
   isSubmitting: boolean;
 }
@@ -26,7 +28,6 @@ export default function PersonnalInformation({
             required
           />
         </div>
-
         <div>
           <label className="block text-stone-700 mb-2">Nom</label>
           <input
@@ -40,7 +41,6 @@ export default function PersonnalInformation({
           />
         </div>
       </div>
-
       <div className="mb-6">
         <label className="block text-stone-700 mb-2">Email</label>
         <input
@@ -54,7 +54,6 @@ export default function PersonnalInformation({
           required
         />
       </div>
-
       <div className="mb-6">
         <label className="block text-stone-700 mb-2">Téléphone</label>
         <input

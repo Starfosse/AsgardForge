@@ -45,9 +45,11 @@ export default function ProductForm() {
 
   useEffect(() => {
     if (id) {
-      productsService.getProduct(parseInt(id)).then((product) => {
+      const fetchProduct = async () => {
+        const product = await productsService.getProduct(parseInt(id));
         setFormData(product);
-      });
+      };
+      fetchProduct();
     }
   }, [id]);
 

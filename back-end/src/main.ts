@@ -9,13 +9,17 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.use(cookieParser());
   app.enableCors({
-    origin: isProd
-      ? ['https://asgard-forge.vercel.app', 'https://accounts.google.com']
-      : ['http://localhost:5173', 'https://accounts.google.com'],
+    origin: [
+      'http://localhost:5173',
+      'https://asgard-forge.vercel.app',
+      'https://accounts.google.com',
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   });
   app.useGlobalInterceptors(new TransformResponseInterceptor());
+  const port = process.env.PORT ?? 3000;
+  console.log('PORT:', port);
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();

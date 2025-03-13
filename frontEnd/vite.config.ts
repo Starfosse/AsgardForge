@@ -20,7 +20,7 @@ export default defineConfig({
     },
     proxy: {
       "/api/": {
-        target: "http://localhost:3000",
+        target: "https://asgard-forge.vercel.app", //"http://localhost:3000",
         changeOrigin: true,
       },
     },

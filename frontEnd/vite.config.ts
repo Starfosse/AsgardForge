@@ -18,12 +18,12 @@ export default defineConfig({
     hmr: {
       overlay: true,
     },
-    proxy: {
-      "/api/": {
-        target: "http://localhost:3000", //"https://asgard-forge.vercel.app", //"http://localhost:3000",
-        changeOrigin: true,
-      },
-    },
+    // proxy: {
+    //   "/api/": {
+    //     target: "https://asgard-forge.vercel.app", //"https://asgard-forge.vercel.app", //"http://localhost:3000",
+    //     changeOrigin: true,
+    //   },
+    // },
   },
   build: {
     outDir: "dist",

@@ -20,12 +20,12 @@ export default function OrderCost({ order }: OrderCostProps) {
       promotionalTotal += promoPrice;
     });
     return {
-      regularTotal: regularTotal.toFixed(2),
-      savings: (regularTotal - promotionalTotal).toFixed(2),
+      regularTotal: regularTotal,
+      savings: regularTotal - promotionalTotal,
     };
   };
   const { regularTotal, savings } = calculateSavings();
-  const hasSavings = parseFloat(savings) > 0;
+  const hasSavings = Number(savings) > 0;
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="bg-stone-800 px-6 py-4">
@@ -64,7 +64,7 @@ export default function OrderCost({ order }: OrderCostProps) {
         </div>
         <div className="flex justify-between items-center text-xl font-bold">
           <span className="text-stone-800">Total</span>
-          <span className="text-amber-700">{order.total.toFixed(2)} €</span>
+          <span className="text-amber-700">{order.total} €</span>
         </div>
       </div>
     </div>

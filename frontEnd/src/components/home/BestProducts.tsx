@@ -46,7 +46,7 @@ export default function FeaturedProducts() {
               <img
                 src={product.main_image}
                 alt={product.name}
-                className="w-full h-64 object-cover"
+                className="w-full h-72 object-cover"
               />
               <div className="p-6">
                 <h3 className="text-xl font-semibold mb-2">{product.name}</h3>

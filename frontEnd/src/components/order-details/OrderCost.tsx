@@ -5,6 +5,7 @@ import { Calendar, CreditCard } from "lucide-react";
 interface OrderCostProps {
   order: OrderHistoryDetails;
 }
+
 export default function OrderCost({ order }: OrderCostProps) {
   const calculateSavings = () => {
     if (!order) return { regularTotal: "0.00", savings: "0.00" };
@@ -24,8 +25,10 @@ export default function OrderCost({ order }: OrderCostProps) {
       savings: regularTotal - promotionalTotal,
     };
   };
+
   const { regularTotal, savings } = calculateSavings();
   const hasSavings = Number(savings) > 0;
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="bg-stone-800 px-6 py-4">

@@ -91,10 +91,10 @@ export default function CollectionsList({
                 <td className="px-6 py-4 text-sm text-gray-400">
                   {collection.description}
                 </td>
-                <td className="px-6 py-4 text-sm space-x-3">
+                <td className="px-6 py-4 text-sm space-x-3 mr-5">
                   <button
                     onClick={() => openEditModal(collection)}
-                    className="text-blue-500 hover:text-blue-700"
+                    className="text-blue-500 hover:text-blue-700 pl-3"
                   >
                     Modifier
                   </button>

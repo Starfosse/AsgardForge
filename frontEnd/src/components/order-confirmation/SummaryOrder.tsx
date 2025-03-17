@@ -29,7 +29,6 @@ export default function SummaryOrder({ order }: SummaryProps) {
 
   const { regularTotal, savings } = calculateSavings();
   const hasSavings = parseFloat(savings) > 0;
-
   return (
     <Card variant="secondaryHidden">
       <div className="bg-stone-800 px-6 py-4">
@@ -60,7 +59,7 @@ export default function SummaryOrder({ order }: SummaryProps) {
                   : "text-stone-800 font-medium"
               }
             >
-              {order?.total.toFixed(2)} €
+              {order?.total} €
             </span>
           </div>
           <div className="flex justify-between">
@@ -71,7 +70,7 @@ export default function SummaryOrder({ order }: SummaryProps) {
         <div className="flex justify-between items-center text-xl font-bold">
           <span className="text-stone-800">Total</span>
           <span className={hasSavings ? "text-red-600" : "text-amber-700"}>
-            {order?.total.toFixed(2)} €
+            {order?.total} €
           </span>
         </div>
       </div>

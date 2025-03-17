@@ -68,13 +68,13 @@ export default function InformationsSection({
         />
       </div>
       <div className="mb-4 flex flex-col">
-        <label className="font-bold text-gray-400 pb-1" htmlFor={"category"}>
-          Catégorie
+        <label className="font-bold text-gray-400 pb-1" htmlFor={"collection"}>
+          Collection
         </label>
         <select
           className="rounded-sm bg-[#272E48] outline-1 outline outline-gray-500 p-1 px-3 text-gray-400 focus:outline-sky-500"
-          id={"category"}
-          name={"category"}
+          id={"collection"}
+          name={"collection"}
           value={formData.collection}
           onChange={handleChange}
           disabled={isUploading}

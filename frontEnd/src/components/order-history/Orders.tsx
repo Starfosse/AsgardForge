@@ -36,9 +36,7 @@ export default function Orders({ filteredOrders }: OrdersProps) {
             <div className="flex items-center justify-between md:justify-end w-full md:w-auto gap-4">
               <div className="text-right">
                 <div className="text-stone-500 text-sm">Total</div>
-                <div className="font-bold text-amber-700">
-                  {order.total.toFixed(2)} €
-                </div>
+                <div className="font-bold text-amber-700">{order.total} €</div>
               </div>
               <Link
                 to={`/order/history/${order.id}`}
@@ -69,7 +67,11 @@ export default function Orders({ filteredOrders }: OrdersProps) {
                       {item.product.name}
                     </p>
                     <p className="text-sm text-stone-500">
-                      Qté: {item.quantity} × {item.price.toFixed(2)} €
+                      Qté: {item.quantity} ×{" "}
+                      {item.promotionPrice === item.price
+                        ? item.price
+                        : item.promotionPrice}{" "}
+                      €
                     </p>
                   </div>
                 </div>

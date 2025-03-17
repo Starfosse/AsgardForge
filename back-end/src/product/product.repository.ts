@@ -160,7 +160,6 @@ export class ProductRepository {
         'SELECT * FROM products WHERE id = ?',
         [id],
       );
-
       await this.connection.query(
         'UPDATE products SET name = ?, description = ?, price = ?, promotion_price = ?, stock = ?, collection_id = ?, alert_stock = ?, specifications = ?, dimensions = ?, weight = ?, material = ?, featured = ? WHERE id = ?',
         [
@@ -175,7 +174,7 @@ export class ProductRepository {
           product.dimensions,
           product.weight,
           product.material,
-          product.featured,
+          product.featured ? 1 : 0,
           rows[0].id,
         ],
       );

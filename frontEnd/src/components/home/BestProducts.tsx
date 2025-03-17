@@ -51,7 +51,7 @@ export default function FeaturedProducts() {
               <div className="p-6">
                 <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
                 <div className="flex justify-between items-center">
-                  {product.promotion_price ? (
+                  {product.promotion_price !== product.price ? (
                     <div className="flex flex-col">
                       <span className="text-lg line-through text-gray-500">
                         {product.price} €

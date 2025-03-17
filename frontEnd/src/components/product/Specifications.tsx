@@ -32,7 +32,7 @@ export default function Specifications({ product }: SpecificationsProps) {
             </div>
           </div>
           <div className="border-b pb-2">
-            <span className="text-stone-600">Origine</span>
+            <span className="text-stone-600">Spécifications</span>
             <div className="font-semibold text-stone-800">
               {product?.specifications}
             </div>

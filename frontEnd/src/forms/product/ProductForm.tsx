@@ -58,10 +58,10 @@ export default function ProductForm() {
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const { name, value, type, checked } = e.target as HTMLInputElement;
+    const inputValue = type === "checkbox" ? checked : value;
+    setFormData((prev) => ({ ...prev, [name]: inputValue }));
   };
-
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const files = Array.from(e.target.files);
@@ -88,7 +88,9 @@ export default function ProductForm() {
     setPreviews((prev) => [...prev, ...newPreviews]);
     setFormData((prev) => ({
       ...prev,
-      imagesFiles: [...prev.imagesFiles!, ...files],
+      imagesFiles: prev.imagesFiles
+        ? [...prev.imagesFiles, ...files]
+        : [...files],
     }));
   };
 
@@ -120,6 +122,8 @@ export default function ProductForm() {
           formDataToSend.append(key, value.toString());
         } else if (typeof value === "string") {
           formDataToSend.append(key, value);
+        } else if (typeof value === "boolean") {
+          formDataToSend.append(key, value.toString());
         }
       }
       if (id) {

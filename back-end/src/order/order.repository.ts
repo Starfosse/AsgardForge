@@ -7,7 +7,6 @@ import { DATABASE_CONNECTION } from 'src/database/database.module';
 @Injectable()
 export class OrderRepository {
   constructor(@Inject(DATABASE_CONNECTION) private connection: Connection) {}
-
   async createOrder(order: CreateOrderDto): Promise<number> {
     try {
       const [result]: any = await this.connection.query(
@@ -42,7 +41,7 @@ export class OrderRepository {
       ]);
       await this.connection.execute(
         `
-    INSERT INTO order_items (order_id, product_id, price, promotion_price, quantity) 
+    INSERT INTO order_items (order_id, product_id, price, promotion_price, quantity)
     VALUES ${placeholders}
   `,
         values,
@@ -54,25 +53,161 @@ export class OrderRepository {
 
   async findOne(orderId: number) {
     try {
-      const [rows]: any = await this.connection.query(
-        "SELECT JSON_OBJECT('id', o.id, 'recipientFirstName', o.recipient_first_name, 'recipientLastName', o.recipient_last_name, 'recipientEmail', o.recipient_email, 'recipientPhone', o.recipient_phone, 'shippingAddress', o.shipping_address, 'shippingCity', o.shipping_city, 'shippingPostalCode', o.shipping_postal_code, 'total', o.total, 'createdAt', o.created_at, 'status', o.status, 'items',(SELECT JSON_ARRAYAGG(JSON_OBJECT('product', JSON_OBJECT('id', p.id, 'name', p.name, 'imagePath', (SELECT pi.image_path FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.image_order LIMIT 1)), 'price', oi.price, 'promotionPrice', oi.promotion_price, 'quantity', oi.quantity)) FROM order_items oi JOIN products p ON oi.product_id = p.id WHERE oi.order_id = o.id)) as 'order' FROM orders o WHERE o.id = ?",
+      const [orderRows]: any = await this.connection.query(
+        `SELECT 
+          id, 
+          recipient_first_name, 
+          recipient_last_name, 
+          recipient_email, 
+          recipient_phone, 
+          shipping_address, 
+          shipping_city, 
+          shipping_postal_code, 
+          total, 
+          created_at, 
+          status
+        FROM orders 
+        WHERE id = ?`,
         [orderId],
       );
-      return rows[0].order;
+      if (!orderRows || orderRows.length === 0) {
+        return null;
+      }
+      const order = orderRows[0];
+      const [items]: any = await this.connection.query(
+        `SELECT 
+          oi.product_id, 
+          oi.price, 
+          oi.promotion_price, 
+          oi.quantity,
+          p.id as product_id,
+          p.name as product_name
+        FROM order_items oi 
+        JOIN products p ON oi.product_id = p.id
+        WHERE oi.order_id = ?`,
+        [orderId],
+      );
+      const itemsWithImages = await Promise.all(
+        items.map(async (item) => {
+          const [images]: any = await this.connection.query(
+            `SELECT image_path 
+            FROM product_images 
+            WHERE product_id = ? 
+            ORDER BY image_order 
+            LIMIT 1`,
+            [item.product_id],
+          );
+          return {
+            product: {
+              id: item.product_id,
+              name: item.product_name,
+              imagePath: images.length > 0 ? images[0].image_path : null,
+            },
+            price: item.price,
+            promotionPrice: item.promotion_price,
+            quantity: item.quantity,
+          };
+        }),
+      );
+      return {
+        id: order.id,
+        recipientFirstName: order.recipient_first_name,
+        recipientLastName: order.recipient_last_name,
+        recipientEmail: order.recipient_email,
+        recipientPhone: order.recipient_phone,
+        shippingAddress: order.shipping_address,
+        shippingCity: order.shipping_city,
+        shippingPostalCode: order.shipping_postal_code,
+        total: order.total,
+        createdAt: order.created_at,
+        status: order.status,
+        items: itemsWithImages,
+      };
     } catch (error) {
       console.error(error);
+      throw error;
     }
   }
 
   async findAllByUserId(userId: number) {
     try {
-      const [rows]: any = await this.connection.query(
-        "SELECT JSON_OBJECT('id', o.id, 'recipientFirstName', o.recipient_first_name, 'recipientLastName', o.recipient_last_name, 'recipientEmail', o.recipient_email, 'recipientPhone', o.recipient_phone, 'shippingAddress', o.shipping_address, 'shippingCity', o.shipping_city, 'shippingPostalCode', o.shipping_postal_code, 'total', o.total, 'createdAt', o.created_at, 'status', o.status, 'items',(SELECT JSON_ARRAYAGG(JSON_OBJECT('product', JSON_OBJECT('id', p.id, 'name', p.name, 'imagePath', (SELECT pi.image_path FROM product_images pi WHERE pi.product_id = p.id ORDER BY pi.image_order LIMIT 1)), 'price', oi.price, 'promotionPrice', oi.promotion_price, 'quantity', oi.quantity)) FROM order_items oi JOIN products p ON oi.product_id = p.id WHERE oi.order_id = o.id)) as 'order' FROM orders o WHERE o.customer_id = ?",
+      const [orderRows]: any = await this.connection.query(
+        `SELECT 
+          id, 
+          recipient_first_name, 
+          recipient_last_name, 
+          recipient_email, 
+          recipient_phone, 
+          shipping_address, 
+          shipping_city, 
+          shipping_postal_code, 
+          total, 
+          created_at, 
+          status
+        FROM orders 
+        WHERE customer_id = ?`,
         [userId],
       );
-      return rows.map((row) => row.order);
+      if (!orderRows || orderRows.length === 0) {
+        return [];
+      }
+      const result = await Promise.all(
+        orderRows.map(async (order) => {
+          const [items]: any = await this.connection.query(
+            `SELECT 
+              oi.product_id, 
+              oi.price, 
+              oi.promotion_price, 
+              oi.quantity,
+              p.id as product_id,
+              p.name as product_name
+            FROM order_items oi 
+            JOIN products p ON oi.product_id = p.id
+            WHERE oi.order_id = ?`,
+            [order.id],
+          );
+          const itemsWithImages = await Promise.all(
+            items.map(async (item) => {
+              const [images]: any = await this.connection.query(
+                `SELECT image_path 
+                FROM product_images 
+                WHERE product_id = ? 
+                ORDER BY image_order 
+                LIMIT 1`,
+                [item.product_id],
+              );
+              return {
+                product: {
+                  id: item.product_id,
+                  name: item.product_name,
+                  imagePath: images.length > 0 ? images[0].image_path : null,
+                },
+                price: item.price,
+                promotionPrice: item.promotion_price,
+                quantity: item.quantity,
+              };
+            }),
+          );
+          return {
+            id: order.id,
+            recipientFirstName: order.recipient_first_name,
+            recipientLastName: order.recipient_last_name,
+            recipientEmail: order.recipient_email,
+            recipientPhone: order.recipient_phone,
+            shippingAddress: order.shipping_address,
+            shippingCity: order.shipping_city,
+            shippingPostalCode: order.shipping_postal_code,
+            total: order.total,
+            createdAt: order.created_at,
+            status: order.status,
+            items: itemsWithImages,
+          };
+        }),
+      );
+      return result;
     } catch (error) {
       console.error(error);
+      throw error;
     }
   }
 }

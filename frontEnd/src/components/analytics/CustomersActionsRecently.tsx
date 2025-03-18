@@ -11,7 +11,7 @@ import { getRandomFakeData } from "./SalesByMonth";
 
 interface CustomerActionData {
   point: number;
-  "Ajouter au panier"?: number;
+  "Ajout au panier"?: number;
   "Passage en caisse"?: number;
   Acheter?: number;
 }
@@ -23,15 +23,15 @@ const CustomersActionsRecently = () => {
     },
     {
       point: 1,
-      "Ajouter au panier": 0,
+      "Ajout au panier": 0,
     },
     {
       point: 2,
-      "Ajouter au panier": Math.floor(getRandomFakeData(15)),
+      "Ajout au panier": Math.floor(getRandomFakeData(15)),
     },
     {
       point: 3,
-      "Ajouter au panier": 0,
+      "Ajout au panier": 0,
     },
     {
       point: 4,
@@ -82,12 +82,12 @@ const CustomersActionsRecently = () => {
             <Legend />
             <Area
               type="basis"
-              dataKey="Ajouter au panier"
+              dataKey="Ajout au panier"
               stroke="#8884d8"
               fill="#8884d8"
               strokeWidth={2}
               dot={false}
-              name="Ajouter au panier"
+              name="Ajout au panier"
               fillOpacity={0.2}
             />
             <Area

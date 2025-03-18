@@ -46,12 +46,12 @@ export default function FeaturedProducts() {
               <img
                 src={product.main_image}
                 alt={product.name}
-                className="w-full h-64 object-cover"
+                className="w-full h-72 object-cover"
               />
               <div className="p-6">
                 <h3 className="text-xl font-semibold mb-2">{product.name}</h3>
                 <div className="flex justify-between items-center">
-                  {product.promotion_price ? (
+                  {product.promotion_price !== product.price ? (
                     <div className="flex flex-col">
                       <span className="text-lg line-through text-gray-500">
                         {product.price} €

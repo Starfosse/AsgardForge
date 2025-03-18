@@ -18,7 +18,7 @@ export default function Gallery({
         <img
           src={images![selectedImage]?.image_path}
           alt={`Vue ${selectedImage + 1}`}
-          className="w-full h-[500px] object-cover"
+          className="w-full h-[500px] object-cover object-center"
         />
       </Card>
       <div className="flex space-x-4">

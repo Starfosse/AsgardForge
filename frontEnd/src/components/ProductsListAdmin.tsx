@@ -88,7 +88,7 @@ export default function ProductsListAdmin() {
               <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-400">
                 {product.name}
               </td>
-              <td className="px-6 py-4 text-sm text-gray-400 max-w-xs truncate">
+              <td className="px-6 py-4 text-sm text-gray-400 max-w-40 truncate">
                 {product.description}
               </td>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-400">
@@ -121,7 +121,7 @@ export default function ProductsListAdmin() {
               <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-400">
                 {product.alertStock}
               </td>
-              <td className="px-6 py-4 text-sm text-gray-400 max-w-xs truncate">
+              <td className="px-6 py-4 text-sm text-gray-400 max-w-40 truncate">
                 {product.specifications}
               </td>
               <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-400">
@@ -130,7 +130,7 @@ export default function ProductsListAdmin() {
               <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-400">
                 {product.weight}
               </td>
-              <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-400">
+              <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-400 max-w-40 truncate">
                 {product.material}
               </td>
               <td className="whitespace-nowrap px-6 py-4 text-sm font-medium">

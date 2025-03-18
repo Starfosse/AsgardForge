@@ -17,9 +17,8 @@ import {
 interface SalesDataByCategory {
   month: string;
   weapons: number;
-  electronics: number;
-  clothing: number;
-  books: number;
+  shields: number;
+  helmets: number;
   [key: string]: string | number;
 }
 
@@ -32,9 +31,8 @@ export default function SalesByMonth() {
   const fakeData: SalesDataByCategory[] = months.map((month) => ({
     month: month,
     weapons: getRandomFakeData(800),
-    electronics: getRandomFakeData(800),
-    clothing: getRandomFakeData(800),
-    books: getRandomFakeData(800),
+    shields: getRandomFakeData(800),
+    helmets: getRandomFakeData(800),
   }));
 
   const getTotalSalesByCategory = (category: keyof SalesDataByCategory) => {
@@ -52,7 +50,7 @@ export default function SalesByMonth() {
 
   const getTotalSales = () => {
     return fakeData.reduce((acc, curr) => {
-      return acc + curr.weapons + curr.electronics + curr.clothing + curr.books;
+      return acc + curr.weapons + curr.shields + curr.helmets;
     }, 0);
   };
 
@@ -60,13 +58,9 @@ export default function SalesByMonth() {
     return (
       ((getTotalSales() -
         fakeData[0].weapons -
-        fakeData[0].electronics -
-        fakeData[0].clothing -
-        fakeData[0].books) /
-        (fakeData[0].weapons +
-          fakeData[0].electronics +
-          fakeData[0].clothing +
-          fakeData[0].books)) *
+        fakeData[0].shields -
+        fakeData[0].helmets) /
+        (fakeData[0].weapons + fakeData[0].shields + fakeData[0].helmets)) *
       100
     ).toFixed(2);
   };
@@ -97,9 +91,8 @@ export default function SalesByMonth() {
             <Tooltip />
             <Legend />
             <Line dataKey="weapons" stroke="#8884d8" strokeWidth={2} />
-            <Line dataKey="electronics" stroke="#82ca9d" strokeWidth={2} />
-            <Line dataKey="clothing" stroke="#ffc658" strokeWidth={2} />
-            <Line dataKey="books" stroke="#ff8042" strokeWidth={2} />
+            <Line dataKey="shields" stroke="#82ca9d" strokeWidth={2} />
+            <Line dataKey="helmets" stroke="#ffc658" strokeWidth={2} />
           </LineChart>
         </ResponsiveContainer>
       </div>
@@ -108,7 +101,7 @@ export default function SalesByMonth() {
         <div className="flex flex-col space-y-2 ">
           <div className="px-2 flex flex-row justify-between items-center border-t border-gray-200 pt-2 ">
             <div className="flex flex-col ">
-              <h3 className="text-gray-300">Weapons</h3>
+              <h3 className="text-gray-300">Armes</h3>
               <p>{getTotalSalesByCategory("weapons")}</p>
             </div>
             <span className="flex flex-row items-center">
@@ -122,30 +115,30 @@ export default function SalesByMonth() {
           </div>
           <div className="px-2 flex flex-row justify-between items-center">
             <div className="flex flex-col">
-              <h3 className="text-gray-300">Clothing</h3>
-              <p>{getTotalSalesByCategory("clothing")}</p>
+              <h3 className="text-gray-300">Boucliers</h3>
+              <p>{getTotalSalesByCategory("shields")}</p>
             </div>
             <span className="flex flex-row items-center">
-              {Number(getGrowthRate("clothing")) > 0 ? (
+              {Number(getGrowthRate("shields")) > 0 ? (
                 <ChartNoAxesColumnIncreasing className="text-green-300" />
               ) : (
                 <ChartNoAxesColumnDecreasing className="text-red-300" />
               )}
-              {getGrowthRate("clothing")} %
+              {getGrowthRate("shields")} %
             </span>
           </div>
           <div className="px-2 flex flex-row justify-between items-center">
             <div className="flex flex-col">
-              <h3 className="text-gray-300">Books</h3>
-              <p>{getTotalSalesByCategory("books")}</p>
+              <h3 className="text-gray-300">Casques</h3>
+              <p>{getTotalSalesByCategory("helmets")}</p>
             </div>
             <span className="flex flex-row items-center">
-              {Number(getGrowthRate("books")) > 0 ? (
+              {Number(getGrowthRate("helmets")) > 0 ? (
                 <ChartNoAxesColumnIncreasing className="text-green-300" />
               ) : (
                 <ChartNoAxesColumnDecreasing className="text-red-300" />
               )}
-              {getGrowthRate("books")} %
+              {getGrowthRate("helmets")} %
             </span>
           </div>
           <div className=" px-2 flex flex-row justify-between items-end border-t border-gray-200 pt-2">

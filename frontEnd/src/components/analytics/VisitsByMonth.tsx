@@ -22,7 +22,7 @@ export default function VisitsByMonth() {
 
   return (
     <DashBoardAnalytics className="h-[300px] col-span-1 overflow-x-auto whitespace-nowrap">
-      <h2 className="font-semibold text-white px-4 pb-4">Visits by Month</h2>
+      <h2 className="font-semibold text-white px-4 pb-4">Visites par mois</h2>
       <ResponsiveContainer width="100%">
         <LineChart data={fakeData} className="p-2">
           <XAxis dataKey="month" />

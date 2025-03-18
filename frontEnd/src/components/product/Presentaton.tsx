@@ -79,7 +79,7 @@ export default function Presentation({
         </div>
       </div>
       <div className="flex items-center mb-6">
-        {product.promotion_price ? (
+        {product.promotion_price !== product.price ? (
           <div className="flex items-center mr-6">
             <span className="text-lg font-medium text-gray-500 line-through mr-2">
               {product.price} €

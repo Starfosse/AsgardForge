@@ -89,6 +89,7 @@ export default function DetailsSection({
           checked={formData.featured}
           onChange={handleChange}
           disabled={isUploading}
+          className="form-checkbox h-5 w-5 text-blue-600"
         />
         <label className="ml-2 text-gray-400" htmlFor={"featured"}>
           Produit en vedette

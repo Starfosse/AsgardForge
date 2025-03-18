@@ -4,9 +4,9 @@ import { contactService } from "@/services/api";
 import { Plus, Send, Shield } from "lucide-react";
 import { nanoid } from "nanoid";
 import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+// import { io } from "socket.io-client";
 
-const socket = io("http://localhost:3000");
+// const socket = io("http://localhost:3000");
 
 interface Message {
   id: string | number;
@@ -81,42 +81,42 @@ export default function Contact() {
       ],
     };
     setConversations([conversation, ...conversations]);
-    const { id, subject, orderId, createdAt } = conversation;
-    const { content, sender } = conversation.messages[0];
-    socket.emit(
-      "createConversation",
-      {
-        id,
-        subject,
-        orderId,
-        content,
-        sender,
-        createdAt,
-        customerId: customer.id,
-      },
-      (response: {
-        success: boolean;
-        conversationId: number;
-        messageId: number;
-      }) => {
-        if (response.success) {
-          setConversations((prev) =>
-            prev.map((conv) =>
-              conv.id === tmpId
-                ? {
-                    ...conv,
-                    id: response.conversationId,
-                    messages: [{ ...conv.messages[0], id: response.messageId }],
-                  }
-                : conv
-            )
-          );
-        }
-      }
-    );
-    setSelectedConversation(conversation);
-    setIsCreateModalOpen(false);
-    setNewConversation({ subject: "", orderId: "", initialMessage: "" });
+    // const { id, subject, orderId, createdAt } = conversation;
+    // const { content, sender } = conversation.messages[0];
+    //   socket.emit(
+    //     "createConversation",
+    //     {
+    //       id,
+    //       subject,
+    //       orderId,
+    //       content,
+    //       sender,
+    //       createdAt,
+    //       customerId: customer.id,
+    //     },
+    //     (response: {
+    //       success: boolean;
+    //       conversationId: number;
+    //       messageId: number;
+    //     }) => {
+    //       if (response.success) {
+    //         setConversations((prev) =>
+    //           prev.map((conv) =>
+    //             conv.id === tmpId
+    //               ? {
+    //                   ...conv,
+    //                   id: response.conversationId,
+    //                   messages: [{ ...conv.messages[0], id: response.messageId }],
+    //                 }
+    //               : conv
+    //           )
+    //         );
+    //       }
+    //     }
+    //   );
+    //   setSelectedConversation(conversation);
+    //   setIsCreateModalOpen(false);
+    //   setNewConversation({ subject: "", orderId: "", initialMessage: "" });
   };
 
   const handleSendMessage = () => {
@@ -138,30 +138,30 @@ export default function Contact() {
         conv.id === selectedConversation.id ? updatedConversation : conv
       )
     );
-    const msgConvId = {
-      content: newMessage,
-      conversationId: selectedConversation.id,
-      sender: "client",
-      timestamp: new Date(),
-    };
-    socket.emit(
-      "message",
-      msgConvId,
-      (response: { success: boolean; messageId: number }) => {
-        if (response.success) {
-          setSelectedConversation((prev) => {
-            if (!prev) return prev;
-            return {
-              ...prev,
-              messages: [
-                ...prev.messages,
-                { ...newMessageObj, id: response.messageId },
-              ],
-            };
-          });
-        }
-      }
-    );
+    // const msgConvId = {
+    //   content: newMessage,
+    //   conversationId: selectedConversation.id,
+    //   sender: "client",
+    //   timestamp: new Date(),
+    // };
+    // socket.emit(
+    //   "message",
+    //   msgConvId,
+    //   (response: { success: boolean; messageId: number }) => {
+    //     if (response.success) {
+    //       setSelectedConversation((prev) => {
+    //         if (!prev) return prev;
+    //         return {
+    //           ...prev,
+    //           messages: [
+    //             ...prev.messages,
+    //             { ...newMessageObj, id: response.messageId },
+    //           ],
+    //         };
+    //       });
+    //     }
+    //   }
+    // );
     setNewMessage("");
   };
 

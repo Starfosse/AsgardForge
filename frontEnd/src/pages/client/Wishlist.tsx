@@ -28,6 +28,7 @@ const Wishlist = () => {
     try {
       setLoading(true);
       const products = await wishlistService.getWishlistProducts();
+      console.log("products", products);
       setWishlistProducts(products);
     } catch (error) {
       console.error(

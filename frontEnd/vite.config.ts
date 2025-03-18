@@ -11,10 +11,10 @@ export default defineConfig({
     },
   },
   server: {
-    watch: {
-      usePolling: true,
-      interval: 1000,
-    },
+    // watch: {
+    //   usePolling: true,
+    //   interval: 1000,
+    // },
     hmr: {
       overlay: true,
     },

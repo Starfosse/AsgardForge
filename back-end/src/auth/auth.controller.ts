@@ -44,7 +44,7 @@ export class AuthController {
     });
     const frontendURL =
       process.env.NODE_ENV === 'production'
-        ? 'https://asgard-forge.vercel.app/'
+        ? 'https://asgardforge.onrender.com/'
         : 'http://localhost:3000';
     return res.redirect(`${frontendURL}/login/success?token=${access_token}`);
   }

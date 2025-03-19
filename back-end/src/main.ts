@@ -17,6 +17,7 @@ async function bootstrap() {
     origin: [
       'http://localhost:5173',
       'https://asgard-forge.vercel.app',
+      'https://asgardforge.onrender.com',
       'https://accounts.google.com',
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],

@@ -2,13 +2,16 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { TransformResponseInterceptor } from './interceptors/transform.interceptor';
 import * as cookieParser from 'cookie-parser';
-import { join } from 'path';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import * as express from 'express';
+import { join } from 'path';
+import * as path from 'path';
+
 async function bootstrap() {
-  console.log('NODE_ENV:', process.env.NODE_ENV);
-  const isProd = process.env.NODE_ENV === 'production';
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
   app.setGlobalPrefix('api');
+
   app.use(cookieParser());
   app.enableCors({
     origin: [
@@ -19,10 +22,22 @@ async function bootstrap() {
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   });
+
   app.useGlobalInterceptors(new TransformResponseInterceptor());
+
+  const staticPath = join(__dirname, '..', 'static-client');
+  app.use(express.static(staticPath));
+  app.use('*', (req, res, next) => {
+    if (req.baseUrl.startsWith('/api')) {
+      return next();
+    }
+    console.log(`[SPA] Serving index.html for route: ${req.baseUrl}`);
+    res.sendFile(path.join(staticPath, 'index.html'));
+  });
+
   const port = process.env.PORT ?? 3000;
   console.log('PORT:', port);
-  app.useStaticAssets(join(__dirname, '..', 'static-client'));
-  await app.listen(process.env.PORT ?? 3000);
+
+  await app.listen(port);
 }
 bootstrap();

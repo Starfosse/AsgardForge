@@ -45,7 +45,7 @@ export class AuthController {
     const frontendURL =
       process.env.NODE_ENV === 'production'
         ? 'https://asgard-forge.vercel.app/'
-        : 'http://localhost:5173';
+        : 'http://localhost:3000';
     return res.redirect(`${frontendURL}/login/success?token=${access_token}`);
   }
 

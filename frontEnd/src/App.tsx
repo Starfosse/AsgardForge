@@ -20,6 +20,7 @@ import OrderHistory from "./pages/client/OrderHistory";
 import OrderDetails from "./pages/client/OrderDetails";
 import Profile from "./forms/profile/ProfileForm";
 import Wishlist from "./pages/client/Wishlist";
+import Collections from "./pages/client/Collections";
 
 function App() {
   return (
@@ -81,6 +82,14 @@ function App() {
             element={
               <LayoutClient>
                 <Checkout />
+              </LayoutClient>
+            }
+          />
+          <Route
+            path="/collections"
+            element={
+              <LayoutClient>
+                <Collections />
               </LayoutClient>
             }
           />

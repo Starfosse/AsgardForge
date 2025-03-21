@@ -98,9 +98,10 @@ export default function Presentation({
           </span>
         )}
         <div className="flex text-yellow-500">
-          {[...Array(Math.floor(getAverageRating()))].map((_, i) => (
-            <Star key={i} className="w-5 h-5 fill-current" />
-          ))}
+          {reviews.length !== 0 &&
+            [...Array(Math.floor(getAverageRating()))].map((_, i) => (
+              <Star key={i} className="w-5 h-5 fill-current" />
+            ))}
           <span className="text-stone-600 ml-2">({reviews.length} avis)</span>
         </div>
       </div>

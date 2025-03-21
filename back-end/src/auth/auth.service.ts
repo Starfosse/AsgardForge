@@ -27,7 +27,7 @@ export class AuthService {
         },
         this.configService.get('JWT_ACCESS_SECRET'),
         {
-          expiresIn: '15m',
+          expiresIn: '30m',
         },
       );
 

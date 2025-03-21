@@ -12,11 +12,13 @@ const Menu = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const { isAuthenticated, customer, login, logout } = useAuth();
-  const [categories, setCategories] = useState<Collection[]>([]);
   const navigate = useNavigate();
+  const [categories, setCategories] = useState<Collection[]>([]);
+
   useEffect(() => {
     fetchCategories();
   }, []);
+
   const fetchCategories = async () => {
     const response = await collectionsService.getCollections();
     setCategories(response);

@@ -2,12 +2,14 @@ interface CardProps {
   children: React.ReactNode;
   className?: string;
   variant?: "primary" | "primaryHidden" | "secondary" | "secondaryHidden";
+  onClick?: () => void;
 }
 
 export default function Card({
   children,
   className,
   variant = "primary",
+  onClick,
 }: CardProps) {
   const variantClasses = {
     primary: "rounded-lg shadow-md",
@@ -16,7 +18,10 @@ export default function Card({
     secondaryHidden: "rounded-lg shadow-lg overflow-hidden",
   };
   return (
-    <div className={`bg-white ${variantClasses[variant]} ${className}`}>
+    <div
+      className={`bg-white ${variantClasses[variant]} ${className}`}
+      onClick={onClick}
+    >
       {children}
     </div>
   );

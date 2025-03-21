@@ -22,7 +22,7 @@ export default function Specifications({ product }: SpecificationsProps) {
           <div className="border-b pb-2">
             <span className="text-stone-600">Poids</span>
             <div className="font-semibold text-stone-800">
-              {product?.weight.toFixed(0)} kg
+              {product?.weight} kg
             </div>
           </div>
           <div className="border-b pb-2">

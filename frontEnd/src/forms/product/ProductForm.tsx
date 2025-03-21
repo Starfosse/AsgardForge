@@ -137,6 +137,8 @@ export default function ProductForm() {
         error: false,
         message: "Produit ajouté avec succès !",
       });
+      previews.forEach((preview) => URL.revokeObjectURL(preview));
+      setPreviews([]);
     } catch (error) {
       console.error("Error adding product:", error);
       setStatus((prev) => ({

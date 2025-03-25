@@ -29,9 +29,9 @@ const Collections = () => {
   // Images de remplacement pour chaque collection
   const getCollectionImage = (collectionName: string) => {
     const images = {
-      Armes: "/weapons.jpg",
-      Boucliers: "/armor.jpg",
-      Casques: "/jewelry.jpg",
+      Armes: "/weapons.png",
+      Boucliers: "/shields.png",
+      Casques: "/helmets.png",
     };
 
     // @ts-ignore

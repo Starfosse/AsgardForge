@@ -26,14 +26,14 @@ async function bootstrap() {
 
   app.useGlobalInterceptors(new TransformResponseInterceptor());
 
-  // const staticPath = join(__dirname, '..', 'static-client');
-  // app.use(express.static(staticPath));
-  // app.use('*', (req, res, next) => {
-  //   if (req.baseUrl.startsWith('/api')) {
-  //     return next();
-  //   }
-  //   res.sendFile(path.join(staticPath, 'index.html'));
-  // });
+  const staticPath = join(__dirname, '..', 'static-client');
+  app.use(express.static(staticPath));
+  app.use('*', (req, res, next) => {
+    if (req.baseUrl.startsWith('/api')) {
+      return next();
+    }
+    res.sendFile(path.join(staticPath, 'index.html'));
+  });
 
   const port = process.env.PORT ?? 3000;
   console.log('PORT:', port);

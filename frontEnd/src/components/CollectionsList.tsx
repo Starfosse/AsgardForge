@@ -1,9 +1,8 @@
-import { collectionsService } from "@/services/api/collection/collections.service";
-import LoadingScreen from "./LoadingScreen";
-import React, { useEffect, useState } from "react";
-import Collection from "@/services/api/collection/types";
-import JustAdmin from "./JustAdmin";
 import { useAuth } from "@/contexts/AuthContext";
+import { collectionsService } from "@/services/api/collection/collections.service";
+import Collection from "@/services/api/collection/types";
+import React, { useEffect, useState } from "react";
+import JustAdmin from "./JustAdmin";
 
 interface CollectionsListProps {
   openEditModal: (collection: Collection) => void;

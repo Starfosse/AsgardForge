@@ -1,9 +1,8 @@
+import { useAuth } from "@/contexts/AuthContext";
+import { productsService } from "@/services/api/products/products.service";
 import Product from "@/services/api/products/types";
 import { useEffect, useState } from "react";
-import LoadingScreen from "./LoadingScreen";
 import { useNavigate } from "react-router-dom";
-import { productsService } from "@/services/api/products/products.service";
-import { useAuth } from "@/contexts/AuthContext";
 import JustAdmin from "./JustAdmin";
 
 export default function ProductsListAdmin() {

@@ -11,19 +11,19 @@ export default defineConfig({
     },
   },
   server: {
-    // watch: {
-    //   usePolling: true,
-    //   interval: 1000,
-    // },
+    watch: {
+      usePolling: true,
+      interval: 1000,
+    },
     hmr: {
       overlay: true,
     },
-    // proxy: {
-    //   "/api/": {
-    //     target: "http://localhost:3000",
-    //     changeOrigin: true,
-    //   },
-    // },
+    proxy: {
+      "/api/": {
+        target: "http://localhost:3000",
+        changeOrigin: true,
+      },
+    },
   },
   build: {
     outDir: "../back-end/static-client",

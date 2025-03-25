@@ -44,7 +44,11 @@ export default function ProductsListAdmin() {
   };
 
   if (loading) {
-    return <LoadingScreen title="liste de produits" />;
+    return (
+      <div className="text-center text-white text-lg font-bold">
+        Chargement des produits
+      </div>
+    );
   }
 
   if (allowed) {

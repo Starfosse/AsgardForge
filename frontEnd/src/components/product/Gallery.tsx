@@ -16,9 +16,9 @@ export default function Gallery({
     <div>
       <Card variant="secondaryHidden" className="mb-6">
         <img
-          src={images![selectedImage]?.image_path}
+          src={images[selectedImage].image_path}
           alt={`Vue ${selectedImage + 1}`}
-          className="w-full h-[600px] object-cover object-center"
+          className="w-full h-full object-contain"
         />
       </Card>
       <div className="flex space-x-4">

@@ -126,6 +126,8 @@ export default function ProductForm() {
           formDataToSend.append(key, value.toString());
         }
       }
+      console.log("formData", formData);
+      console.log("formDataToSend", formDataToSend);
       if (id) {
         productsService.editProduct(parseInt(id), formDataToSend);
       } else {

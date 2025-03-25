@@ -45,7 +45,7 @@ export default function Footer() {
           <p className="text-stone-400">
             Email: contact@asgardforge.com
             <br />
-            Téléphone: +33 1 23 45 67 89
+            Téléphone: +33 1 23 45 XX XX
           </p>
         </div>
       </div>

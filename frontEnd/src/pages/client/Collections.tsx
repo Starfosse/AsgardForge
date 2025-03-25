@@ -30,8 +30,8 @@ const Collections = () => {
   const getCollectionImage = (collectionName: string) => {
     const images = {
       Armes: "/weapons.jpg",
-      Boucliers: "/armor.jpg",
-      Casques: "/jewelry.jpg",
+      Boucliers: "/shields.jpg",
+      Casques: "/helmets.jpg",
     };
 
     // @ts-ignore

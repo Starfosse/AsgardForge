@@ -53,7 +53,7 @@ export class ProductController {
           ? createProductDto.alertStock
           : 0,
         weight: createProductDto.weight ? createProductDto.weight : 0,
-        featured: createProductDto.featured ? createProductDto.featured : false,
+        featured: createProductDto.featured ? true : false,
       };
       const imageUrls = images ? images.map((image) => image.path) : [];
       const imageUploaded =
@@ -162,6 +162,7 @@ export class ProductController {
           ? updateProductDto.alertStock
           : 0,
         weight: updateProductDto.weight ? updateProductDto.weight : 0,
+        featured: updateProductDto.featured ? true : false,
       };
       const imageUrls = images ? images.map((image) => image.path) : [];
       const imageUploaded =

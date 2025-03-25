@@ -10,5 +10,5 @@ export class CreateProductDto {
   dimensions: string;
   weight: number;
   material: string;
-  featured: boolean;
+  featured: string;
 }

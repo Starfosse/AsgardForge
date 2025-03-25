@@ -32,7 +32,6 @@ async function bootstrap() {
     if (req.baseUrl.startsWith('/api')) {
       return next();
     }
-    console.log(`[SPA] Serving index.html for route: ${req.baseUrl}`);
     res.sendFile(path.join(staticPath, 'index.html'));
   });
 

@@ -53,7 +53,7 @@ export class ProductController {
           ? createProductDto.alertStock
           : 0,
         weight: createProductDto.weight ? createProductDto.weight : 0,
-        featured: createProductDto.featured ? true : false,
+        featured: createProductDto.featured === 'true',
       };
       const imageUrls = images ? images.map((image) => image.path) : [];
       const imageUploaded =
@@ -148,8 +148,6 @@ export class ProductController {
     @Body() updateProductDto: CreateProductDto,
     @UploadedFiles() images: Array<Express.Multer.File>,
   ) {
-    console.log('updateProductDto', updateProductDto);
-    console.log('updateProductDto.featured', updateProductDto.featured);
     try {
       const productData = {
         ...updateProductDto,
@@ -162,7 +160,7 @@ export class ProductController {
           ? updateProductDto.alertStock
           : 0,
         weight: updateProductDto.weight ? updateProductDto.weight : 0,
-        featured: updateProductDto.featured ? true : false,
+        featured: updateProductDto.featured === 'true',
       };
       const imageUrls = images ? images.map((image) => image.path) : [];
       const imageUploaded =

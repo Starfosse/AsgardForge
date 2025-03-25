@@ -23,7 +23,6 @@ export class ProductService {
 
   async create(product: productData) {
     try {
-      console.log('product', product);
       const productCreatedId =
         await this.productRepository.createProduct(product);
       for (const imageUrl of product.images) {
@@ -50,7 +49,6 @@ export class ProductService {
 
   async updateProduct(productUpdated: productData, id: number) {
     try {
-      console.log('productUpdated', productUpdated);
       await this.productRepository.updateProduct(productUpdated, id);
       await this.productRepository.deleteAllImagesFromProduct(id);
       for (const image of productUpdated.images) {

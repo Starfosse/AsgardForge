@@ -148,8 +148,8 @@ export class ProductController {
     @Body() updateProductDto: CreateProductDto,
     @UploadedFiles() images: Array<Express.Multer.File>,
   ) {
-    console.log(updateProductDto);
-    console.log(updateProductDto.featured);
+    console.log('updateProductDto', updateProductDto);
+    console.log('updateProductDto.featured', updateProductDto.featured);
     try {
       const productData = {
         ...updateProductDto,

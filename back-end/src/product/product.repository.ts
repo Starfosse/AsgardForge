@@ -12,6 +12,7 @@ export class ProductRepository {
 
   async createProduct(product: productData) {
     try {
+      console.log('productCreatedRepository', product);
       const [rows] = await this.connection.query(
         'SELECT * FROM collections WHERE name = ?',
         [product.collection],
@@ -156,6 +157,7 @@ export class ProductRepository {
 
   async updateProduct(product: productData, id: number) {
     try {
+      console.log('productUpdatedRepository', product);
       const [rows] = await this.connection.query(
         'SELECT * FROM products WHERE id = ?',
         [id],

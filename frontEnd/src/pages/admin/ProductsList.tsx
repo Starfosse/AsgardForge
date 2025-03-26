@@ -96,7 +96,7 @@ export default function ProductsList() {
             onClick={openCreateModal}
             className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
           >
-            Créer une catégorie
+            Créer une collection
           </button>
         </div>
       </div>

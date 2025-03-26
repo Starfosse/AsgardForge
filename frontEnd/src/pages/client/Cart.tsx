@@ -86,13 +86,13 @@ const Cart = () => {
                   />
                   <div className="flex-grow p-6">
                     <h3 className="text-xl font-semibold mb-2">{item.name}</h3>
-                    {item.promotion_price ? (
+                    {item.promotion_price !== item.price ? (
                       <div className="flex flex-col mb-4">
                         <span className="text-gray-500 line-through">
                           {item.price.toFixed(2)} € / unité
                         </span>
                         <span className="text-red-600 font-bold">
-                          {item.promotion_price.toFixed(2)} € / unité
+                          {item.promotion_price?.toFixed(2)} € / unité
                         </span>
                       </div>
                     ) : (
@@ -128,13 +128,13 @@ const Cart = () => {
                     </div>
                   </div>
                   <div className="p-6 text-right">
-                    {item.promotion_price ? (
+                    {item.promotion_price !== item.price ? (
                       <div className="flex flex-col items-end">
                         <span className="text-gray-500 line-through">
                           {(item.price * item.quantity).toFixed(2)} €
                         </span>
                         <span className="font-bold text-xl text-red-600">
-                          {(item.promotion_price * item.quantity).toFixed(2)} €
+                          {(item.promotion_price! * item.quantity).toFixed(2)} €
                         </span>
                       </div>
                     ) : (

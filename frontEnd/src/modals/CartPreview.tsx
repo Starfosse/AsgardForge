@@ -30,13 +30,13 @@ export default function CartPreview({ cart }: CartPreviewProps) {
           <div className="flex-grow">
             <p className="text-sm font-medium text-stone-800">{item.name}</p>
             <div className="flex flex-col">
-              {item.promotion_price ? (
+              {item.promotion_price !== item.price ? (
                 <>
                   <span className="text-xs line-through text-gray-500">
                     {item.price.toFixed(2)} €
                   </span>
                   <span className="text-sm font-bold text-red-600">
-                    {item.promotion_price.toFixed(2)} €
+                    {item.promotion_price?.toFixed(2)} €
                   </span>
                 </>
               ) : (

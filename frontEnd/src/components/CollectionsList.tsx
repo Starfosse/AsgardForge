@@ -66,7 +66,7 @@ export default function CollectionsList({
 
   return (
     <div className="mt-8">
-      <h2 className="text-xl font-bold text-gray-400 mb-4">Catégories</h2>
+      <h2 className="text-xl font-bold text-gray-400 mb-4">Collections</h2>
       <div className="overflow-x-auto shadow-sm rounded-lg border border-gray-200">
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-[#272E48]">

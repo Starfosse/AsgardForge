@@ -57,13 +57,13 @@ export default function OrderSummary({
                   </p>
                 </div>
               </div>
-              {item.promotion_price ? (
+              {item.promotion_price !== item.price ? (
                 <div className="text-right">
                   <span className="text-sm line-through text-gray-500 block">
                     {(item.price * item.quantity).toFixed(2)} €
                   </span>
                   <span className="font-semibold text-red-600">
-                    {(item.promotion_price * item.quantity).toFixed(2)} €
+                    {(item.promotion_price! * item.quantity).toFixed(2)} €
                   </span>
                 </div>
               ) : (

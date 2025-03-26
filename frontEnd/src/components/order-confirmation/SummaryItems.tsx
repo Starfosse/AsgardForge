@@ -25,7 +25,7 @@ export default function SummaryItems({ items }: SummaryItemsProps) {
             <p className="text-stone-600">Quantité: {item.quantity}</p>
           </div>
           <div className="text-right">
-            {item.promotionPrice ? (
+            {item.promotionPrice !== item.price ? (
               <div className="flex flex-col items-end">
                 <span className="text-sm line-through text-gray-500">
                   {(item.price * item.quantity).toFixed(2)} €

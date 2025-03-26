@@ -16,7 +16,6 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'http://localhost:5173',
-      'https://asgard-forge.vercel.app',
       'https://asgardforge.onrender.com',
       'https://accounts.google.com',
     ],
@@ -26,14 +25,14 @@ async function bootstrap() {
 
   app.useGlobalInterceptors(new TransformResponseInterceptor());
 
-  const staticPath = join(__dirname, '..', 'static-client');
-  app.use(express.static(staticPath));
-  app.use('*', (req, res, next) => {
-    if (req.baseUrl.startsWith('/api')) {
-      return next();
-    }
-    res.sendFile(path.join(staticPath, 'index.html'));
-  });
+  // const staticPath = join(__dirname, '..', 'static-client');
+  // app.use(express.static(staticPath));
+  // app.use('*', (req, res, next) => {
+  //   if (req.baseUrl.startsWith('/api')) {
+  //     return next();
+  //   }
+  //   res.sendFile(path.join(staticPath, 'index.html'));
+  // });
 
   const port = process.env.PORT ?? 3000;
   console.log('PORT:', port);

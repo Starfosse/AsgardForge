@@ -45,7 +45,7 @@ export class AuthController {
     const frontendURL =
       process.env.NODE_ENV === 'production'
         ? 'https://asgardforge.onrender.com'
-        : 'http://localhost:3000';
+        : 'http://localhost:5173';
     return res.redirect(`${frontendURL}/login/success?token=${access_token}`);
   }
 
